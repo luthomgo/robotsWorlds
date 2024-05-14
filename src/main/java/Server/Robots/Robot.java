@@ -21,6 +21,65 @@ public class Robot {
     public Robot(String name, String kind, int shield, int shots) {
         this.shield = shield;
         this.kind = kind;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        18
         this.name = name;
         this.shots = shots;
         this.position = centre;
