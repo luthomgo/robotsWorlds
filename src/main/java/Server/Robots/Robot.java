@@ -29,6 +29,12 @@ public class Robot {
     public JsonObject handleCommand(Command command) {
         return command.execute(this);
     }
+    public String getName(){
+        return this.name;
+    }
+    public Position getPosition(){
+        return this.position;
+    }
 
     public JsonObject data(){
         JsonObject data = new JsonObject();

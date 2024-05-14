@@ -4,6 +4,7 @@ import Server.Commands.Command;
 import Server.Robots.Launch;
 import Server.Robots.Robot;
 import Server.ServerCommands.ServerCommand;
+import Server.World.World;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -13,7 +14,8 @@ import java.net.*;
 
 public class Server
 {
-    public static List<Robot> robots = new ArrayList<Robot>();
+//    public static List<Robot> robots = new ArrayList<Robot>();
+    public static World world = new World();
 
     public static void main(String[] args) throws IOException
     {
@@ -84,6 +86,7 @@ class ClientHandler extends Thread
             else {
             Launch l = new Launch(jsonObject);
             this.robot = l.getRobot();
+            Server.world.robotList.add(this.robot);
             JsonObject respond = l.LaunchResponse();
             dos.writeUTF(respond.toString());
             }
