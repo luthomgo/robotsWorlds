@@ -1,5 +1,6 @@
 package Server.World;
 import Server.Robots.Position;
+import Server.Robots.Robot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +9,10 @@ public class World {
     protected final Position TOP_LEFT = new Position(-100,200);
     protected final Position BOTTOM_RIGHT = new Position(100,-200);
     public List<SqaureObstacle> obstacles = new ArrayList<>();
+    public List<Robot> robotList = new ArrayList<>();
 
     public World(){
+        System.out.println("Started world");
         genObs();
     }
 

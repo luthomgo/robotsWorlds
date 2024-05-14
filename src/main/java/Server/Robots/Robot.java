@@ -21,65 +21,6 @@ public class Robot {
     public Robot(String name, String kind, int shield, int shots) {
         this.shield = shield;
         this.kind = kind;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        18
         this.name = name;
         this.shots = shots;
         this.position = centre;
@@ -87,6 +28,12 @@ public class Robot {
 
     public JsonObject handleCommand(Command command) {
         return command.execute(this);
+    }
+    public String getName(){
+        return this.name;
+    }
+    public Position getPosition(){
+        return this.position;
     }
 
     public JsonObject data(){
