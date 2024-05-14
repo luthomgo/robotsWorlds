@@ -14,7 +14,6 @@ import java.net.*;
 
 public class Server
 {
-//    public static List<Robot> robots = new ArrayList<Robot>();
     public static World world = new World();
 
     public static void main(String[] args) throws IOException

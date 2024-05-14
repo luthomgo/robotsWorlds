@@ -30,6 +30,9 @@ public class ServerCommand {
                         out.println("dump command");
                     }
                     else if (message.equals("robots")){
+                        for (Robot i : Server.world.robotList){
+                            System.out.println(i);
+                        }
                         out.println("robots command");
                     }
                     else{
@@ -40,5 +43,4 @@ public class ServerCommand {
         });
         t.start();
     }
-
 }

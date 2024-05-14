@@ -8,6 +8,7 @@ public class LookCommand extends Command {
     @Override
     public JsonObject execute(Robot target) {
         JsonObject response = new JsonObject();
+        response.addProperty("result","OK");
         response.addProperty("command","Look");
         response.addProperty("functionality","Shows obstacles");
         return response;

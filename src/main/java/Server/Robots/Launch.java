@@ -15,7 +15,6 @@ public class Launch {
         int shots = args.get(2).getAsInt();
         Robot robot = new Robot(name,kind,shield,shots);
         this.robot = robot;
-        Server.robots.add(robot);
     }
 
     public JsonObject LaunchResponse(){
