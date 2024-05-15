@@ -35,6 +35,12 @@ public class Robot {
     public Position getPosition(){
         return this.position;
     }
+    public int getVisibility(){
+        return this.visibility;
+    }
+    public Direction getDirection(){
+        return this.direction;
+    }
 
     public JsonObject data(){
         JsonObject data = new JsonObject();
