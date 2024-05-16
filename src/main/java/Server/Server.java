@@ -15,6 +15,7 @@ import java.net.*;
 public class Server
 {
     public static World world = new World();
+    public final static List<String> names = new ArrayList<String>();
 
     public static void main(String[] args) throws IOException
     {
@@ -69,10 +70,25 @@ class ClientHandler extends Thread
         String received;
 
         try {
-            dos.writeUTF("Server: Welcome to robot worlds what is your name: ");
-            received = dis.readUTF();
-            dos.writeUTF("Server: Hello " + received);
+            while (true) {
+                dos.writeUTF("Server: Welcome to robot worlds what is your name: ");
+                received = dis.readUTF();
 
+                if (Server.names.contains(received)){
+                    JsonObject error = new JsonObject();
+                    error.addProperty("result", "ERROR");
+                    JsonObject msg = new JsonObject();
+                    msg.addProperty("message", "To many of you in this world");
+                    error.add("data", msg);
+                    dos.writeUTF(error.toString());
+                }
+                else{
+                dos.writeUTF("Server: Hello " + received);
+                Server.names.add(received);
+                break;
+                }
+
+            }
             while (true) {
                 dos.writeUTF("Enter launch to start:");
                 String request = dis.readUTF();
@@ -86,7 +102,6 @@ class ClientHandler extends Thread
                     msg.addProperty("message", "Unsupported command");
                     error.add("data", msg);
                     dos.writeUTF(error.toString());
-//                dos.writeUTF("Command not understood");
                 } else {
                     Launch l = new Launch(jsonObject);
                     this.robot = l.getRobot();

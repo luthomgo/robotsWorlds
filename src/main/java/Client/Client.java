@@ -16,12 +16,20 @@ public class Client {
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
-            System.out.println(dis.readUTF());
             Scanner scn = new Scanner(System.in);
-            String name = scn.nextLine();
-            dos.writeUTF(name);
-            System.out.println(dis.readUTF());
+            String name;
+            while (true) {
+                System.out.println(dis.readUTF());
 
+                name = scn.nextLine();
+                dos.writeUTF(name);
+                String response = dis.readUTF();
+                if (response.contains("Hello")){
+                System.out.println(response);
+                break;
+                }else {System.out.println(response);}
+
+            }
             while (true) {
                 System.out.println(dis.readUTF());
                 String command = scn.nextLine();
