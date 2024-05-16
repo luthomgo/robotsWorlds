@@ -22,15 +22,17 @@ public class Client {
             dos.writeUTF(name);
             System.out.println(dis.readUTF());
 
+            while (true) {
+                System.out.println(dis.readUTF());
+                String command = scn.nextLine();
 
-            System.out.println(dis.readUTF());
-            String command = scn.nextLine();
-
-            Request request = new Request(name,command);
-            JsonObject toSend = request.createRequest();
-            dos.writeUTF(toSend.toString());
-            System.out.println(dis.readUTF());
-
+                Request request = new Request(name, command);
+                JsonObject toSend = request.createRequest();
+                dos.writeUTF(toSend.toString());
+                String response = dis.readUTF();
+                System.out.println(response);
+                if (response.contains("ok")) break;
+            }
             while (true){
                 System.out.println(dis.readUTF());
                 String newCommand = scn.nextLine();
