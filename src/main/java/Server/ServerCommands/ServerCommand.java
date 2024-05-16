@@ -46,7 +46,7 @@ public class ServerCommand {
                             System.out.println(); // Add an empty line for better readability between robots
                         }
 
-                        //0out.println("robots command");
+
                     }
                     else{
                         out.println("command not understood");
