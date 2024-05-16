@@ -54,13 +54,17 @@ class ClientHandler extends Thread
     final DataInputStream dis;
     final DataOutputStream dos;
     final Socket s;
+
     private Robot robot;
+
+
 
     public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos)
     {
         this.s = s;
         this.dis = dis;
         this.dos = dos;
+
     }
 
     @Override
@@ -95,7 +99,8 @@ class ClientHandler extends Thread
                 String newRequest = dis.readUTF();
                 System.out.println(newRequest);
                 JsonObject newJsonObject = JsonParser.parseString(newRequest).getAsJsonObject();
-                command = Command.create(newJsonObject);
+                World world = new World();
+                command = Command.create(newJsonObject, world);
                 JsonObject respond = this.robot.handleCommand(command);
                 dos.writeUTF(respond.toString());
                 if (request.contains("Exit")) break;}

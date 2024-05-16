@@ -18,6 +18,9 @@ public class World {
 
     public void genObs(){
         this.obstacles.add(new SqaureObstacle(5,5));
+//        this.obstacles.add(new SqaureObstacle(1,5));
+//        this.obstacles.add(new SqaureObstacle(15,2));
+//        this.obstacles.add(new SqaureObstacle(0,5));
     }
     public List<SqaureObstacle> getObstacles() {
         return this.obstacles;
@@ -27,6 +30,8 @@ public class World {
         obstacles.forEach(o -> System.out.println(o.toString()));
     }
 
-
+    public List<Robot> getRobotList() {
+        return robotList;
+    }
 }
 

@@ -16,23 +16,28 @@ public class LookCommand extends Command {
     private Direction direction;
     private World world;
     private List<SqaureObstacle> obstacles;
+    private List<Robot> robots;
+
+    public LookCommand(World world){
+        this.world =  world;
+
+    }
 
     @Override
     public JsonObject execute(Robot target) {
 
         JsonObject response = new JsonObject();
         response.addProperty("result","OK");
-        response.addProperty("command","Look");
-        response.addProperty("functionality","Shows obstacles");
+//        response.addProperty("command","Look");
+//        response.addProperty("functionality","Shows obstacles");
 
         JsonArray objects = new JsonArray();
 
-//        this.world = world;
         this.visibility = target.getVisibility();
         this.position = target.getPosition();
         this.direction = target.getDirection();
         this.obstacles = world.getObstacles();
-        this.robot = world.get
+        this.robots= world.getRobotList();
 
         int x = position.getX();
         int y = position.getY();
@@ -46,16 +51,53 @@ public class LookCommand extends Command {
 //            if (Math.abs(x - obstacleX) <= visibility && Math.abs(y - obstacleY) <= visibility){
             int distance = Math.abs(x - obstacleX) + Math.abs(y - obstacleY);
             if (distance <= visibility){
-                objects.add(obstaclesJson(distance, obstacle, target, direction));
+                objects.add(obstaclesJson(distance, target));
             }
         }
         response.add("objects", objects);
         // iterate through all the robots in the world
-        for (Robot robot :  )
+        for (Robot robot : robots){
+            if (robot.equals(target)){
+
+            }
+            // check  if the robot is within the visibility range of other robots
+            Position robotPosition = target.getPosition();
+            Position otherRobotPosition =robot.getPosition();
+            int xDifference = Math.abs(robotPosition.getX() - otherRobotPosition.getX());
+            int yDifference = Math.abs(robotPosition.getY() - otherRobotPosition.getY());
+            int distance = xDifference + yDifference;
+            if (distance <= visibility){
+                objects.add(robotsJson(distance, robot, target ));
+            }
+        }
+        response.add("object", objects );
+        response.add("state", target.state());
         return response;
     }
 
-    private String obstaclesJson(int distance, SqaureObstacle obstacle, Robot target, Direction direction) {
+//    private String getDirection() {
+//        for (Direction dir : direction) {
+//
+//        }
+//    }
+
+
+
+    private JsonObject robotsJson(int distance, Robot robot, Robot target) {
+        JsonObject JsonObject = new JsonObject();
+//        JsonObject.addProperty("Direction", );
+        JsonObject.addProperty("type", "robot");
+        JsonObject.addProperty("Distance", distance);
+        return JsonObject;
+
+    }
+
+    private JsonObject obstaclesJson(int distance, Robot target) {
+        JsonObject JsonObject = new JsonObject();
+//        JsonObject.addProperty("Direction", );
+        JsonObject.addProperty("type", "obstacle");
+        JsonObject.addProperty("Distance", distance);
+        return JsonObject;
     }
 
 }
