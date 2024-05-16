@@ -51,69 +51,76 @@ public class LookCommand extends Command {
 //            if (Math.abs(x - obstacleX) <= visibility && Math.abs(y - obstacleY) <= visibility){
             int distance = Math.abs(x - obstacleX) + Math.abs(y - obstacleY);
             if (distance <= visibility){
-                objects.add(obstaclesJson(distance, target));
+                objects.add(obstaclesJson(distance, target, obstacle));
             }
         }
-        response.add("objects", objects);
         // iterate through all the robots in the world
         for (Robot robot : robots){
             if (robot.equals(target)){
-
+                continue;
             }
             // check  if the robot is within the visibility range of other robots
-            Position robotPosition = target.getPosition();
-            Position otherRobotPosition =robot.getPosition();
-            int xDifference = Math.abs(robotPosition.getX() - otherRobotPosition.getX());
-            int yDifference = Math.abs(robotPosition.getY() - otherRobotPosition.getY());
+//            Position robotPosition = target.getPosition();
+            Position otherRobotPosition = robot.getPosition();
+            int xDifference = Math.abs(x - otherRobotPosition.getX());
+            int yDifference = Math.abs(y - otherRobotPosition.getY());
             int distance = xDifference + yDifference;
             if (distance <= visibility){
                 objects.add(robotsJson(distance, robot, target ));
             }
         }
-        response.add("object", objects );
+        response.add("objects", objects );
         response.add("state", target.state());
         return response;
     }
 
-    private Direction getDirection(Position robotPosition,Position otherRobotPosition) {
-        for (Direction dir : Direction.values()) {
-            int x = robotPosition.getX() - otherRobotPosition.getX();
-            int y = robotPosition.getY() - otherRobotPosition.getY();
-            if (x == 0 && y < 0){
+    private Direction getObstacleDirection(int x , int y, int obstacleX, int obstacleY ) {
+        if (obstacleY < y){
                 return Direction.NORTH;
-            }
-            else if (x == 0 && y > 0){
-                return
-            }
-            else if (dir == Direction.EAST){
-                x = position.getX() - visibility;
-                y = position.getY();
-            }
-            else {
-                x = position.getX() + visibility;
-                y = position.getY();
-            }
-
+        }else if (obstacleY > y){
+            return Direction.SOUTH;
+        }else if (obstacleX < x){
+            return Direction.EAST;
+        }else{
+            return Direction.WEST;
         }
+
+    }
+
+    private Direction getRobotDirection(int x , int y, Position otherRobotPosition ) {
+        if (otherRobotPosition.getY() < y){
+            return Direction.NORTH;
+        }else if (otherRobotPosition.getY() > y){
+            return Direction.SOUTH;
+        }else if (otherRobotPosition.getX() < x){
+            return Direction.EAST;
+        }else{
+            return Direction.WEST;
+        }
+
     }
 
 
 
     private JsonObject robotsJson(int distance, Robot robot, Robot target) {
-        JsonObject JsonObject = new JsonObject();
-//        JsonObject.addProperty("Direction", target.ge);
-        JsonObject.addProperty("type", "robot");
-        JsonObject.addProperty("Distance", distance);
-        return JsonObject;
+        JsonObject jsonObject = new JsonObject();
+        Position otherRobotPosition = robot.getPosition();
+        Direction direction = getRobotDirection(target.getPosition().getX(), target.getPosition().getY(), otherRobotPosition);
+        jsonObject.addProperty("Direction", direction.toString());
+        jsonObject.addProperty("type", "robot");
+        jsonObject.addProperty("Distance", distance);
+        return jsonObject;
 
     }
 
-    private JsonObject obstaclesJson(int distance, Robot target) {
-        JsonObject JsonObject = new JsonObject();
-//        JsonObject.addProperty("Direction", );
-        JsonObject.addProperty("type", "obstacle");
-        JsonObject.addProperty("Distance", distance);
-        return JsonObject;
+    private JsonObject obstaclesJson(int distance, Robot target,SqaureObstacle obstacle) {
+        JsonObject jsonObject = new JsonObject();
+        Position obstaclePosition = new Position(obstacle.getBottomLeftX(), obstacle.getBottomLeftY());
+        Direction direction = getObstacleDirection(target.getPosition().getX(), target.getPosition().getY(), obstaclePosition.getX(), obstaclePosition.getY());
+        jsonObject.addProperty("Direction", direction.toString());
+        jsonObject.addProperty("type", "obstacle");
+        jsonObject.addProperty("Distance", distance);
+        return jsonObject;
     }
 
 }
