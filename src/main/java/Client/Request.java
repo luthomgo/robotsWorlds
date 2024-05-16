@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Request {
-    String name;
-    String command;
-    String kind;
-    String shield;
-    String shots;
+    private String name;
+    private String command;
+    private String kind;
+    private String shield;
+    private String shots;
 
     public Request(String name,String instruction) {
         this.name = name;

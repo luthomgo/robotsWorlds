@@ -7,9 +7,7 @@ public class StateCommand extends Command {
 
     @Override
     public JsonObject execute(Robot target) {
-        JsonObject response = new JsonObject();
-        response.addProperty("command","state");
-        response.addProperty("functionality","shows state");
+        JsonObject response = target.state();
         return response;
     }
 }
