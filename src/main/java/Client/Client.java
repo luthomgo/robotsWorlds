@@ -16,21 +16,31 @@ public class Client {
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
-            System.out.println(dis.readUTF());
             Scanner scn = new Scanner(System.in);
-            String name = scn.nextLine();
-            dos.writeUTF(name);
-            System.out.println(dis.readUTF());
+            String name;
+            while (true) {
+                System.out.println(dis.readUTF());
 
+                name = scn.nextLine();
+                dos.writeUTF(name);
+                String response = dis.readUTF();
+                if (response.contains("Hello")){
+                System.out.println(response);
+                break;
+                }else {System.out.println(response);}
 
-            System.out.println(dis.readUTF());
-            String command = scn.nextLine();
+            }
+            while (true) {
+                System.out.println(dis.readUTF());
+                String command = scn.nextLine();
 
-            Request request = new Request(name,command);
-            JsonObject toSend = request.createRequest();
-            dos.writeUTF(toSend.toString());
-            System.out.println(dis.readUTF());
-
+                Request request = new Request(name, command);
+                JsonObject toSend = request.createRequest();
+                dos.writeUTF(toSend.toString());
+                String response = dis.readUTF();
+                System.out.println(response);
+                if (response.contains("ok")) break;
+            }
             while (true){
                 System.out.println(dis.readUTF());
                 String newCommand = scn.nextLine();
