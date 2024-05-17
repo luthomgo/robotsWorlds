@@ -48,4 +48,12 @@ public class SqaureObstacle implements Obstacles{
         return false;
 
     }
+
+    @Override
+    public String toString() {
+        return "SquareObstacle{ " +
+                " x=" + getBottomLeftX()+
+                ", y=" + getBottomLeftY() +
+                " }";
+    }
 }

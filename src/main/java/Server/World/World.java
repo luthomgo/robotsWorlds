@@ -26,4 +26,5 @@ public class World {
     public void showObstacles() {
         obstacles.forEach(o -> System.out.println(o.toString()));
     }
+
 }

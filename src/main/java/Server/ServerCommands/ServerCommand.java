@@ -1,14 +1,19 @@
 package Server.ServerCommands;
 
 
+import Server.Robots.Position;
 import Server.Robots.Robot;
 import Server.Server;
+import Server.World.SqaureObstacle;
+import Server.World.World;
 import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import static Server.Server.clientSockets;
+import static Server.Server.world;
+
 public class ServerCommand {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLUE = "\u001B[34m";
@@ -49,7 +54,18 @@ public class ServerCommand {
                         }
                     }
                     else if (message.equals("dump")){
-                        out.println("dump command");
+                        System.out.println(ANSI_BLUE + "Obstacles on world: "+ ANSI_RESET);
+                        for (int i = 0; i < Server.world.obstacles.size(); i++) {
+                            System.out.println(ANSI_GREEN + (i+1) + "-> "+ Server.world.obstacles.get(i) +ANSI_RESET);
+                        }
+
+                        System.out.println(ANSI_BLUE + "Robots name and position: "+ ANSI_RESET);
+                        for (Robot i : Server.world.robotList) {
+                            String name = i.getName();
+                            Position pos = i.getPosition();
+                            System.out.println(ANSI_GREEN +"Robot name: "+name +" and is located at "+pos+ ANSI_RESET);
+                        }
+
                     }
                     else if (message.equals("robots")){
                         System.out.println(ANSI_BLUE + "Robots in the game: "+ ANSI_RESET);

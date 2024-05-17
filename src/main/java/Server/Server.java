@@ -141,7 +141,6 @@ class ClientHandler extends Thread
         {
             this.dis.close();
             this.dos.close();
-
         }catch(IOException ignored){}
     }
 }
