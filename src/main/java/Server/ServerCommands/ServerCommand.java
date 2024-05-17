@@ -7,7 +7,8 @@ import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.ServerSocket;
-
+import java.net.Socket;
+import static Server.Server.clientSockets;
 public class ServerCommand {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLUE = "\u001B[34m";
@@ -28,9 +29,24 @@ public class ServerCommand {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    if (message.equals("quit")){
-                        out.println("exit command");
-                        break;
+                    if (message.equals("quit")) {
+                        System.out.println("Disconnecting Server and clients");
+                        synchronized (clientSockets) {
+                            for (Socket clientSocket : clientSockets) {
+                                try {
+                                    clientSocket.close();
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                            clientSockets.clear();
+                            try {
+                                socket.close();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            break;
+                        }
                     }
                     else if (message.equals("dump")){
                         out.println("dump command");
