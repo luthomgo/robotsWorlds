@@ -8,48 +8,58 @@ import Server.World.World;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.*;
-import java.util.*;
-import java.net.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Server
-{
-    public static World world = new World();
+public class Server {
+    public static final List<Socket> clientSockets = new ArrayList<>();
     public final static List<String> names = new ArrayList<String>();
 
-    public static void main(String[] args) throws IOException
-    {
+    public static World world = new World();
+
+    public static void main(String[] args) throws IOException {
         ServerSocket ss = new ServerSocket(5056);
         ServerCommand sc = new ServerCommand();
         sc.ServerCommand(ss);
 
-        while (true)
-        {
+        while (!ss.isClosed()) {
             Socket s = null;
+            try {
+                try {
+                    s = ss.accept();
+                } catch (SocketException ignored) {
+                }
 
-            try
-            {
-                s = ss.accept();
+                if (s != null) {
+                    System.out.println("A new client is connected : " + s);
 
-                System.out.println("A new client is connected : " + s);
+                    DataInputStream dis = new DataInputStream(s.getInputStream());
+                    DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
-                DataInputStream dis = new DataInputStream(s.getInputStream());
-                DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+                    System.out.println("Assigning new thread");
 
-                System.out.println("Assigning new thread");
-
-                Thread t = new ClientHandler(s, dis, dos);
-
-                t.start();
-            }
-            catch (Exception e){
-                s.close();
+                    Thread t = new ClientHandler(s, dis, dos);
+                    t.start();
+                }
+            } catch (IOException e) {
+                if (s != null) {
+                    try {
+                        s.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
                 e.printStackTrace();
             }
         }
     }
 }
-
 class ClientHandler extends Thread
 {
     final DataInputStream dis;
@@ -62,6 +72,9 @@ class ClientHandler extends Thread
         this.s = s;
         this.dis = dis;
         this.dos = dos;
+        synchronized (Server.clientSockets) {
+            Server.clientSockets.add(s);
+        }
     }
 
     @Override
@@ -83,9 +96,9 @@ class ClientHandler extends Thread
                     dos.writeUTF(error.toString());
                 }
                 else{
-                dos.writeUTF("Server: Hello " + received);
-                Server.names.add(received);
-                break;
+                    dos.writeUTF("Server: Hello " + received);
+                    Server.names.add(received);
+                    break;
                 }
 
             }
