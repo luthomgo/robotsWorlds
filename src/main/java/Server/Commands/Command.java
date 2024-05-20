@@ -14,7 +14,7 @@ public abstract class Command {
         System.out.println(command);
         return switch (command) {
             case "state" -> new StateCommand();
-            case "look" -> new LookCommand(world);
+            case "look" -> new LookCommand();
             default -> throw new IllegalArgumentException("Unsupported command: " + response.toString());
         };
     }
