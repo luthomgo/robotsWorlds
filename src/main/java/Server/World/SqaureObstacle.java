@@ -5,11 +5,16 @@ import Server.Robots.Position;
 public class SqaureObstacle implements Obstacles{
     private int x;
     private int y;
+    private String type = "obstacle";
 
 
     public  SqaureObstacle(int x,int y){
         this.x = x;
         this.y = y;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override
