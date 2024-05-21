@@ -99,8 +99,8 @@ class ClientHandler extends Thread
                 String newRequest = dis.readUTF();
                 System.out.println(newRequest);
                 JsonObject newJsonObject = JsonParser.parseString(newRequest).getAsJsonObject();
-                World world = new World();
-                command = Command.create(newJsonObject, world);
+
+                command = Command.create(newJsonObject);
                 JsonObject respond = this.robot.handleCommand(command);
                 dos.writeUTF(respond.toString());
                 if (request.contains("Exit")) break;}

@@ -9,7 +9,7 @@ public abstract class Command {
     public abstract JsonObject execute(Robot target);
 
 
-    public static Command create(JsonObject response, World world) {
+    public static Command create(JsonObject response) {
         String command = response.get("command").getAsString();
         System.out.println(command);
         return switch (command) {
