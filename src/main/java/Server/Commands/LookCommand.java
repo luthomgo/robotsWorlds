@@ -1,16 +1,11 @@
 package Server.Commands;
 
-import Server.Robots.Direction;
 import Server.Robots.Position;
 import Server.Robots.Robot;
 import Server.Server;
-import Server.World.Obstacles;
 import Server.World.SqaureObstacle;
-import Server.World.World;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import java.util.List;
 
 public class LookCommand extends Command {
 
@@ -79,43 +74,42 @@ public class LookCommand extends Command {
         Position robot_east = new Position(robotX + visibility,robotY);
 
         for (Robot robot : Server.world.getRobotList()) {
-            if (robot.equals(target)) {
-                continue;
-            }
-            JsonObject obstacleStats = new JsonObject();
-            Position rob = robot.getPosition();
-            SqaureObstacle robObstacle = new SqaureObstacle(rob.getX(), rob.getY());
-            if (robObstacle.blocksPath(rob, robot_north)){
-                obstacleStats.addProperty("direction","NORTH");
-                obstacleStats.addProperty("type","Robot");
-                int distance = robotY - robot.getPosition().getY();
-                if (distance < 0) distance *= -1; //remove negative to positive
-                obstacleStats.addProperty("distance",distance);
-                objects.add(obstacleStats);
+            if (!target.getName().equals(robot.getName())){
+                JsonObject robotStats = new JsonObject();
+                Position rob = robot.getPosition();
+                SqaureObstacle robObstacle = new SqaureObstacle(rob.getX(), rob.getY());
+                if (robObstacle.blocksPath(rob, robot_north)){
+                    robotStats.addProperty("direction","NORTH");
+                    robotStats.addProperty("type","Robot");
+                    int distance = robotY - robot.getPosition().getY();
+                    if (distance < 0) distance *= -1; //remove negative to positive
+                    robotStats.addProperty("distance",distance);
+                    objects.add(robotStats);
 
-            }if (robObstacle.blocksPath(rob, robot_south)){
-                obstacleStats.addProperty("direction","SOUTH");
-                obstacleStats.addProperty("type","Robot");
-                int distance = robotY - robot.getPosition().getY();
-                if (distance < 0) distance *= -1; //remove negative to positive
-                obstacleStats.addProperty("distance",distance);
-                objects.add(obstacleStats);
+                }if (robObstacle.blocksPath(rob, robot_south)){
+                    robotStats.addProperty("direction","SOUTH");
+                    robotStats.addProperty("type","Robot");
+                    int distance = robotY - robot.getPosition().getY();
+                    if (distance < 0) distance *= -1; //remove negative to positive
+                    robotStats.addProperty("distance",distance);
+                    objects.add(robotStats);
 
-            }if (robObstacle.blocksPath(rob, robot_east)){
-                obstacleStats.addProperty("direction","EAST");
-                obstacleStats.addProperty("type","Robot");
-                int distance = robotX - robot.getPosition().getX();
-                if (distance < 0) distance *= -1; //remove negative to positive
-                obstacleStats.addProperty("distance",distance);
-                objects.add(obstacleStats);
+                }if (robObstacle.blocksPath(rob, robot_east)){
+                    robotStats.addProperty("direction","EAST");
+                    robotStats.addProperty("type","Robot");
+                    int distance = robotX - robot.getPosition().getX();
+                    if (distance < 0) distance *= -1; //remove negative to positive
+                    robotStats.addProperty("distance",distance);
+                    objects.add(robotStats);
 
-            }if (robObstacle.blocksPath(rob, robot_west)){
-                obstacleStats.addProperty("direction","WEST");
-                obstacleStats.addProperty("type","Robot");
-                int distance = robotX - robot.getPosition().getX();
-                if (distance < 0) distance *= -1; //remove negative to positive
-                obstacleStats.addProperty("distance",distance);
-                objects.add(obstacleStats);
+                }if (robObstacle.blocksPath(rob, robot_west)){
+                    robotStats.addProperty("direction","WEST");
+                    robotStats.addProperty("type","Robot");
+                    int distance = robotX - robot.getPosition().getX();
+                    if (distance < 0) distance *= -1; //remove negative to positive
+                    robotStats.addProperty("distance",distance);
+                    objects.add(robotStats);
+                }
             }
 
         }
