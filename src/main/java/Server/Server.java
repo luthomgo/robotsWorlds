@@ -8,47 +8,58 @@ import Server.World.World;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.*;
-import java.util.*;
-import java.net.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Server
-{
+public class Server {
+    public static final List<Socket> clientSockets = new ArrayList<>();
+    public final static List<String> names = new ArrayList<String>();
+
     public static World world = new World();
 
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         ServerSocket ss = new ServerSocket(5056);
         ServerCommand sc = new ServerCommand();
         sc.ServerCommand(ss);
 
-        while (true)
-        {
+        while (!ss.isClosed()) {
             Socket s = null;
+            try {
+                try {
+                    s = ss.accept();
+                } catch (SocketException ignored) {
+                }
 
-            try
-            {
-                s = ss.accept();
+                if (s != null) {
+                    System.out.println("A new client is connected : " + s);
 
-                System.out.println("A new client is connected : " + s);
+                    DataInputStream dis = new DataInputStream(s.getInputStream());
+                    DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
-                DataInputStream dis = new DataInputStream(s.getInputStream());
-                DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+                    System.out.println("Assigning new thread");
 
-                System.out.println("Assigning new thread");
-
-                Thread t = new ClientHandler(s, dis, dos);
-
-                t.start();
-            }
-            catch (Exception e){
-                s.close();
+                    Thread t = new ClientHandler(s, dis, dos);
+                    t.start();
+                }
+            } catch (IOException e) {
+                if (s != null) {
+                    try {
+                        s.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
                 e.printStackTrace();
             }
         }
     }
 }
-
 class ClientHandler extends Thread
 {
     final DataInputStream dis;
@@ -64,7 +75,9 @@ class ClientHandler extends Thread
         this.s = s;
         this.dis = dis;
         this.dos = dos;
-
+        synchronized (Server.clientSockets) {
+            Server.clientSockets.add(s);
+        }
     }
 
     @Override
@@ -73,25 +86,46 @@ class ClientHandler extends Thread
         String received;
 
         try {
-            dos.writeUTF("Server: Welcome to robot worlds what is your name: ");
-            received = dis.readUTF();
-            dos.writeUTF("Server: Hello " + received);
+            while (true) {
+                dos.writeUTF("Server: Welcome to robot worlds what is your name: ");
+                received = dis.readUTF();
 
-            dos.writeUTF("Enter launch to start:");
-            String request = dis.readUTF();
-            System.out.println(request);
-            JsonObject jsonObject = JsonParser.parseString(request).getAsJsonObject();
+                if (Server.names.contains(received)){
+                    JsonObject error = new JsonObject();
+                    error.addProperty("result", "ERROR");
+                    JsonObject msg = new JsonObject();
+                    msg.addProperty("message", "To many of you in this world");
+                    error.add("data", msg);
+                    dos.writeUTF(error.toString());
+                }
+                else{
+                    dos.writeUTF("Server: Hello " + received);
+                    Server.names.add(received);
+                    break;
+                }
 
-            if (!request.contains("launch"))
-            {
-                dos.writeUTF("Command not understood");
             }
-            else {
-            Launch l = new Launch(jsonObject);
-            this.robot = l.getRobot();
-            Server.world.robotList.add(this.robot);
-            JsonObject respond = l.LaunchResponse();
-            dos.writeUTF(respond.toString());
+            while (true) {
+                dos.writeUTF("Enter launch to start (please specify the type):\n-Sniper shield 2 shots 3\n-Tank shield 10 shots 5\n-Brad1 shield 5 shots 10\n-Default shields 6 shots 6");
+                String request = dis.readUTF();
+                System.out.println(request);
+                JsonObject jsonObject = JsonParser.parseString(request).getAsJsonObject();
+
+                if (!request.contains("launch")) {
+                    JsonObject error = new JsonObject();
+                    error.addProperty("result", "ERROR");
+                    JsonObject msg = new JsonObject();
+                    msg.addProperty("message", "Unsupported command");
+                    error.add("data", msg);
+                    dos.writeUTF(error.toString());
+                } else {
+                    Launch l = new Launch(jsonObject);
+                    this.robot = l.getRobot();
+                    Server.world.robotList.add(this.robot);
+                    JsonObject respond = l.LaunchResponse();
+                    dos.writeUTF(respond.toString());
+                    break;
+                }
             }
             Command command;
             while (true){
@@ -103,7 +137,7 @@ class ClientHandler extends Thread
                 command = Command.create(newJsonObject);
                 JsonObject respond = this.robot.handleCommand(command);
                 dos.writeUTF(respond.toString());
-                if (request.contains("Exit")) break;}
+                if (newRequest.contains("Exit")) break;}
 
         }catch (IOException ignored){}
 
@@ -111,7 +145,6 @@ class ClientHandler extends Thread
         {
             this.dis.close();
             this.dos.close();
-
         }catch(IOException ignored){}
     }
 }
