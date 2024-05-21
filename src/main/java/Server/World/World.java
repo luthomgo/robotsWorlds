@@ -8,7 +8,7 @@ import java.util.List;
 public class World {
     protected final Position TOP_LEFT = new Position(-100,200);
     protected final Position BOTTOM_RIGHT = new Position(100,-200);
-    public List<SqaureObstacle> obstacles = new ArrayList<>();
+    public List<Obstacles> obstacles = new ArrayList<>();
     public List<Robot> robotList = new ArrayList<>();
 
     public World(){
@@ -21,8 +21,9 @@ public class World {
         this.obstacles.add(new SqaureObstacle(0,1));
         this.obstacles.add(new SqaureObstacle(15,2));
         this.obstacles.add(new SqaureObstacle(0,5));
+        this.obstacles.add(new WallObstacle(5,0));
     }
-    public List<SqaureObstacle> getObstacles() {
+    public List<Obstacles> getObstacles() {
         return this.obstacles;
     }
 

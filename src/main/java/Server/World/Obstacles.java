@@ -37,4 +37,5 @@ public interface Obstacles {
      */
     boolean blocksPath(Position a, Position b);
 
+    String getType();
 }
