@@ -34,22 +34,19 @@ public class SqaureObstacle implements Obstacles{
 
     @Override
     public boolean blocksPath(Position a, Position b) {
-        int startX = Math.min(a.getX(), b.getX());
-        int endX = Math.max(a.getX(), b.getX());
-        int startY = Math.min(a.getY(), b.getY());
-        int endY = Math.max(a.getY(), b.getY());
+        int aX = a.getX();
+        int aY = a.getY();
+        int bX = b.getX();
+        int bY = b.getY();
 
-        for (int x = startX; x < endX; x++) {
-            if (x == this.x && startX != this.x) {
-                return true;
-            }
+        if (aX >= this.x && aX <= this.x + 5 && bX >= this.x && bX <= this.x + 5){
+            if (this.y >= aY && this.y <= bY || this.y <= aY && this.y >= bY) return true;
         }
-        for (int y = startY; y < endY; y++) {
-            if (y == this.y && startY != this.y) {
-                return true;
-            }
+        if (aY >= this.y && aY <= this.y + 5 && bY >= this.y && bY <= this.y + 5){
+            return this.x >= aX && this.x <= bX;
         }
         return false;
+
     }
 
     @Override
