@@ -30,7 +30,7 @@ public class LookCommand extends Command {
             Position ob = new Position(i.getBottomLeftX(), i.getBottomLeftY());
             if (i.blocksPath(curPos,look_north)){
                 obstacleStats.addProperty("direction","NORTH");
-                obstacleStats.addProperty("type","Square");
+                obstacleStats.addProperty("type",i.getType());
                 int distance = tY - i.getBottomLeftY();
                 if (distance < 0) distance *= -1; //remove negative to positive
                 obstacleStats.addProperty("distance",distance);
@@ -39,7 +39,7 @@ public class LookCommand extends Command {
 
             if (i.blocksPath(curPos,look_south)){
                 obstacleStats.addProperty("direction","SOUTH");
-                obstacleStats.addProperty("type","Square");
+                obstacleStats.addProperty("type",i.getType());
                 int distance = tY - i.getBottomLeftY();
                 if (distance < 0) distance *= -1;
                 obstacleStats.addProperty("distance",distance);
@@ -48,7 +48,7 @@ public class LookCommand extends Command {
 
             if (i.blocksPath(curPos,look_west)){
                 obstacleStats.addProperty("direction","WEST");
-                obstacleStats.addProperty("type","Square");
+                obstacleStats.addProperty("type",i.getType());
                 int distance = tX - i.getBottomLeftX();
                 if (distance < 0) distance *= -1; //remove negative to positive
                 obstacleStats.addProperty("distance",distance);
@@ -56,7 +56,7 @@ public class LookCommand extends Command {
             }
             if (i.blocksPath(curPos,look_east)){
                 obstacleStats.addProperty("direction","EAST");
-                obstacleStats.addProperty("type","Square");
+                obstacleStats.addProperty("type",i.getType());
                 int distance = tX - i.getBottomLeftX();
                 if (distance < 0) distance *= -1; //remove negative to positive
                 obstacleStats.addProperty("distance",distance);
@@ -78,7 +78,7 @@ public class LookCommand extends Command {
                 JsonObject robotStats = new JsonObject();
                 Position rob = robot.getPosition();
                 SqaureObstacle robObstacle = new SqaureObstacle(rob.getX(), rob.getY());
-                if (robObstacle.blocksPath(rob, robot_north)){
+                if (robObstacle.blocksPath(target.getPosition(), robot_north)){
                     robotStats.addProperty("direction","NORTH");
                     robotStats.addProperty("type","Robot");
                     int distance = robotY - robot.getPosition().getY();
@@ -86,7 +86,7 @@ public class LookCommand extends Command {
                     robotStats.addProperty("distance",distance);
                     objects.add(robotStats);
 
-                }if (robObstacle.blocksPath(rob, robot_south)){
+                }if (robObstacle.blocksPath(target.getPosition(), robot_south)){
                     robotStats.addProperty("direction","SOUTH");
                     robotStats.addProperty("type","Robot");
                     int distance = robotY - robot.getPosition().getY();
@@ -94,7 +94,7 @@ public class LookCommand extends Command {
                     robotStats.addProperty("distance",distance);
                     objects.add(robotStats);
 
-                }if (robObstacle.blocksPath(rob, robot_east)){
+                }if (robObstacle.blocksPath(target.getPosition(), robot_east)){
                     robotStats.addProperty("direction","EAST");
                     robotStats.addProperty("type","Robot");
                     int distance = robotX - robot.getPosition().getX();
@@ -102,7 +102,7 @@ public class LookCommand extends Command {
                     robotStats.addProperty("distance",distance);
                     objects.add(robotStats);
 
-                }if (robObstacle.blocksPath(rob, robot_west)){
+                }if (robObstacle.blocksPath(target.getPosition(), robot_west)){
                     robotStats.addProperty("direction","WEST");
                     robotStats.addProperty("type","Robot");
                     int distance = robotX - robot.getPosition().getX();
