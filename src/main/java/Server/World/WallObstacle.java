@@ -2,13 +2,14 @@ package Server.World;
 
 import Server.Robots.Position;
 
-public class SqaureObstacle implements Obstacles{
+public class WallObstacle implements Obstacles{
     private int x;
     private int y;
-    private String type = "square";
+    private int size = 5;
+    private String type = "wall";
 
 
-    public  SqaureObstacle(int x,int y){
+    public  WallObstacle(int x,int y){
         this.x = x;
         this.y = y;
     }
@@ -30,12 +31,12 @@ public class SqaureObstacle implements Obstacles{
 
     @Override
     public int getSize() {
-        return 5;
+        return this.size;
     }
 
     @Override
     public boolean blocksPosition(Position position) {
-        return (position.getX() >= this.x && position.getX() < this.x + 5) && (position.getY() >= this.y && position.getY() < this.y + 5);
+        return (position.getX() >= this.x && position.getX() < this.x + this.size) && (position.getY() >= this.y && position.getY() < this.y + this.size);
     }
 
     @Override
@@ -45,14 +46,13 @@ public class SqaureObstacle implements Obstacles{
         int bX = b.getX();
         int bY = b.getY();
 
-        if (aX >= this.x && aX <= this.x + 5 && bX >= this.x && bX <= this.x + 5){
+        if (aX >= this.x && aX <= this.x + this.size && bX >= this.x && bX <= this.x + this.size){
             if (this.y >= aY && this.y <= bY || this.y <= aY && this.y >= bY) return true;
         }
-        if (aY >= this.y && aY <= this.y + 5 && bY >= this.y && bY <= this.y + 5){
+        if (aY >= this.y && aY <= this.y + this.size && bY >= this.y && bY <= this.y + this.size){
             return this.x >= aX && this.x <= bX;
         }
         return false;
-
     }
 
     @Override

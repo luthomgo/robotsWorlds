@@ -3,6 +3,7 @@ package Server.Commands;
 import Server.Robots.Position;
 import Server.Robots.Robot;
 import Server.Server;
+import Server.World.Obstacles;
 import Server.World.SqaureObstacle;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -25,7 +26,7 @@ public class LookCommand extends Command {
 
         Position curPos = target.getPosition();
 
-        for (SqaureObstacle i : Server.world.obstacles){
+        for (Obstacles i : Server.world.obstacles){
             JsonObject obstacleStats = new JsonObject();
             Position ob = new Position(i.getBottomLeftX(), i.getBottomLeftY());
             if (i.blocksPath(curPos,look_north)){
