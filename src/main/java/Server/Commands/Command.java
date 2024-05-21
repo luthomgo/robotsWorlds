@@ -1,6 +1,7 @@
 package Server.Commands;
 
 import Server.Robots.Robot;
+import Server.World.World;
 import com.google.gson.JsonObject;
 
 public abstract class Command {
