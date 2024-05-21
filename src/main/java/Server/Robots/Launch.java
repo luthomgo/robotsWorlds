@@ -10,14 +10,37 @@ public class Launch {
     public Launch(JsonObject received) {
         String name = received.get("robot").getAsString();
         JsonArray args = received.get("arguments").getAsJsonArray();
-        String kind = args.get(0).getAsString();
-        int shield = args.get(1).getAsInt();
-        int shots = args.get(2).getAsInt();
-        Robot robot = new Robot(name,kind,shield,shots);
-        this.robot = robot;
+
+
+        if (!args.isEmpty())
+        {
+            if (args.get(0).toString().contains("tank")){
+                Robot robot = new Robot(name,"tank",10,5);
+                this.robot = robot;
+            }
+            else if (args.get(0).toString().contains("sniper")){
+                System.out.println("sniper selected");
+                Robot robot = new Robot(name,"sniper",2,3);
+                this.robot = robot;
+            }
+            else if (args.get(0).toString().contains("brad1")){
+                Robot robot = new Robot(name,"brad1",5,10);
+                this.robot = robot;
+            }
+            else {
+                Robot robot = new Robot(name,"Normy",6,6);
+                this.robot = robot;
+            }
+        }
+        else
+        {
+            Robot newRobot = new Robot(name,"Normy",6,6);
+            this.robot = newRobot;
+        }
     }
 
-    public JsonObject LaunchResponse(){
+    public JsonObject LaunchResponse()
+    {
         return this.robot.toJSON();
     }
 
