@@ -11,8 +11,23 @@ public class ForwardCommand extends Command{
     @Override
     public JsonObject execute(Robot target) {
         JsonObject response = new JsonObject();
-        response.addProperty("Command","Forward");
-        response.add("Arguments",getArgument());
+
+        int nrSteps = Integer.parseInt(getArgument().getAsString());
+        if (target.updatePosition(nrSteps)){
+            response.addProperty("result","OK");
+            JsonObject data = new JsonObject();
+            data.addProperty("message","Done");
+            response.add("data",data);
+            response.add("state",target.state());
+
+        } else {
+            response.addProperty("result","OK");
+            JsonObject data = new JsonObject();
+            data.addProperty("message","Obstructed");
+            response.add("data",data);
+            response.add("state",target.state());
+        }
+
         return response;
     }
     public ForwardCommand(JsonArray args) {

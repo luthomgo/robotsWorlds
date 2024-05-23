@@ -24,4 +24,11 @@ public class Position {
                 ", y=" + getY() +
                 " }";
     }
+    public boolean isIn(Position topLeft, Position bottomRight) {
+        boolean withinTop = this.y <= topLeft.getY();
+        boolean withinBottom = this.y >= bottomRight.getY();
+        boolean withinLeft = this.x >= topLeft.getX();
+        boolean withinRight = this.x <= bottomRight.getX();
+        return withinTop && withinBottom && withinLeft && withinRight;
+    }
 }

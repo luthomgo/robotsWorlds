@@ -5,6 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class Robot {
+    private final Position TOP_LEFT = new Position(-200, 200);
+    private final Position BOTTOM_RIGHT = new Position(200, -200);
     private Position centre = new Position(0,0);
     private String name;
     private String kind;
@@ -41,6 +43,18 @@ public class Robot {
     public Direction getDirection(){
         return this.direction;
     }
+
+    public Direction getCurrentDirection() {
+        return this.direction;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    public String Position1() {
+        return "[" + this.position.getX() + "," + this.position.getY() + "] "
+                + this.name + "> " + this.status;
+    }
+
 
     public JsonObject data(){
         JsonObject data = new JsonObject();
@@ -88,5 +102,31 @@ public class Robot {
                 ", shield=" + shield +
                 ", shots=" + shots +
                 '}';
+    }
+    public boolean updatePosition(int nrSteps) {
+        int newX = this.position.getX();
+        int newY = this.position.getY();
+
+        switch (this.direction) {
+            case NORTH:
+                newY = newY + nrSteps;
+                break;
+            case EAST:
+                newX = newX + nrSteps;
+                break;
+            case SOUTH:
+                newY = newY - nrSteps;
+                break;
+            case WEST:
+                newX = newX - nrSteps;
+                break;
+        }
+
+        Position newPosition = new Position(newX, newY);
+        if (newPosition.isIn(TOP_LEFT, BOTTOM_RIGHT)) {
+            this.position = newPosition;
+            return true;
+        }
+        return false;
     }
 }
