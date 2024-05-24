@@ -17,6 +17,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Server.Commands.Command.*;
+
 public class Server {
     public static final List<Socket> clientSockets = new ArrayList<>();
     public final static List<String> names = new ArrayList<String>();
@@ -91,12 +93,7 @@ class ClientHandler extends Thread
                 received = dis.readUTF();
 
                 if (Server.names.contains(received)){
-                    JsonObject error = new JsonObject();
-                    error.addProperty("result", "ERROR");
-                    JsonObject msg = new JsonObject();
-                    msg.addProperty("message", "To many of you in this world");
-                    error.add("data", msg);
-                    dos.writeUTF(error.toString());
+                    dos.writeUTF(generateErrorResponse("To many of you in this world").toString());
                 }
                 else{
                     dos.writeUTF("Server: Hello " + received);
@@ -112,12 +109,7 @@ class ClientHandler extends Thread
                 JsonObject jsonObject = JsonParser.parseString(request).getAsJsonObject();
 
                 if (!request.contains("launch")) {
-                    JsonObject error = new JsonObject();
-                    error.addProperty("result", "ERROR");
-                    JsonObject msg = new JsonObject();
-                    msg.addProperty("message", "Unsupported command");
-                    error.add("data", msg);
-                    dos.writeUTF(error.toString());
+                    dos.writeUTF(generateErrorResponse("Unsupported command").toString());
                 } else {
                     Launch l = new Launch(jsonObject);
                     this.robot = l.getRobot();
