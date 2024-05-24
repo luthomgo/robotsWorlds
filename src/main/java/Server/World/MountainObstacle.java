@@ -2,14 +2,14 @@ package Server.World;
 
 import Server.Robots.Position;
 
-public class WallObstacle implements Obstacles{
+public class MountainObstacle implements Obstacles{
     private int x;
     private int y;
     private int size = 5;
-    private String type = "wall";
+    private String type = "mountain";
 
 
-    public  WallObstacle(int x,int y){
+    public MountainObstacle(int x, int y){
         this.x = x;
         this.y = y;
     }

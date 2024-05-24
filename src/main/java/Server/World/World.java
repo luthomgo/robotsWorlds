@@ -21,7 +21,7 @@ public class World {
         this.obstacles.add(new SqaureObstacle(0,1));
         this.obstacles.add(new SqaureObstacle(15,2));
         this.obstacles.add(new SqaureObstacle(0,5));
-        this.obstacles.add(new WallObstacle(5,0));
+        this.obstacles.add(new MountainObstacle(5,0));
     }
     public List<Obstacles> getObstacles() {
         return this.obstacles;
