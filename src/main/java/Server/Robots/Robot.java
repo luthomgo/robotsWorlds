@@ -5,12 +5,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class Robot {
-    private Position centre = new Position(0,0);
+    private Position centre = new Position(5,5);
     private String name;
     private String kind;
     private int shield;
     private int shots;
     private Position position;
+    private int fireDistance = 20;
     private int visibility = 10;
     private int reload = 5;
     private int repair = 5;
@@ -55,6 +56,10 @@ public class Robot {
         data.addProperty("shields",this.shield);
 
         return data;
+    }
+
+    public void setPosition(Position centre) {
+        this.position= centre;
     }
 
     public JsonObject state(){
