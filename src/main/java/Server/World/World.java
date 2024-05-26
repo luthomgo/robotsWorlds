@@ -17,11 +17,12 @@ public class World {
     }
 
     public void genObs(){
-        this.obstacles.add(new SqaureObstacle(5,5));
-        this.obstacles.add(new SqaureObstacle(0,1));
-        this.obstacles.add(new SqaureObstacle(15,2));
-        this.obstacles.add(new SqaureObstacle(0,5));
-        this.obstacles.add(new WallObstacle(5,0));
+        this.obstacles.add(new WallObstacle(5,8));
+        this.obstacles.add(new WallObstacle(5,9));
+        this.obstacles.add(new WallObstacle(5,2));
+        this.obstacles.add(new WallObstacle(2,5));
+        this.obstacles.add(new WallObstacle(8,5));
+
     }
     public List<Obstacles> getObstacles() {
         return this.obstacles;

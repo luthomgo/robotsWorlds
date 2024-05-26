@@ -24,7 +24,6 @@ public abstract class Command {
 
     public static Command create(JsonObject response) {
         String command = response.get("command").getAsString();
-        System.out.println(command);
         JsonArray args = response.get("arguments").getAsJsonArray();
         System.out.println(args);
 

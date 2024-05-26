@@ -26,7 +26,7 @@ public class Server {
     public static World world = new World();
 
     public static void main(String[] args) throws IOException {
-        ServerSocket ss = new ServerSocket(5056);
+        ServerSocket ss = new ServerSocket(5055);
         ServerCommand sc = new ServerCommand();
         sc.ServerCommand(ss);
 
@@ -105,7 +105,6 @@ class ClientHandler extends Thread
             while (true) {
                 dos.writeUTF("Enter launch to start (please specify the type):\n-Sniper shield 2 shots 3\n-Tank shield 10 shots 5\n-Brad1 shield 5 shots 10\n-Default shields 6 shots 6");
                 String request = dis.readUTF();
-                System.out.println(request);
                 JsonObject jsonObject = JsonParser.parseString(request).getAsJsonObject();
 
                 if (!request.contains("launch")) {

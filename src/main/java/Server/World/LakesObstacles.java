@@ -2,21 +2,16 @@ package Server.World;
 
 import Server.Robots.Position;
 
-public class WallObstacle implements Obstacles{
+public class LakesObstacles implements Obstacles{
     private int x;
     private int y;
-    private int size = 5;
-    private String type = "wall";
+    private int size = 15;
+    private String type = "lakes";
 
-
-    public  WallObstacle(int x,int y){
+    public LakesObstacles(int x, int y){
         this.x = x;
         this.y = y;
-    }
 
-    @Override
-    public String getType() {
-        return type;
     }
 
     @Override
@@ -54,6 +49,12 @@ public class WallObstacle implements Obstacles{
         }
         return false;
     }
+
+    @Override
+    public String getType() {
+        return "";
+    }
+
 
     @Override
     public String toString() {
