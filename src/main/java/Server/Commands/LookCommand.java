@@ -138,25 +138,25 @@ public class LookCommand extends Command {
         for (JsonElement i : ob){
             if (i.getAsJsonObject().get("direction").getAsString().equals("NORTH")){
                 obNorth.add(i);
-                if (i.getAsJsonObject().get("type").getAsString().equals("wall")) break;
+                if (i.getAsJsonObject().get("type").getAsString().equals("mountain")) break;
             }
         }
         for (JsonElement i : ob){
             if (i.getAsJsonObject().get("direction").getAsString().equals("SOUTH")){
                 obSouth.add(i);
-                if (i.getAsJsonObject().get("type").getAsString().equals("wall")) break;
+                if (i.getAsJsonObject().get("type").getAsString().equals("mountain")) break;
             }
         }
         for (JsonElement i : ob){
             if (i.getAsJsonObject().get("direction").getAsString().equals("EAST")){
                 obEast.add(i);
-                if (i.getAsJsonObject().get("type").getAsString().equals("wall")) break;
+                if (i.getAsJsonObject().get("type").getAsString().equals("mountain")) break;
             }
         }
         for (JsonElement i : ob){
             if (i.getAsJsonObject().get("direction").getAsString().equals("WEST")){
                 obWest.add(i);
-                if (i.getAsJsonObject().get("type").getAsString().equals("wall")) break;
+                if (i.getAsJsonObject().get("type").getAsString().equals("mountain")) break;
             }
         }
 
