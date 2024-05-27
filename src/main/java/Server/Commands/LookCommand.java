@@ -28,11 +28,11 @@ public class LookCommand extends Command {
         Position look_east = new Position(tX + visibility,tY);
 
         Position curPos = target.getPosition();
-
         for (Obstacles i : Server.world.obstacles) {
             JsonObject obstacleStats = new JsonObject();
             Position ob = new Position(i.getBottomLeftX(), i.getBottomLeftY());
-            if (look_north.getY() > i.getBottomLeftY() && tY < i.getBottomLeftY() && tX >= i.getBottomLeftX() && tX <= i.getBottomLeftX() + i.getSize()){
+
+            if (look_north.getY() >= i.getBottomLeftY() && tY <= i.getBottomLeftY() && tX >= i.getBottomLeftX() && tX <= i.getBottomLeftX() + i.getSize()){
                 System.out.println("not");
                 obstacleStats.addProperty("direction", "NORTH");
                 obstacleStats.addProperty("type", i.getType());
@@ -42,7 +42,7 @@ public class LookCommand extends Command {
                 objects.add(obstacleStats);
             }
 
-            if (look_south.getY() < i.getBottomLeftY() && tY > i.getBottomLeftY() && tX >= i.getBottomLeftX() && tX<= i.getBottomLeftX() + i.getSize()){
+            if (look_south.getY() <= i.getBottomLeftY() && tY >= i.getBottomLeftY() && tX >= i.getBottomLeftX() && tX<= i.getBottomLeftX() + i.getSize()){
                 obstacleStats.addProperty("direction", "SOUTH");
                 obstacleStats.addProperty("type", i.getType());
                 int distance = tY - i.getBottomLeftY();
@@ -51,7 +51,7 @@ public class LookCommand extends Command {
                 objects.add(obstacleStats);
             }
 
-            if (look_west.getX() < i.getBottomLeftX() &&  tX > i.getBottomLeftX() && tY >= i.getBottomLeftY() && tY <= i.getBottomLeftY() + i.getSize()){
+            if (look_west.getX() <= i.getBottomLeftX() &&  tX >= i.getBottomLeftX() && tY >= i.getBottomLeftY() && tY <= i.getBottomLeftY() + i.getSize()){
                 obstacleStats.addProperty("direction", "WEST");
                 obstacleStats.addProperty("type", i.getType());
                 int distance = tX - i.getBottomLeftX();
@@ -60,7 +60,7 @@ public class LookCommand extends Command {
                 objects.add(obstacleStats);
             }
 
-            if (look_east.getX() > i.getBottomLeftX() && tX < i.getBottomLeftX() && tY >= i.getBottomLeftY() && tY <= i.getBottomLeftY() + i.getSize()){
+            if (look_east.getX() >= i.getBottomLeftX() && tX <= i.getBottomLeftX() && tY >= i.getBottomLeftY() && tY <= i.getBottomLeftY() + i.getSize()){
                 obstacleStats.addProperty("direction", "EAST");
                 obstacleStats.addProperty("type", i.getType());
                 int distance = tX - i.getBottomLeftX();
@@ -133,7 +133,6 @@ public class LookCommand extends Command {
         JsonArray obSouth = new JsonArray();
         JsonArray obWest = new JsonArray();
         JsonArray obEast = new JsonArray();
-
 
         for (JsonElement i : ob){
             if (i.getAsJsonObject().get("direction").getAsString().equals("NORTH")){
