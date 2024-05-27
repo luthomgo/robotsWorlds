@@ -37,7 +37,10 @@ public abstract class Command {
         };
     }
     private static boolean isValidArg(JsonArray args){
-        String[] validArgs = {"sniper", "tank", "brad1"};
+        if (args.size() == 0){
+            return true;
+        }
+        String[] validArgs = {"sniper", "tank", "brad1", "left", "right", " "};
         for (JsonElement argElement : args){
             String arg = argElement.getAsString();
             try{
