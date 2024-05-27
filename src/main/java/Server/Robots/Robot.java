@@ -1,6 +1,7 @@
 package Server.Robots;
 
 import Server.Commands.Command;
+import Server.Server;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -12,18 +13,23 @@ public class Robot {
     private int shots;
     private Position position;
     private int fireDistance = 20;
-    private int visibility = 10;
-    private int reload = 5;
-    private int repair = 5;
+    private int visibility ;
+    private int reload ;
+    private int repair ;
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
 
 
-    public Robot(String name, String kind, int shield, int shots) {
-        this.shield = shield;
+    public Robot(String name, String kind, int shield, int shots,int vis) {
         this.kind = kind;
         this.name = name;
         this.shots = shots;
+        if (shield > Server.world.getMaxShield()) this.shield = Server.world.getMaxShield();
+        else this.shield = shield;
+        this.reload = Server.world.getReloadTime();
+        this.repair = Server.world.getRepairTime();
+        if (vis > Server.world.getWorldVisibily()) this.visibility = Server.world.getWorldVisibily();
+        else this.visibility = vis;
         this.position = centre;
     }
 

@@ -15,27 +15,21 @@ public class Launch {
         if (!args.isEmpty())
         {
             if (args.get(0).toString().contains("tank")){
-                Robot robot = new Robot(name,"tank",10,5);
-                this.robot = robot;
+                this.robot = new Robot(name,"tank",10,5,5);
             }
             else if (args.get(0).toString().contains("sniper")){
-                System.out.println("sniper selected");
-                Robot robot = new Robot(name,"sniper",2,3);
-                this.robot = robot;
+                this.robot = new Robot(name,"sniper",2,3,15);
             }
             else if (args.get(0).toString().contains("brad1")){
-                Robot robot = new Robot(name,"brad1",5,10);
-                this.robot = robot;
+                this.robot = new Robot(name,"brad1",5,10,10);
             }
             else {
-                Robot robot = new Robot(name,"Normy",6,6);
-                this.robot = robot;
+                this.robot = new Robot(name,"Normy",6,6,6);
             }
         }
         else
         {
-            Robot newRobot = new Robot(name,"Normy",6,6);
-            this.robot = newRobot;
+            this.robot = new Robot(name,"Normy",6,6,6);
         }
     }
 

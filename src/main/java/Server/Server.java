@@ -22,7 +22,6 @@ import static Server.Commands.Command.*;
 public class Server {
     public static final List<Socket> clientSockets = new ArrayList<>();
     public final static List<String> names = new ArrayList<String>();
-
     public static World world = new World();
 
     public static void main(String[] args) throws IOException {
@@ -37,7 +36,6 @@ public class Server {
                     s = ss.accept();
                 } catch (SocketException ignored) {
                 }
-
                 if (s != null) {
                     System.out.println("A new client is connected : " + s);
 
