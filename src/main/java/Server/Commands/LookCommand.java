@@ -12,11 +12,50 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 public class LookCommand extends Command {
+    private JsonArray ObstaclesNorth;
+    private JsonArray ObstaclesSouth;
+    private JsonArray ObstaclesWest;
+    private JsonArray ObstaclesEast;
 
     @Override
     public JsonObject execute(Robot target) {
-        JsonArray objects = new JsonArray();
         JsonObject response = new JsonObject();
+        JsonArray obFinal = generateObFinal(target);
+        response.addProperty("result","ok");
+        JsonObject data = new JsonObject();
+        data.add("objects",obFinal);
+        response.add("data",data);
+        response.add("state",target.state());
+        return response;
+    }
+
+    public JsonArray sortArray(JsonArray objects){
+        JsonObject smal;
+
+        JsonArray temp = new JsonArray();
+        JsonArray res = new JsonArray();
+
+        temp = objects;
+        while (!temp.isEmpty()) {
+            smal = temp.get(0).getAsJsonObject();
+            for (int i = 0; i < temp.size(); i++) {
+                int smallDis = smal.get("distance").getAsInt();
+                JsonObject temf = temp.get(i).getAsJsonObject();
+                int tempDistance = temf.get("distance").getAsInt();
+
+                if (tempDistance < smallDis){
+                    smal = temp.get(i).getAsJsonObject();
+                }
+            }
+            res.add(smal);
+            temp.remove(smal);
+        }
+
+        return res;
+    }
+    public JsonArray generateObFinal(Robot target){
+        JsonArray objects = new JsonArray();
+
 
         int tX = target.getPosition().getX();
         int tY = target.getPosition().getY();
@@ -158,6 +197,10 @@ public class LookCommand extends Command {
                 if (i.getAsJsonObject().get("type").getAsString().equals("mountain")) break;
             }
         }
+        this.ObstaclesNorth = obNorth;
+        this.ObstaclesSouth = obSouth;
+        this.ObstaclesEast = obEast;
+        this.ObstaclesWest = obWest;
 
         for (JsonElement i:obNorth){
             obFinal.add(i);
@@ -171,36 +214,22 @@ public class LookCommand extends Command {
         for (JsonElement i:obEast){
             obFinal.add(i);
         }
-
-        response.addProperty("result","ok");
-        JsonObject data = new JsonObject();
-        data.add("objects",obFinal);
-        response.add("data",data);
-        response.add("state",target.state());
-        return response;
+        return obFinal;
     }
-    public JsonArray sortArray(JsonArray objects){
-        JsonObject smal;
 
-        JsonArray temp = new JsonArray();
-        JsonArray res = new JsonArray();
+    public JsonArray getObstaclesNorth() {
+        return ObstaclesNorth;
+    }
 
-        temp = objects;
-        while (!temp.isEmpty()) {
-            smal = temp.get(0).getAsJsonObject();
-            for (int i = 0; i < temp.size(); i++) {
-                int smallDis = smal.get("distance").getAsInt();
-                JsonObject temf = temp.get(i).getAsJsonObject();
-                int tempDistance = temf.get("distance").getAsInt();
+    public JsonArray getObstaclesSouth() {
+        return ObstaclesSouth;
+    }
 
-                if (tempDistance < smallDis){
-                    smal = temp.get(i).getAsJsonObject();
-                }
-            }
-            res.add(smal);
-            temp.remove(smal);
-        }
+    public JsonArray getObstaclesWest() {
+        return ObstaclesWest;
+    }
 
-        return res;
+    public JsonArray getObstaclesEast() {
+        return ObstaclesEast;
     }
 }
