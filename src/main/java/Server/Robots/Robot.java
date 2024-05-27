@@ -1,6 +1,7 @@
 package Server.Robots;
 
 import Server.Commands.Command;
+import Server.Server;
 import Server.World.Obstacles;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -134,10 +135,13 @@ public class Robot {
             }
 
             else if (!world.getRobotList().isEmpty()) {
-                for (Robot otherRobot : world.getRobotList()) {
-                    if (!otherRobot.equals(this) && otherRobot.getPosition().equals(newPosition)) {
+                for (Robot i : Server.world.robotList) {
+                    JsonObject state = i.state();
+                    JsonArray positionArray = state.getAsJsonArray("position");
+                    int stateX = positionArray.get(0).getAsInt();
+                    int stateY = positionArray.get(1).getAsInt();
+                    if (stateX == newPosition.getX() && stateY == newPosition.getY()) {
                         return false;
-
                     }
                 }
             } else if (newPosition.isIn(TOP_LEFT, BOTTOM_RIGHT)) {
