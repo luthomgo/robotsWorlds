@@ -4,6 +4,8 @@ import Server.Commands.Command;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.util.Map;
+
 public class Robot {
     private Position centre = new Position(0,0);
     private String name;
@@ -40,6 +42,24 @@ public class Robot {
     }
     public Direction getDirection(){
         return this.direction;
+    }
+
+    public void updateDirection(boolean turnRight) {
+        if (turnRight) {
+            switch (this.direction) {
+                case NORTH -> this.direction = Direction.EAST;
+                case EAST -> this.direction = Direction.SOUTH;
+                case SOUTH -> this.direction = Direction.WEST;
+                case WEST -> this.direction = Direction.NORTH;
+            }
+        } else {
+            switch (this.direction) {
+                case NORTH -> this.direction = Direction.WEST;
+                case WEST -> this.direction = Direction.SOUTH;
+                case SOUTH -> this.direction = Direction.EAST;
+                case EAST -> this.direction = Direction.NORTH;
+            }
+        }
     }
 
     public JsonObject data(){
@@ -89,4 +109,6 @@ public class Robot {
                 ", shots=" + shots +
                 '}';
     }
+
+
 }

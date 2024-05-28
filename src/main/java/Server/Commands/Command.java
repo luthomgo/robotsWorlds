@@ -28,6 +28,8 @@ public abstract class Command {
             case "state" -> new StateCommand();
             case "look" -> new LookCommand();
             case "forward" -> new ForwardCommand(args);
+            case "turn" -> new TurnCommand(args);
+
             default -> throw new IllegalArgumentException("Unsupported command: " + response.toString());
         };
     }
