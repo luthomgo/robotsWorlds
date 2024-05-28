@@ -18,7 +18,6 @@ public class Robot {
     private int repair ;
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
-    private boolean isRepairing = false;
 
 
     public Robot(String name, String kind, int shield, int shots,int vis) {
@@ -48,6 +47,24 @@ public class Robot {
     }
     public Direction getDirection(){
         return this.direction;
+    }
+
+    public void updateDirection(boolean turnRight) {
+        if (turnRight) {
+            switch (this.direction) {
+                case NORTH -> this.direction = Direction.EAST;
+                case EAST -> this.direction = Direction.SOUTH;
+                case SOUTH -> this.direction = Direction.WEST;
+                case WEST -> this.direction = Direction.NORTH;
+            }
+        } else {
+            switch (this.direction) {
+                case NORTH -> this.direction = Direction.WEST;
+                case WEST -> this.direction = Direction.SOUTH;
+                case SOUTH -> this.direction = Direction.EAST;
+                case EAST -> this.direction = Direction.NORTH;
+            }
+        }
     }
 
     public JsonObject data(){
@@ -100,6 +117,29 @@ public class Robot {
                 ", shield=" + shield +
                 ", shots=" + shots +
                 '}';
+    }
+    public boolean updatePosition(int nrSteps) {
+        int newX = this.position.getX();
+        int newY = this.position.getY();
+
+        switch (this.direction) {
+            case NORTH:
+                newY = newY + nrSteps;
+                break;
+            case EAST:
+                newX = newX + nrSteps;
+                break;
+            case SOUTH:
+                newY = newY - nrSteps;
+                break;
+            case WEST:
+                newX = newX - nrSteps;
+                break;
+        }
+
+        Position newPosition = new Position(newX, newY);
+        this.position=newPosition;
+        return true;
     }
 
     public void repairShields(){

@@ -4,7 +4,7 @@ import Server.Robots.Robot;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class ForwardCommand extends Command{
+public class BackwardCommand extends Command{
 
 
 
@@ -13,7 +13,7 @@ public class ForwardCommand extends Command{
         JsonObject response = new JsonObject();
 
         int nrSteps = Integer.parseInt(getArgument().getAsString());
-        if (target.updatePosition(nrSteps)){
+        if (target.updatePosition(-nrSteps)){
             response.addProperty("result","OK");
             JsonObject data = new JsonObject();
             data.addProperty("message","Done");
@@ -30,7 +30,7 @@ public class ForwardCommand extends Command{
 
         return response;
     }
-    public ForwardCommand(JsonArray args) {
+    public BackwardCommand(JsonArray args) {
         super(args);
     }
 }
