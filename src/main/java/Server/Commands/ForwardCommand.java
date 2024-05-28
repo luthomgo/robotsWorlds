@@ -4,7 +4,7 @@ import Server.Robots.Robot;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class ForwardCommand extends Command{
+        public class ForwardCommand extends Command{
 
 
 

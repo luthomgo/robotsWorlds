@@ -18,6 +18,7 @@ public class Robot {
     private int repair ;
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
+    private boolean isRepairing = false;
 
 
     public Robot(String name, String kind, int shield, int shots,int vis) {
