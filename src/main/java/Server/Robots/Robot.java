@@ -49,6 +49,18 @@ public class Robot {
         return this.direction;
     }
 
+    public Direction getCurrentDirection() {
+        return this.direction;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    public String Position1() {
+        return "[" + this.position.getX() + "," + this.position.getY() + "] "
+                + this.name + "> " + this.status;
+    }
+
+
     public JsonObject data(){
         JsonObject data = new JsonObject();
 
@@ -100,4 +112,28 @@ public class Robot {
                 ", shots=" + shots +
                 '}';
     }
+    public boolean updatePosition(int nrSteps) {
+        int newX = this.position.getX();
+        int newY = this.position.getY();
+
+        switch (this.direction) {
+            case NORTH:
+                newY = newY + nrSteps;
+                break;
+            case EAST:
+                newX = newX + nrSteps;
+                break;
+            case SOUTH:
+                newY = newY - nrSteps;
+                break;
+            case WEST:
+                newX = newX - nrSteps;
+                break;
+        }
+
+        Position newPosition = new Position(newX, newY);
+        this.position=newPosition;
+        return true;
+    }
 }
+
