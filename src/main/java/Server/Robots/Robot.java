@@ -18,6 +18,7 @@ public class Robot {
     private int repair ;
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
+    private boolean isRepairing = false;
 
 
     public Robot(String name, String kind, int shield, int shots,int vis) {
@@ -99,5 +100,32 @@ public class Robot {
                 ", shield=" + shield +
                 ", shots=" + shots +
                 '}';
+    }
+
+    public void repairShields(){
+        this.shield = Server.world.getMaxShield();
+    }
+
+    public int getRepair() {
+        return this.repair;
+    }
+
+    public void setRepair(int repair){
+        this.repair = repair;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus(){
+        return this.status;
+    }
+
+    public boolean isRepairing(){
+        return this.isRepairing;
+    }
+    public void setRepairing(boolean repairing){
+        this.isRepairing = repairing;
     }
 }
