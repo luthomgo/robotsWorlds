@@ -52,6 +52,7 @@ public class MountainObstacle implements Obstacles{
         if (aY >= this.y && aY <= this.y + this.size && bY >= this.y && bY <= this.y + this.size){
             return this.x >= aX && this.x <= bX;
         }
+
         return false;
     }
 

@@ -17,14 +17,15 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Server.Commands.Command.*;
+
 public class Server {
     public static final List<Socket> clientSockets = new ArrayList<>();
     public final static List<String> names = new ArrayList<String>();
-
     public static World world = new World();
 
     public static void main(String[] args) throws IOException {
-        ServerSocket ss = new ServerSocket(5056);
+        ServerSocket ss = new ServerSocket(5055);
         ServerCommand sc = new ServerCommand();
         sc.ServerCommand(ss);
 
@@ -35,7 +36,6 @@ public class Server {
                     s = ss.accept();
                 } catch (SocketException ignored) {
                 }
-
                 if (s != null) {
                     System.out.println("A new client is connected : " + s);
 
@@ -91,12 +91,7 @@ class ClientHandler extends Thread
                 received = dis.readUTF();
 
                 if (Server.names.contains(received)){
-                    JsonObject error = new JsonObject();
-                    error.addProperty("result", "ERROR");
-                    JsonObject msg = new JsonObject();
-                    msg.addProperty("message", "To many of you in this world");
-                    error.add("data", msg);
-                    dos.writeUTF(error.toString());
+                    dos.writeUTF(generateErrorResponse("To many of you in this world").toString());
                 }
                 else{
                     dos.writeUTF("Server: Hello " + received);
@@ -108,16 +103,10 @@ class ClientHandler extends Thread
             while (true) {
                 dos.writeUTF("Enter launch to start (please specify the type):\n-Sniper shield 2 shots 3\n-Tank shield 10 shots 5\n-Brad1 shield 5 shots 10\n-Default shields 6 shots 6");
                 String request = dis.readUTF();
-                System.out.println(request);
                 JsonObject jsonObject = JsonParser.parseString(request).getAsJsonObject();
 
                 if (!request.contains("launch")) {
-                    JsonObject error = new JsonObject();
-                    error.addProperty("result", "ERROR");
-                    JsonObject msg = new JsonObject();
-                    msg.addProperty("message", "Unsupported command");
-                    error.add("data", msg);
-                    dos.writeUTF(error.toString());
+                    dos.writeUTF(generateErrorResponse("Unsupported command").toString());
                 } else {
                     Launch l = new Launch(jsonObject);
                     this.robot = l.getRobot();

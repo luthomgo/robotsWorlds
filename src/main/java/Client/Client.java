@@ -11,7 +11,7 @@ public class Client {
     {
         try {
             InetAddress ip = InetAddress.getByName("localhost");
-            Socket s = new Socket(ip, 5056);
+            Socket s = new Socket(ip, 5055);
 
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());

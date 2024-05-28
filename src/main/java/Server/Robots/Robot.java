@@ -1,30 +1,37 @@
 package Server.Robots;
 
 import Server.Commands.Command;
+import Server.Server;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.Map;
 
 public class Robot {
-    private Position centre = new Position(0,0);
+    private Position centre = new Position(5,5);
     private String name;
     private String kind;
     private int shield;
     private int shots;
     private Position position;
-    private int visibility = 10;
-    private int reload = 5;
-    private int repair = 5;
+    private int fireDistance = 20;
+    private int visibility ;
+    private int reload ;
+    private int repair ;
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
 
 
-    public Robot(String name, String kind, int shield, int shots) {
-        this.shield = shield;
+    public Robot(String name, String kind, int shield, int shots,int vis) {
         this.kind = kind;
         this.name = name;
         this.shots = shots;
+        if (shield > Server.world.getMaxShield()) this.shield = Server.world.getMaxShield();
+        else this.shield = shield;
+        this.reload = Server.world.getReloadTime();
+        this.repair = Server.world.getRepairTime();
+        if (vis > Server.world.getWorldVisibily()) this.visibility = Server.world.getWorldVisibily();
+        else this.visibility = vis;
         this.position = centre;
     }
 
@@ -77,6 +84,10 @@ public class Robot {
         return data;
     }
 
+    public void setPosition(Position centre) {
+        this.position= centre;
+    }
+
     public JsonObject state(){
         JsonObject state = new JsonObject();
 
@@ -109,6 +120,28 @@ public class Robot {
                 ", shots=" + shots +
                 '}';
     }
+    public boolean updatePosition(int nrSteps) {
+        int newX = this.position.getX();
+        int newY = this.position.getY();
 
+        switch (this.direction) {
+            case NORTH:
+                newY = newY + nrSteps;
+                break;
+            case EAST:
+                newX = newX + nrSteps;
+                break;
+            case SOUTH:
+                newY = newY - nrSteps;
+                break;
+            case WEST:
+                newX = newX - nrSteps;
+                break;
+        }
 
+        Position newPosition = new Position(newX, newY);
+        this.position=newPosition;
+        return true;
+    }
 }
+
