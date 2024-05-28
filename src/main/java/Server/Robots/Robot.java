@@ -129,12 +129,11 @@ public class Robot {
         Position newPosition = new Position(newX, newY);
 
         for (Obstacles obstacle : world.getObstacles()) {
-            System.out.println(obstacle);
             if (obstacle.blocksPosition(newPosition)) {
                 return false;
             }
-
-            else if (!world.getRobotList().isEmpty()) {
+        }
+        if (!world.getRobotList().isEmpty()) {
                 for (Robot i : Server.world.robotList) {
                     JsonObject state = i.state();
                     JsonArray positionArray = state.getAsJsonArray("position");
@@ -149,8 +148,9 @@ public class Robot {
                 return true;
             }
 
-        }
+
         this.position = newPosition;
         return true;
     }
 }
+

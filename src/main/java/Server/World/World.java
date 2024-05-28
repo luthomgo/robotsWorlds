@@ -17,7 +17,7 @@ public class World {
     }
 
     public void genObs(){
-        this.obstacles.add(new SqaureObstacle(5,5));
+        this.obstacles.add(new SqaureObstacle(0,10));
         this.obstacles.add(new SqaureObstacle(0,1));
         this.obstacles.add(new SqaureObstacle(15,2));
         this.obstacles.add(new SqaureObstacle(0,5));
