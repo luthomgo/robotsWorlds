@@ -1,30 +1,35 @@
 package Server.Robots;
 
 import Server.Commands.Command;
+import Server.Server;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class Robot {
-    private final Position TOP_LEFT = new Position(-200, 200);
-    private final Position BOTTOM_RIGHT = new Position(200, -200);
-    private Position centre = new Position(0,0);
+    private Position centre = new Position(5,5);
     private String name;
     private String kind;
     private int shield;
     private int shots;
     private Position position;
-    private int visibility = 10;
-    private int reload = 5;
-    private int repair = 5;
+    private int fireDistance = 20;
+    private int visibility ;
+    private int reload ;
+    private int repair ;
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
 
 
-    public Robot(String name, String kind, int shield, int shots) {
-        this.shield = shield;
+    public Robot(String name, String kind, int shield, int shots,int vis) {
         this.kind = kind;
         this.name = name;
         this.shots = shots;
+        if (shield > Server.world.getMaxShield()) this.shield = Server.world.getMaxShield();
+        else this.shield = shield;
+        this.reload = Server.world.getReloadTime();
+        this.repair = Server.world.getRepairTime();
+        if (vis > Server.world.getWorldVisibily()) this.visibility = Server.world.getWorldVisibily();
+        else this.visibility = vis;
         this.position = centre;
     }
 
@@ -69,6 +74,10 @@ public class Robot {
         data.addProperty("shields",this.shield);
 
         return data;
+    }
+
+    public void setPosition(Position centre) {
+        this.position= centre;
     }
 
     public JsonObject state(){
