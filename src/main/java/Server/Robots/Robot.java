@@ -1,12 +1,8 @@
 package Server.Robots;
 
 import Server.Commands.Command;
-import Server.Server;
-import Server.World.Obstacles;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import static Server.Server.world;
 
 public class Robot {
     private final Position TOP_LEFT = new Position(-200, 200);
@@ -127,29 +123,7 @@ public class Robot {
         }
 
         Position newPosition = new Position(newX, newY);
-
-        for (Obstacles obstacle : world.getObstacles()) {
-            if (obstacle.blocksPosition(newPosition)) {
-                return false;
-            }
-        }
-        if (!world.getRobotList().isEmpty()) {
-                for (Robot i : Server.world.robotList) {
-                    JsonObject state = i.state();
-                    JsonArray positionArray = state.getAsJsonArray("position");
-                    int stateX = positionArray.get(0).getAsInt();
-                    int stateY = positionArray.get(1).getAsInt();
-                    if (stateX == newPosition.getX() && stateY == newPosition.getY()) {
-                        return false;
-                    }
-                }
-            } else if (newPosition.isIn(TOP_LEFT, BOTTOM_RIGHT)) {
-                this.position = newPosition;
-                return true;
-            }
-
-
-        this.position = newPosition;
+        this.position=newPosition;
         return true;
     }
 }
