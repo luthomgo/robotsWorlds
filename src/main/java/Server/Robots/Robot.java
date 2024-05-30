@@ -2,8 +2,13 @@ package Server.Robots;
 
 import Server.Commands.Command;
 import Server.Server;
+import Server.World.Obstacles;
+import Server.World.RobotObstacle;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Robot {
     private Position centre = new Position(5,5);
@@ -124,6 +129,8 @@ public class Robot {
                 '}';
     }
     public boolean updatePosition(int nrSteps) {
+        List<Obstacles> temp = new ArrayList<>();
+        temp = Server.world.getObstacles();
         int newX = this.position.getX();
         int newY = this.position.getY();
 
@@ -141,10 +148,33 @@ public class Robot {
                 newX = newX - nrSteps;
                 break;
         }
-
         Position newPosition = new Position(newX, newY);
-        this.position=newPosition;
-        return true;
+
+        for (Robot i: Server.world.robotList){
+            if (i.getName().equals(this.name))continue;
+            Position ipos = i.getPosition();
+            Obstacles ob = new RobotObstacle(ipos.getX(), ipos.getY());
+            temp.add(ob);
+        }
+        for (Obstacles robotObs : temp){
+            if (robotObs.blocksPath(this.position,newPosition)) {
+                return false;
+            }
+        }
+
+        if (Position.Isin(newPosition.getX(), newPosition.getY())) {
+
+            for (Obstacles obstacle : Server.world.obstacles) {
+                System.out.println(obstacle);
+                if (obstacle.blocksPath(this.position,newPosition)) {
+                    return false;
+                }
+            }
+            this.position = newPosition;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void repairShields(){
