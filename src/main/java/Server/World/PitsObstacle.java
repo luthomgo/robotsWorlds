@@ -6,7 +6,7 @@ public class PitsObstacle implements Obstacles{
     private int x;
     private int y;
     private int size = 5;
-    private String type = "";
+    private String type = "pit";
 
 
     @Override
@@ -36,6 +36,6 @@ public class PitsObstacle implements Obstacles{
 
     @Override
     public String getType() {
-        return "";
+        return this.type;
     }
 }
