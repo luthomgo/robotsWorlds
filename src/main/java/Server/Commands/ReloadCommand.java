@@ -15,11 +15,16 @@ public class ReloadCommand extends Command {
     @Override
     public JsonObject execute(Robot target) {
         JsonObject response = new JsonObject();
+        int reloadtime = target.getShots();
 
-        // Reload the robot's shots
+        try{
+            Thread.sleep(reloadtime*1000L);
+        }
+        catch (InterruptedException e){
+            e.printStackTrace();
+        }
         target.reloadShots();
 
-        // Construct the response according to the protocol requirements
         response.addProperty("result", "OK");
         JsonObject jsonData = new JsonObject();
         jsonData.addProperty("message", "Done");

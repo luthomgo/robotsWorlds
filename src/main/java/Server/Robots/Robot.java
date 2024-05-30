@@ -44,6 +44,10 @@ public class Robot {
         return this.direction;
     }
 
+    public int getShots() {
+        return shots;
+    }
+
     public void updateDirection(boolean turnRight) {
         if (turnRight) {
             switch (this.direction) {
@@ -62,9 +66,9 @@ public class Robot {
         }
     }
 
-    public void reloadShots() {
-        this.shots = 10; // assuming 10 is the maximum number of shots
-    }
+//    public void reloadShots() {
+//        this.shots = 10; // assuming 10 is the maximum number of shots
+//    }
 
     public JsonObject data(){
         JsonObject data = new JsonObject();
