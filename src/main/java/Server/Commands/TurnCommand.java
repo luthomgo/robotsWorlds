@@ -22,6 +22,9 @@ public class TurnCommand extends Command {
 
         // Create the JSON response object
         JsonObject response = new JsonObject();
+        if (target.isRepairing()){
+            return generateErrorResponse("Robot is currently repairing and can't move");
+        }
 
         if (turnDirection.equalsIgnoreCase("right")) {
             // Update the robot's direction to the right
