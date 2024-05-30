@@ -35,6 +35,7 @@ public abstract class Command {
             case "forward" -> new ForwardCommand(args);
             case "back" -> new BackwardCommand(args);
             case "repair" -> new RepairCommand();
+            case "reload" -> new ReloadCommand();
             default -> new ErrorResponse(generateErrorResponse("Unsupported command"));
         };
     }

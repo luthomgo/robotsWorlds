@@ -6,28 +6,26 @@ import com.google.gson.JsonObject;
 
 public class ReloadCommand extends Command {
 
-    // Constructor that takes a JsonArray of arguments
-    public ReloadCommand(JsonArray args) {
-        super(args);
-    }
 
-    // The method that gets executed on the target robot
+
     @Override
     public JsonObject execute(Robot target) {
         JsonObject response = new JsonObject();
 
-        // Reload the robot's shots
-        target.reloadShots();
-
-        // Construct the response according to the protocol requirements
-        response.addProperty("result", "OK");
-        JsonObject jsonData = new JsonObject();
-        jsonData.addProperty("message", "Done");
-        response.add("data", jsonData);
-
-
-
-        response.add("state", target.state());
+        if (target.isReloading()) {
+            response.addProperty("result", "ERROR");
+            response.addProperty("message", "Robot is already reloading.");
+        } else if (target.getShots() == target.getMaxShots()) {
+            response.addProperty("result", "ERROR");
+            response.addProperty("message", "Robot is already fully loaded.");
+        } else {
+            target.startReloading();
+            response.addProperty("result", "OK");
+            JsonObject jsonData = new JsonObject();
+            jsonData.addProperty("message", "Done");
+            response.add("data", jsonData);
+            response.add("state", target.state());
+        }
 
         return response;
     }
