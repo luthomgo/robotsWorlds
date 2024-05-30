@@ -4,13 +4,16 @@ import Server.Robots.Robot;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class ForwardCommand extends Command{
+        public class ForwardCommand extends Command{
 
 
 
     @Override
     public JsonObject execute(Robot target) {
         JsonObject response = new JsonObject();
+        if (target.isRepairing()){
+            return generateErrorResponse("Robot is currently repairing and can't move");
+        }
 
         int nrSteps = Integer.parseInt(getArgument().getAsString());
         if (target.updatePosition(nrSteps)){

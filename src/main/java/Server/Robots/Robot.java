@@ -5,8 +5,6 @@ import Server.Server;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.util.Map;
-
 public class Robot {
     private Position centre = new Position(5,5);
     private String name;
@@ -20,6 +18,7 @@ public class Robot {
     private int repair ;
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
+    private boolean isRepairing = false;
 
 
     public Robot(String name, String kind, int shield, int shots,int vis) {
@@ -147,5 +146,31 @@ public class Robot {
         this.position=newPosition;
         return true;
     }
-}
 
+    public void repairShields(){
+        this.shield = Server.world.getMaxShield();
+    }
+
+    public int getRepair() {
+        return this.repair;
+    }
+
+    public void setRepair(int repair){
+        this.repair = repair;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus(){
+        return this.status;
+    }
+
+    public boolean isRepairing(){
+        return this.isRepairing;
+    }
+    public void setRepairing(boolean repairing){
+        this.isRepairing = repairing;
+    }
+}

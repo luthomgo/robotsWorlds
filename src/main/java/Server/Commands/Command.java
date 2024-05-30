@@ -33,6 +33,7 @@ public abstract class Command {
             case "state" -> new StateCommand();
             case "look" -> new LookCommand();
             case "forward" -> new ForwardCommand(args);
+            case "repair" -> new RepairCommand();
             default -> new ErrorResponse(generateErrorResponse("Unsupported command"));
         };
     }

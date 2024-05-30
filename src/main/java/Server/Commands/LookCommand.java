@@ -72,7 +72,7 @@ public class LookCommand extends Command {
             Position ob = new Position(i.getBottomLeftX(), i.getBottomLeftY());
 
             if (look_north.getY() >= i.getBottomLeftY() && tY <= i.getBottomLeftY() && tX >= i.getBottomLeftX() && tX <= i.getBottomLeftX() + i.getSize()){
-                System.out.println("not");
+//                System.out.println("not");
                 obstacleStats.addProperty("direction", "NORTH");
                 obstacleStats.addProperty("type", i.getType());
                 int distance = tY - i.getBottomLeftY();

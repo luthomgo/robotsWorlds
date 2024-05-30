@@ -11,6 +11,10 @@ public class BackwardCommand extends Command{
     @Override
     public JsonObject execute(Robot target) {
         JsonObject response = new JsonObject();
+        if (target.isRepairing()){
+            return generateErrorResponse("Robot is currently repairing and can't move");
+        }
+
 
         int nrSteps = Integer.parseInt(getArgument().getAsString());
         if (target.updatePosition(-nrSteps)){
