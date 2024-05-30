@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
         }
 
         int nrSteps = Integer.parseInt(getArgument().getAsString());
+
         if (target.updatePosition(nrSteps)){
             response.addProperty("result","OK");
             JsonObject data = new JsonObject();
