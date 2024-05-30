@@ -19,19 +19,27 @@ public class Robot {
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
     private boolean isRepairing = false;
+    private int iShield;
+    private int iShot;
+    private boolean reloading = false;
+    private int maxShots;
 
+    public int getReload() {
+        return reload;
+    }
 
-    public Robot(String name, String kind, int shield, int shots,int vis) {
+    public Robot(String name, String kind, int shield, int shots, int vis) {
         this.kind = kind;
         this.name = name;
-        this.shots = shots;
-        if (shield > Server.world.getMaxShield()) this.shield = Server.world.getMaxShield();
-        else this.shield = shield;
+        this.shots = shots;this.iShot = shots;
+        if (shield > Server.world.getMaxShield()) {this.shield = Server.world.getMaxShield();this.iShield = Server.world.getMaxShield();}
+        else this.shield = shield;this.iShield = shield;
         this.reload = Server.world.getReloadTime();
         this.repair = Server.world.getRepairTime();
         if (vis > Server.world.getWorldVisibily()) this.visibility = Server.world.getWorldVisibily();
         else this.visibility = vis;
         this.position = centre;
+
     }
 
     public JsonObject handleCommand(Command command) {
@@ -50,9 +58,38 @@ public class Robot {
         return this.direction;
     }
 
+
+    public void startReloading() {
+        int reloadTime = this.reload;
+        this.reloading = true;
+        this.status = "RELOAD";
+        new Thread(() -> {
+            try {
+                Thread.sleep(reloadTime * 1000L);
+                this.shots = this.maxShots;
+                this.status = "NORMAL";
+                this.reloading = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public boolean isReloading() {
+        return reloading;
+    }
+
     public int getShots() {
         return shots;
     }
+
+    public int getMaxShots() {
+        return maxShots;
+    }
+
+
+
+
 
     public void updateDirection(boolean turnRight) {
         if (turnRight) {

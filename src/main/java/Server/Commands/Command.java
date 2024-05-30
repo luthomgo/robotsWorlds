@@ -34,6 +34,7 @@ public abstract class Command {
             case "look" -> new LookCommand();
             case "forward" -> new ForwardCommand(args);
             case "repair" -> new RepairCommand();
+            case "reload" -> new ReloadCommand();
             default -> new ErrorResponse(generateErrorResponse("Unsupported command"));
         };
     }
