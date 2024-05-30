@@ -69,6 +69,10 @@ public class Robot {
         }
     }
 
+    public void reloadShots() {
+        this.shots = 10; // assuming 10 is the maximum number of shots
+    }
+
     public JsonObject data(){
         JsonObject data = new JsonObject();
 
