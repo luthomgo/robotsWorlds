@@ -60,19 +60,19 @@ public class Robot {
 
 
     public void startReloading() {
-        int reloadTime = this.reload;
+        int reloadTime = getReload();
         this.reloading = true;
         this.status = "RELOAD";
-        new Thread(() -> {
+
             try {
-                Thread.sleep(reloadTime * 1000L);
+                Thread.sleep(this.reload * 1000L);
                 this.shots = this.maxShots;
                 this.status = "NORMAL";
                 this.reloading = false;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }).start();
+
     }
 
     public boolean isReloading() {
