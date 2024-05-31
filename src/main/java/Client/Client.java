@@ -4,13 +4,21 @@ import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.*;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args) throws IOException
     {
         try {
-            InetAddress ip = InetAddress.getByName("localhost");
+            System.out.println("Please enter your ip Address:");
+            Scanner scanner = new Scanner(System.in);
+            String ipAddress = scanner.nextLine();
+            if (!isValidIpAddress(ipAddress)){
+                throw new IOException("Invalid ip address format");
+            }
+
+            InetAddress ip = InetAddress.getByName(ipAddress);
             Socket s = new Socket(ip, 5055);
 
             DataInputStream dis = new DataInputStream(s.getInputStream());
@@ -64,4 +72,22 @@ public class Client {
             dis.close();
         }catch (IOException ignored){}
     }
+    private static boolean isValidIpAddress(String ipAddress){
+        String[] ipNum = ipAddress.split("\\.");
+        if (ipNum.length != 4){
+            return false;
+        }
+        try {
+            for (String num : ipNum) {
+                int ip = Integer.parseInt(num);
+                if (ip < 0) {
+                    return false;
+                }
+            }
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
+    }
+
 }
