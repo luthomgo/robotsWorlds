@@ -31,6 +31,14 @@ public class Client {
 
                 name = scn.nextLine();
                 dos.writeUTF(name);
+
+                if(name.equalsIgnoreCase("exit"))
+                {
+                    System.out.println("Closing this connection : " + s);
+                    s.close();
+                    System.out.println("Connection closed");
+                    break;
+                }
                 String response = dis.readUTF();
                 if (response.contains("Hello")){
                 System.out.println(response);
@@ -41,6 +49,13 @@ public class Client {
             while (true) {
                 System.out.println(dis.readUTF());
                 String command = scn.nextLine();
+                if(command.equalsIgnoreCase("exit"))
+                {
+                    System.out.println("Closing this connection : " + s);
+                    s.close();
+                    System.out.println("Connection closed");
+                    break;
+                }
 
                 Request request = new Request(name, command);
                 JsonObject toSend = request.createRequest();
@@ -52,8 +67,7 @@ public class Client {
             while (true){
                 System.out.println(dis.readUTF());
                 String newCommand = scn.nextLine();
-
-                if(newCommand.equals("Exit"))
+                if(newCommand.equalsIgnoreCase("exit"))
                 {
                     System.out.println("Closing this connection : " + s);
                     s.close();
@@ -89,5 +103,7 @@ public class Client {
             return false;
         }
     }
+
+
 
 }
