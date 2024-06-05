@@ -66,6 +66,48 @@ public class LookCommand extends Command {
         Position look_west = new Position(tX - visibility,tY);
         Position look_east = new Position(tX + visibility,tY);
 
+        //edge
+        if (look_north.getY() >= Server.world.getTOP_LEFT().getY()){
+            JsonObject edgeStats = new JsonObject();
+            edgeStats.addProperty("direction", "NORTH");
+            edgeStats.addProperty("type", "Edge");
+            int distance = look_north.getY() - Server.world.getTOP_LEFT().getY();
+            if (distance < 0) distance *= -1; //remove negative to positive
+            edgeStats.addProperty("distance",distance);
+            objects.add(edgeStats);
+
+        }
+        if (look_south.getY() <= Server.world.getBOTTOM_RIGHT().getY()){
+            JsonObject edgeStats = new JsonObject();
+            edgeStats.addProperty("direction", "SOUTH");
+            edgeStats.addProperty("type", "Edge");
+            int distance = Server.world.getBOTTOM_RIGHT().getY() - look_south.getY() ;
+            if (distance < 0) distance *= -1; //remove negative to positive
+            edgeStats.addProperty("distance",distance);
+            objects.add(edgeStats);
+
+        }
+        if (look_east.getX() >= Server.world.getTOP_LEFT().getX()){
+            JsonObject edgeStats = new JsonObject();
+            edgeStats.addProperty("direction", "EAST");
+            edgeStats.addProperty("type", "Edge");
+            int distance = look_east.getX() - Server.world.getTOP_LEFT().getX();
+            if (distance < 0) distance *= -1; //remove negative to positive
+            edgeStats.addProperty("distance",distance);
+            objects.add(edgeStats);
+
+        }
+        if (look_west.getX() <= Server.world.getBOTTOM_RIGHT().getX()){
+            JsonObject edgeStats = new JsonObject();
+            edgeStats.addProperty("direction", "WEST");
+            edgeStats.addProperty("type", "Edge");
+            int distance =  Server.world.getBOTTOM_RIGHT().getX() - look_west.getX();
+            if (distance < 0) distance *= -1; //remove negative to positive
+            edgeStats.addProperty("distance",distance);
+            objects.add(edgeStats);
+
+        }
+
         Position curPos = target.getPosition();
         for (Obstacles i : Server.world.obstacles) {
             JsonObject obstacleStats = new JsonObject();
@@ -161,6 +203,48 @@ public class LookCommand extends Command {
                     robotStats.addProperty("distance",distance);
                     objects.add(robotStats);
                 }
+            }
+
+            //edge
+            if (robot_north.getY() >= Server.world.getTOP_LEFT().getY()){
+                JsonObject edgeStats = new JsonObject();
+                edgeStats.addProperty("direction", "NORTH");
+                edgeStats.addProperty("type", "Edge");
+                int distance = robot_north.getY()- Server.world.getTOP_LEFT().getY();
+                if (distance < 0) distance *= -1; //remove negative to positive
+                edgeStats.addProperty("distance",distance);
+                objects.add(edgeStats);
+
+            }
+            if (robot_south.getY() <= Server.world.getBOTTOM_RIGHT().getY()){
+                JsonObject edgeStats = new JsonObject();
+                edgeStats.addProperty("direction", "SOUTH");
+                edgeStats.addProperty("type", "Edge");
+                int distance = Server.world.getBOTTOM_RIGHT().getY() - robot_south.getY();
+                if (distance < 0) distance *= -1; //remove negative to positive
+                edgeStats.addProperty("distance",distance);
+                objects.add(edgeStats);
+
+            }
+            if (robot_east.getX() >= Server.world.getTOP_LEFT().getX()){
+                JsonObject edgeStats = new JsonObject();
+                edgeStats.addProperty("direction", "EAST");
+                edgeStats.addProperty("type", "Edge");
+                int distance = robot_east.getX()- Server.world.getTOP_LEFT().getX();
+                if (distance < 0) distance *= -1; //remove negative to positive
+                edgeStats.addProperty("distance",distance);
+                objects.add(edgeStats);
+
+            }
+            if (robot_west.getX() <= Server.world.getBOTTOM_RIGHT().getX()){
+                JsonObject edgeStats = new JsonObject();
+                edgeStats.addProperty("direction", "WEST");
+                edgeStats.addProperty("type", "Edge");
+                int distance = Server.world.getBOTTOM_RIGHT().getX() - robot_west.getX();
+                if (distance < 0) distance *= -1; //remove negative to positive
+                edgeStats.addProperty("distance",distance);
+                objects.add(edgeStats);
+
             }
 
         }
