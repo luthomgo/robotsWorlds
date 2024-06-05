@@ -1,5 +1,6 @@
 package Server.Robots;
 
+import Client.Client;
 import Server.Commands.Command;
 import Server.Server;
 import Server.World.Obstacles;
@@ -7,6 +8,9 @@ import Server.World.RobotObstacle;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +32,16 @@ public class Robot {
     private int iShot;
     private boolean reloading = false;
     private int maxShots;
+    private Socket client;
 
     public int getReload() {
         return reload;
     }
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_RESET = "\u001B[0m";
 
-    public Robot(String name, String kind, int shield, int shots, int vis) {
+
+    public Robot(String name, String kind, int shield, int shots, int vis,Socket s) {
         this.kind = kind;
         this.name = name;
         this.shots = shots;this.iShot = shots;
@@ -44,7 +52,7 @@ public class Robot {
         if (vis > Server.world.getWorldVisibily()) this.visibility = Server.world.getWorldVisibily();
         else this.visibility = vis;
         this.position = centre;
-
+        this.client = s;
     }
 
     public JsonObject handleCommand(Command command) {
@@ -190,7 +198,7 @@ public class Robot {
                 break;
         }
         Position newPosition = new Position(newX, newY);
-
+        checkIfDead();
         for (Robot i: Server.world.robotList){
             if (i.getName().equals(this.name))continue;
             Position ipos = i.getPosition();
@@ -206,8 +214,10 @@ public class Robot {
         if (Position.Isin(newPosition.getX(), newPosition.getY())) {
 
             for (Obstacles obstacle : Server.world.obstacles) {
-                System.out.println(obstacle);
+                String type = obstacle.getType();
                 if (obstacle.blocksPath(this.position,newPosition)) {
+                    if (type.equals("pit")) {
+                        pitDeath();}
                     return false;
                 }
             }
@@ -217,6 +227,36 @@ public class Robot {
             return false;
         }
     }
+
+    public void pitDeath(){
+        Server.world.removeRobot(this);
+        System.out.println(ANSI_RED+"Robot "+this.name+" has died"+ANSI_RESET);
+            try {
+                DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
+                dos.writeUTF(ANSI_RED+"You have fallen into a pit"+ANSI_RESET);
+                dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)"+ANSI_RESET);
+                this.client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    public void checkIfDead() {
+        if (this.shield == 0 ) {
+            Server.world.removeRobot(this);
+            System.out.println(ANSI_RED+"Robot "+this.name+" has died"+ANSI_RESET);
+                try {
+                    DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
+                    dos.writeUTF(ANSI_RED+"You're shields have hit 0"+ANSI_RESET);
+                    dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)"+ANSI_RESET);
+                    this.client.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
 
     public void repairShields(){
         this.shield = Server.world.getMaxShield();
