@@ -15,13 +15,16 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Server.ServerCommands.ServerCommand.ANSI_RED;
+import static Server.ServerCommands.ServerCommand.ANSI_RESET;
+
 public class Robot {
     private DataInputStream dis;
     private DataOutputStream dos;
-    private Position centre = new Position(5,5);
+    private Position centre = new Position(0,0);
     private String name;
     private String kind;
-    private int shield;
+    public int shield;
     private int shots;
     private Position position;
     private int fireDistance = 20;
@@ -31,7 +34,7 @@ public class Robot {
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
     private boolean isRepairing = false;
-    private int iShield;
+    public int iShield;
     private int iShot;
     private boolean reloading = false;
     private int maxShots;
