@@ -6,7 +6,7 @@ public class RobotObstacle implements Obstacles{
     private int x;
     private int y;
     private int size = 1;
-    private String type = "mountain";
+    private String type = "robot";
 
 
     public RobotObstacle(int x, int y){

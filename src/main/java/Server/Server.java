@@ -108,7 +108,7 @@ class ClientHandler extends Thread
                 if (!request.contains("launch")) {
                     dos.writeUTF(generateErrorResponse("Unsupported command").toString());
                 } else {
-                    Launch l = new Launch(jsonObject);
+                    Launch l = new Launch(jsonObject,s,dos,dis);
                     this.robot = l.getRobot();
                     Server.world.robotList.add(this.robot);
                     JsonObject respond = l.LaunchResponse();

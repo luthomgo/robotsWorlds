@@ -41,8 +41,8 @@ public class Client {
                 }
                 String response = dis.readUTF();
                 if (response.contains("Hello")){
-                System.out.println(response);
-                break;
+                    System.out.println(response);
+                    break;
                 }else {System.out.println(response);}
 
             }
