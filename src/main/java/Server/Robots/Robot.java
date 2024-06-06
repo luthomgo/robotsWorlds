@@ -180,6 +180,7 @@ public class Robot {
     public boolean updatePosition(int nrSteps) {
         List<Obstacles> temp = new ArrayList<>();
         temp = Server.world.getObstacles();
+
         int newX = this.position.getX();
         int newY = this.position.getY();
 
@@ -205,22 +206,27 @@ public class Robot {
             Obstacles ob = new RobotObstacle(ipos.getX(), ipos.getY());
             temp.add(ob);
         }
+
         for (Obstacles robotObs : temp){
+            if(!robotObs.getType().equals("robot")){continue;}
             if (robotObs.blocksPath(this.position,newPosition)) {
+                temp.clear();
                 return false;
             }
         }
 
         if (Position.Isin(newPosition.getX(), newPosition.getY())) {
-
             for (Obstacles obstacle : Server.world.obstacles) {
-                String type = obstacle.getType();
                 if (obstacle.blocksPath(this.position,newPosition)) {
+                    String type = obstacle.getType();
                     if (type.equals("pit")) {
                         pitDeath();}
-                    return false;
+                    else return false;
                 }
+
             }
+
+
             this.position = newPosition;
             return true;
         } else {
