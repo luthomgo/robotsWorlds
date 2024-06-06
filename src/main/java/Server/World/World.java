@@ -40,9 +40,9 @@ public class World {
     }
 
     public void genObs(){
-        this.obstacles.add(new MountainObstacle(5,25));
-//        this.obstacles.add(new MountainObstacle(5,9));
-//        this.obstacles.add(new MountainObstacle(5,2));
+//        this.obstacles.add(new MountainObstacle(5,25));
+//        this.obstacles.add(new MountainObstacle(5,7));
+//        this.obstacles.add(new MountainObstacle(5,6));
 //        this.obstacles.add(new MountainObstacle(2,5));
 //        this.obstacles.add(new MountainObstacle(8,5));
     }
