@@ -36,10 +36,12 @@ public class Robot {
     private boolean reloading = false;
     private int maxShots;
     private Socket client;
+    public static final String ANSI_RED = "\u001B[31m";
 
     public int getReload() {
         return reload;
     }
+
     public void minusShield(){
         if(this.shield > 0){
             this.shield -= 1;
@@ -118,9 +120,6 @@ public class Robot {
     public int getMaxShots() {
         return maxShots;
     }
-
-
-
 
 
     public void updateDirection(boolean turnRight) {
@@ -253,11 +252,11 @@ public class Robot {
 
     public void pitDeath(){
         Server.world.removeRobot(this);
-        System.out.println(ANSI_RED+"Robot "+this.name+" has died"+ANSI_RESET);
+        System.out.println(ANSI_RED+"Robot "+this.name+" has died");
             try {
                 DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
-                dos.writeUTF(ANSI_RED+"You have fallen into a pit"+ANSI_RESET);
-                dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)"+ANSI_RESET);
+                dos.writeUTF(ANSI_RED+"You have fallen into a pit");
+                dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)");
                 this.client.close();
                 this.dos.close();
                 this.dis.close();
@@ -270,11 +269,11 @@ public class Robot {
     public void checkIfDead() {
         if (this.shield == 0 ) {
             Server.world.removeRobot(this);
-            System.out.println(ANSI_RED+"Robot "+this.name+" has died"+ANSI_RESET);
+            System.out.println(ANSI_RED+"Robot "+this.name+" has died");
                 try {
                     DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
-                    dos.writeUTF(ANSI_RED+"You're shields have hit 0"+ANSI_RESET);
-                    dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)"+ANSI_RESET);
+                    dos.writeUTF(ANSI_RED+"You're shields have hit 0");
+                    dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)");
                     this.client.close();
                     this.dos.close();
                     this.dis.close();
