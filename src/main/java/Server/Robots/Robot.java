@@ -8,6 +8,7 @@ import Server.World.RobotObstacle;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Robot {
+    private DataInputStream dis;
+    private DataOutputStream dos;
     private Position centre = new Position(5,5);
     private String name;
     private String kind;
@@ -41,7 +44,7 @@ public class Robot {
     public static final String ANSI_RESET = "\u001B[0m";
 
 
-    public Robot(String name, String kind, int shield, int shots, int vis,Socket s) {
+    public Robot(String name, String kind, int shield, int shots, int vis, Socket s,DataOutputStream dos, DataInputStream dis) {
         this.kind = kind;
         this.name = name;
         this.shots = shots;this.iShot = shots;
@@ -53,6 +56,8 @@ public class Robot {
         else this.visibility = vis;
         this.position = centre;
         this.client = s;
+        this.dis = dis;
+        this.dos = dos;
     }
 
     public JsonObject handleCommand(Command command) {
@@ -122,9 +127,7 @@ public class Robot {
         }
     }
 
-//    public void reloadShots() {
-//        this.shots = 10; // assuming 10 is the maximum number of shots
-//    }
+
 
     public JsonObject data(){
         JsonObject data = new JsonObject();
@@ -242,6 +245,8 @@ public class Robot {
                 dos.writeUTF(ANSI_RED+"You have fallen into a pit"+ANSI_RESET);
                 dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)"+ANSI_RESET);
                 this.client.close();
+                this.dos.close();
+                this.dis.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -257,6 +262,8 @@ public class Robot {
                     dos.writeUTF(ANSI_RED+"You're shields have hit 0"+ANSI_RESET);
                     dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)"+ANSI_RESET);
                     this.client.close();
+                    this.dos.close();
+                    this.dis.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
