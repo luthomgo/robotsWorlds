@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 public class RepairCommand extends Command{
     @Override
     public JsonObject execute(Robot target) {
-        target.setStatus("repair");
+        target.setStatus("REPAIR");
         target.setRepairing(true);
 
         int repairTime = target.getRepair();

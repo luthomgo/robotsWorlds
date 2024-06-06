@@ -15,6 +15,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Server.ServerCommands.ServerCommand.ANSI_RED;
+import static Server.ServerCommands.ServerCommand.ANSI_RESET;
+
 public class Robot {
     private DataInputStream dis;
     private DataOutputStream dos;
@@ -30,12 +33,12 @@ public class Robot {
     private int repair ;
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
-    private boolean isRepairing = false;
     private int iShield;
-    private int iShot;
-    private boolean reloading = false;
+    public int iShot;
     private int maxShots;
     private Socket client;
+    private boolean isReloading = false;
+    private boolean isRepairing = false;
 
     public int getReload() {
         return reload;
@@ -91,25 +94,6 @@ public class Robot {
     }
 
 
-    public void startReloading() {
-        int reloadTime = getReload();
-        this.reloading = true;
-        this.status = "RELOAD";
-
-            try {
-                Thread.sleep(this.reload * 1000L);
-                this.shots = this.maxShots;
-                this.status = "NORMAL";
-                this.reloading = false;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-    }
-
-    public boolean isReloading() {
-        return reloading;
-    }
 
     public int getShots() {
         return shots;
@@ -305,10 +289,23 @@ public class Robot {
         return this.status;
     }
 
+    public void setiShot(int iShot) {
+        this.iShot = iShot;
+    }
+
     public boolean isRepairing(){
         return this.isRepairing;
     }
     public void setRepairing(boolean repairing){
         this.isRepairing = repairing;
+    }
+
+    public boolean isReloading() {
+
+        return this.isReloading;
+    }
+
+    public void setReload(boolean reloading){
+        this.isReloading = reloading;
     }
 }
