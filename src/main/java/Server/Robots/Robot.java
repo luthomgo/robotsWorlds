@@ -1,5 +1,6 @@
 package Server.Robots;
 
+import Client.Client;
 import Server.Commands.Command;
 import Server.Server;
 import Server.World.Obstacles;
@@ -7,10 +8,16 @@ import Server.World.RobotObstacle;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Robot {
+    private DataInputStream dis;
+    private DataOutputStream dos;
     private Position centre = new Position(5,5);
     private String name;
     private String kind;
@@ -28,12 +35,30 @@ public class Robot {
     private int iShot;
     private boolean reloading = false;
     private int maxShots;
+    private Socket client;
 
     public int getReload() {
         return reload;
     }
+    public void minusShield(){
+        if(this.shield > 0){
+            this.shield -= 1;
+        }else {
+            System.out.println("dies");
+            //abdul dies
+        }
+    }
 
-    public Robot(String name, String kind, int shield, int shots, int vis) {
+    public boolean minusShot(){
+        if(this.shots > 0){
+            this.shots -= 1;
+            return true;
+        }
+        return false;
+    }
+
+
+    public Robot(String name, String kind, int shield, int shots, int vis, Socket s,DataOutputStream dos, DataInputStream dis) {
         this.kind = kind;
         this.name = name;
         this.shots = shots;this.iShot = shots;
@@ -44,7 +69,9 @@ public class Robot {
         if (vis > Server.world.getWorldVisibily()) this.visibility = Server.world.getWorldVisibily();
         else this.visibility = vis;
         this.position = centre;
-
+        this.client = s;
+        this.dis = dis;
+        this.dos = dos;
     }
 
     public JsonObject handleCommand(Command command) {
@@ -114,9 +141,7 @@ public class Robot {
         }
     }
 
-//    public void reloadShots() {
-//        this.shots = 10; // assuming 10 is the maximum number of shots
-//    }
+
 
     public JsonObject data(){
         JsonObject data = new JsonObject();
@@ -172,6 +197,7 @@ public class Robot {
     public boolean updatePosition(int nrSteps) {
         List<Obstacles> temp = new ArrayList<>();
         temp = Server.world.getObstacles();
+
         int newX = this.position.getX();
         int newY = this.position.getY();
 
@@ -190,33 +216,74 @@ public class Robot {
                 break;
         }
         Position newPosition = new Position(newX, newY);
-
+        checkIfDead();
         for (Robot i: Server.world.robotList){
             if (i.getName().equals(this.name))continue;
             Position ipos = i.getPosition();
             Obstacles ob = new RobotObstacle(ipos.getX(), ipos.getY());
             temp.add(ob);
         }
+
         for (Obstacles robotObs : temp){
+            if(!robotObs.getType().equals("robot")){continue;}
             if (robotObs.blocksPath(this.position,newPosition)) {
+                temp.clear();
                 return false;
             }
         }
 
         if (Position.Isin(newPosition.getX(), newPosition.getY())) {
-
             for (Obstacles obstacle : Server.world.obstacles) {
-                System.out.println(obstacle);
                 if (obstacle.blocksPath(this.position,newPosition)) {
-                    return false;
+                    String type = obstacle.getType();
+                    if (type.equals("pit")) {
+                        pitDeath();}
+                    else return false;
                 }
+
             }
+
+
             this.position = newPosition;
             return true;
         } else {
             return false;
         }
     }
+
+    public void pitDeath(){
+        Server.world.removeRobot(this);
+        System.out.println(ANSI_RED+"Robot "+this.name+" has died"+ANSI_RESET);
+            try {
+                DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
+                dos.writeUTF(ANSI_RED+"You have fallen into a pit"+ANSI_RESET);
+                dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)"+ANSI_RESET);
+                this.client.close();
+                this.dos.close();
+                this.dis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    public void checkIfDead() {
+        if (this.shield == 0 ) {
+            Server.world.removeRobot(this);
+            System.out.println(ANSI_RED+"Robot "+this.name+" has died"+ANSI_RESET);
+                try {
+                    DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
+                    dos.writeUTF(ANSI_RED+"You're shields have hit 0"+ANSI_RESET);
+                    dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)"+ANSI_RESET);
+                    this.client.close();
+                    this.dos.close();
+                    this.dis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
 
     public void repairShields(){
         this.shield = Server.world.getMaxShield();
