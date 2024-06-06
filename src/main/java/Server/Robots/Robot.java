@@ -40,8 +40,22 @@ public class Robot {
     public int getReload() {
         return reload;
     }
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_RESET = "\u001B[0m";
+    public void minusShield(){
+        if(this.shield > 0){
+            this.shield -= 1;
+        }else {
+            System.out.println("dies");
+            //abdul dies
+        }
+    }
+
+    public boolean minusShot(){
+        if(this.shots > 0){
+            this.shots -= 1;
+            return true;
+        }
+        return false;
+    }
 
 
     public Robot(String name, String kind, int shield, int shots, int vis, Socket s,DataOutputStream dos, DataInputStream dis) {
