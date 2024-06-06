@@ -15,10 +15,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Server.ServerCommands.ServerCommand.ANSI_RED;
+import static Server.ServerCommands.ServerCommand.ANSI_RESET;
+
 public class Robot {
     private DataInputStream dis;
     private DataOutputStream dos;
-    private Position centre = new Position(5,5);
+    private Position centre = new Position(0,0);
     private String name;
     private String kind;
     public int shield;
