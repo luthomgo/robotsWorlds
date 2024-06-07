@@ -33,13 +33,12 @@ public class Robot {
     private int repair ;
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
-    private boolean isRepairing = false;
-    public int iShield;
-    private int iShot;
-    private boolean reloading = false;
+    private int iShield;
+    public int iShot;
     private int maxShots;
     private Socket client;
-    public static final String ANSI_RED = "\u001B[31m";
+    private boolean isReloading = false;
+    private boolean isRepairing = false;
 
     public int getReload() {
         return reload;
@@ -96,25 +95,6 @@ public class Robot {
     }
 
 
-    public void startReloading() {
-        int reloadTime = getReload();
-        this.reloading = true;
-        this.status = "RELOAD";
-
-            try {
-                Thread.sleep(this.reload * 1000L);
-                this.shots = this.maxShots;
-                this.status = "NORMAL";
-                this.reloading = false;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-    }
-
-    public boolean isReloading() {
-        return reloading;
-    }
 
     public int getShots() {
         return shots;
@@ -307,10 +287,23 @@ public class Robot {
         return this.status;
     }
 
+    public void setiShot(int iShot) {
+        this.iShot = iShot;
+    }
+
     public boolean isRepairing(){
         return this.isRepairing;
     }
     public void setRepairing(boolean repairing){
         this.isRepairing = repairing;
+    }
+
+    public boolean isReloading() {
+
+        return this.isReloading;
+    }
+
+    public void setReload(boolean reloading){
+        this.isReloading = reloading;
     }
 }
