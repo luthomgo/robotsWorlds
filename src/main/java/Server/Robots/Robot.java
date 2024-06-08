@@ -232,14 +232,16 @@ public class Robot {
             return false;
         }
     }
-
+    public int getIshield(){
+        return this.iShield;
+    }
     public void pitDeath(){
         Server.world.removeRobot(this);
         System.out.println(ANSI_RED+"Robot "+this.name+" has died");
             try {
                 DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
-                dos.writeUTF(ANSI_RED+"You have fallen into a pit");
-                dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)");
+                dos.writeUTF(ANSI_RED+"You have fallen into a pit" + ANSI_RESET);
+                dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)" + ANSI_RESET);
                 this.client.close();
                 this.dos.close();
                 this.dis.close();
@@ -248,15 +250,14 @@ public class Robot {
             }
         }
 
-
     public void checkIfDead() {
         if (this.shield == 0 ) {
             Server.world.removeRobot(this);
-            System.out.println(ANSI_RED+"Robot "+this.name+" has died");
+            System.out.println(ANSI_RED+"Robot "+this.name+" has died" + ANSI_RESET);
                 try {
                     DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
-                    dos.writeUTF(ANSI_RED+"You're shields have hit 0");
-                    dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)");
+                    dos.writeUTF(ANSI_RED+"You're shields have hit 0" + ANSI_RESET);
+                    dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)" + ANSI_RESET);
                     this.client.close();
                     this.dos.close();
                     this.dis.close();

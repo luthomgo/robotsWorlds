@@ -41,7 +41,7 @@ public class World {
 
     public void genObs(){
 //        this.obstacles.add(new MountainObstacle(5,19));
-//        this.obstacles.add(new PitsObstacle(5,20));
+        this.obstacles.add(new PitsObstacle(5,20));
 //        this.obstacles.add(new MountainObstacle(5,9));
 //        this.obstacles.add(new MountainObstacle(5,2));
 //        this.obstacles.add(new MountainObstacle(2,5));

@@ -12,7 +12,7 @@ public class RepairCommand extends Command{
 
         int repairTime = target.getRepair();
 
-        if (target.iShield == Server.world.getMaxShield()){
+        if (target.getIshield() == Server.world.getMaxShield()){
             JsonObject response = new JsonObject();
             response.addProperty("result", "OK");
             JsonObject data = new JsonObject();
