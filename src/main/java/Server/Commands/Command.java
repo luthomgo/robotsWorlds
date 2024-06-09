@@ -4,12 +4,10 @@ import Server.Robots.Robot;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import java.util.Arrays;
 
 public abstract class Command {
     private JsonArray args;
-
     public Command(JsonArray args){
         this.args = args;
     }
@@ -24,11 +22,11 @@ public abstract class Command {
     public static Command create(JsonObject response) {
         String command = response.get("command").getAsString();
         JsonArray args = response.get("arguments").getAsJsonArray();
-        System.out.println(args);
 
         if (!isValidArg(args)){
             return new ErrorResponse(generateErrorResponse("Could not parse arguments"));
         }
+
         return switch (command) {
             case "state" -> new StateCommand();
             case "look" -> new LookCommand();
@@ -43,7 +41,7 @@ public abstract class Command {
         };
     }
     private static boolean isValidArg(JsonArray args){
-        if (args.size() == 0){
+        if (args.isEmpty()){
             return true;
         }
         String[] validArgs = {"sniper", "tank", "brad1", "left", "right", " "};
@@ -73,7 +71,7 @@ public abstract class Command {
     }
 
     public static class ErrorResponse extends Command{
-        private JsonObject errorResponse;
+        private final JsonObject errorResponse;
 
         public ErrorResponse(JsonObject errorResponse){
             this.errorResponse = errorResponse;

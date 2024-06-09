@@ -3,15 +3,14 @@ package Server.World;
 import Server.Robots.Position;
 
 public class LakesObstacles implements Obstacles{
-    private int x;
-    private int y;
-    private int size = 15;
-    private String type = "lakes";
+    private final int x;
+    private final int y;
+    private final int size = 10;
+    private final String type = "lakes";
 
     public LakesObstacles(int x, int y){
         this.x = x;
         this.y = y;
-
     }
 
     @Override
@@ -58,7 +57,7 @@ public class LakesObstacles implements Obstacles{
 
     @Override
     public String toString() {
-        return "SquareObstacle{ " +
+        return "Lake Obstacle{ " +
                 " x=" + getBottomLeftX()+
                 ", y=" + getBottomLeftY() +
                 " }";

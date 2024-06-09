@@ -15,6 +15,7 @@ public class TurnCommand extends Command {
         JsonArray arguments = getArgument();
         String turnDirection = arguments.get(0).getAsString();
         JsonObject response = new JsonObject();
+
         if (target.isRepairing()){
             return generateErrorResponse("Robot is currently repairing and can't move");
         }
@@ -23,24 +24,21 @@ public class TurnCommand extends Command {
             target.updateDirection(true);
             JsonObject data = new JsonObject();
             response.addProperty("result", "ok");
-            JsonObject jsondata = new JsonObject();
-            jsondata.addProperty("message", "done");
-            response.add("data", jsondata);
+            JsonObject jsonData = new JsonObject();
+            jsonData.addProperty("message", "done");
+            response.add("data", jsonData);
             response.add("state", target.state());
 
         } else if (turnDirection.equalsIgnoreCase("left")) {
             target.updateDirection(true);
             JsonObject data = new JsonObject();
             response.addProperty("result", "ok");
-            JsonObject jsondata = new JsonObject();
-            jsondata.addProperty("message", "done");
-            response.add("data", jsondata);
+            JsonObject jsonData = new JsonObject();
+            jsonData.addProperty("message", "done");
+            response.add("data", jsonData);
             response.add("state", target.state());
 
         }
-
         return response;
-
     }
-
 }

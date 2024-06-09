@@ -3,9 +3,9 @@ package Server.World;
 import Server.Robots.Position;
 
 public class PitsObstacle implements Obstacles{
-    private int x;
-    private int y;
-    private int size = 5;
+    private final int x;
+    private final int y;
+    private final int size = 1;
     private String type = "pit";
 
 
@@ -52,13 +52,12 @@ public class PitsObstacle implements Obstacles{
         if (aY >= this.y && aY <= this.y + this.size && bY >= this.y && bY <= this.y + this.size){
             return this.x >= aX && this.x <= bX;
         }
-
         return false;
     }
 
     @Override
     public String toString() {
-        return "SquareObstacle{ " +
+        return "Pit Obstacle{ " +
                 " x=" + getBottomLeftX()+
                 ", y=" + getBottomLeftY() +
                 " }";

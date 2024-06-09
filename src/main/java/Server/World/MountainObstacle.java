@@ -3,11 +3,10 @@ package Server.World;
 import Server.Robots.Position;
 
 public class MountainObstacle implements Obstacles{
-    private int x;
-    private int y;
-    private int size = 5;
-    private String type = "mountain";
-
+    private final int x;
+    private final int y;
+    private final int size = 5;
+    private final String type = "mountain";
 
     public MountainObstacle(int x, int y){
         this.x = x;
@@ -58,7 +57,7 @@ public class MountainObstacle implements Obstacles{
 
     @Override
     public String toString() {
-        return "SquareObstacle{ " +
+        return "Mountain Obstacle{ " +
                 " x=" + getBottomLeftX()+
                 ", y=" + getBottomLeftY() +
                 " }";

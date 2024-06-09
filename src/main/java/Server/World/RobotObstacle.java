@@ -3,9 +3,9 @@ package Server.World;
 import Server.Robots.Position;
 
 public class RobotObstacle implements Obstacles{
-    private int x;
-    private int y;
-    private int size = 1;
+    private final int x;
+    private final int y;
+    private final int size = 1;
     private String type = "robot";
 
 
@@ -58,7 +58,7 @@ public class RobotObstacle implements Obstacles{
 
     @Override
     public String toString() {
-        return "SquareObstacle{ " +
+        return "Robot Obstacle{ " +
                 " x=" + getBottomLeftX()+
                 ", y=" + getBottomLeftY() +
                 " }";

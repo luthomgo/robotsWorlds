@@ -25,13 +25,13 @@ public class HelpCommand extends Command {
     }
 
     private String getHelpText() {
-        StringBuilder helpText = new StringBuilder();
-        helpText.append("Available Commands:\n");
-        helpText.append("1. state - Returns the current state of the robot.\n");
-        helpText.append("2. look - Returns the current view from the robot's perspective.\n");
-        helpText.append("3. forward <steps> - Moves the robot forward by the specified number of steps.\n");
-        helpText.append("4. turn <direction> - Turns the robot in the specified direction (left or right).\n");
-        helpText.append("5. help - Displays this help message.\n");
-        return helpText.toString();
+        return """
+                Available Commands:
+                1. state - Returns the current state of the robot.
+                2. look - Returns the current view from the robot's perspective.
+                3. forward <steps> - Moves the robot forward by the specified number of steps.
+                4. turn <direction> - Turns the robot in the specified direction (left or right).
+                5. help - Displays this help message.
+                """;
     }
 }

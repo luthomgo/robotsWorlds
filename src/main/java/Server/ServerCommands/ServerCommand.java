@@ -4,21 +4,19 @@ package Server.ServerCommands;
 import Server.Robots.Position;
 import Server.Robots.Robot;
 import Server.Server;
-import Server.World.SqaureObstacle;
-import Server.World.World;
 import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import static Server.Server.clientSockets;
-import static Server.Server.world;
 
 public class ServerCommand {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
+
     public void ServerCommand(ServerSocket socket){
         BufferedReader com = new BufferedReader(new InputStreamReader(System.in));
         PrintStream out = new PrintStream(System.out);
@@ -73,12 +71,10 @@ public class ServerCommand {
                             String name = i.getName();
                             JsonObject state = i.state();
                             System.out.print("Robot Name: ");
-                            System.out.println(ANSI_GREEN + name + ANSI_RESET); // Print name in green and reset color
+                            System.out.println(ANSI_GREEN + name + ANSI_RESET);
                             System.out.println("Robot State: " + state.toString());
-                            System.out.println(); // Add an empty line for better readability between robots
+                            System.out.println();
                         }
-
-
                     }
                     else{
                         out.println("command not understood");
@@ -88,16 +84,4 @@ public class ServerCommand {
         });
         t.start();
     }
-
-//    public void robot(){
-//        System.out.println("Robot");
-//        for(Robot robot : world.getPlayers()){
-//            System.out.println("Name: " + robot.getName());
-//            System.out.println("Position: " + robot.getPosition());
-//            System.out.println("Direction: " + robot.getCurDirection());
-//            System.out.println("State: " + robot.getState());
-//        }
-//
-//    }
-
 }
