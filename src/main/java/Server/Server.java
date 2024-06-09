@@ -60,6 +60,7 @@ public class Server {
         }
     }
 }
+
 class ClientHandler extends Thread
 {
     final DataInputStream dis;
@@ -67,8 +68,6 @@ class ClientHandler extends Thread
     final Socket s;
 
     private Robot robot;
-
-
 
     public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos)
     {
@@ -108,19 +107,27 @@ class ClientHandler extends Thread
                 if (!request.contains("launch")) {
                     dos.writeUTF(generateErrorResponse("Unsupported command").toString());
                 } else {
-                    Launch l = new Launch(jsonObject,s,dos,dis);
-                    this.robot = l.getRobot();
-                    Server.world.robotList.add(this.robot);
-                    JsonObject respond = l.LaunchResponse();
-                    dos.writeUTF(respond.toString());
-                    break;
+                    if (Server.world.getRobotList().size() == Server.world.getPlayers()){
+                        JsonObject toMany = new JsonObject();
+                        toMany.addProperty("result","ERROR");
+                        JsonObject data = new JsonObject();
+                        data.addProperty("message","No more space in this world");
+                        toMany.add("data",data);
+                        dos.writeUTF(toMany.toString());
+                    }else{
+                        Launch l = new Launch(jsonObject,s,dos,dis);
+                        this.robot = l.getRobot();
+                        Server.world.robotList.add(this.robot);
+                        JsonObject respond = l.LaunchResponse();
+                        dos.writeUTF(respond.toString());
+                        break;
+                    }
                 }
             }
             Command command;
             while (true){
                 dos.writeUTF("Enter a command");
                 String newRequest = dis.readUTF();
-                System.out.println(newRequest);
                 JsonObject newJsonObject = JsonParser.parseString(newRequest).getAsJsonObject();
 
                 command = Command.create(newJsonObject);

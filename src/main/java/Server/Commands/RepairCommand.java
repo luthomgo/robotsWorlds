@@ -1,7 +1,6 @@
 package Server.Commands;
 
 import Server.Robots.Robot;
-import Server.Server;
 import com.google.gson.JsonObject;
 
 public class RepairCommand extends Command{
@@ -12,7 +11,7 @@ public class RepairCommand extends Command{
 
         int repairTime = target.getRepair();
 
-        if (target.getIshield() == Server.world.getMaxShield()){
+        if (target.getIShield() == target.getShield()){
             JsonObject response = new JsonObject();
             response.addProperty("result", "OK");
             JsonObject data = new JsonObject();

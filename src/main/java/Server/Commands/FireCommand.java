@@ -5,11 +5,9 @@ import Server.Robots.Position;
 import Server.Robots.Robot;
 import Server.Server;
 import Server.World.Obstacles;
-import Server.World.SqaureObstacle;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import java.util.List;
 
 public class FireCommand extends Command {
@@ -17,25 +15,25 @@ public class FireCommand extends Command {
     private JsonArray ObstaclesSouth;
     private JsonArray ObstaclesWest;
     private JsonArray ObstaclesEast;
+
     @Override
     public JsonObject execute(Robot target) {
+        JsonArray obFinal = generateObFinal(target);
         JsonObject response = new JsonObject();
         response.addProperty("result","ok");
+
         JsonObject data = new JsonObject();
 
-
         String name = "";
-        JsonArray o = generateObFinal(target);
-        JsonArray directionObstacles = new JsonArray();
+
         if(target.getDirection() == Direction.NORTH){
             for (JsonElement i:ObstaclesNorth){
                 JsonObject obs = i.getAsJsonObject();
                 if (obs.get("type").getAsString().equals("Robot")) {
                     name = obs.get("name").getAsString();
-                    Robot rob = getRobotObject(name);
+                    Robot rob = getRobotObject(name,target);
 
                     if (target.minusShot()) {
-
                         response.add("state",target.state());
                         data.addProperty("test","test");
                         response.add("data",data);
@@ -45,15 +43,15 @@ public class FireCommand extends Command {
                 target.minusShot();
             }
         }
+
         if(target.getDirection() == Direction.SOUTH){
             for (JsonElement i:ObstaclesSouth){
                 JsonObject obs = i.getAsJsonObject();
                 if (obs.get("type").getAsString().equals("Robot")) {
                     name = obs.get("name").getAsString();
-                    Robot rob = getRobotObject(name);
+                    Robot rob = getRobotObject(name,target);
 
                     if (target.minusShot()) {
-
                         response.add("state",target.state());
                         data.addProperty("test","test");
                         response.add("data",data);
@@ -63,15 +61,15 @@ public class FireCommand extends Command {
                 target.minusShot();
             }
         }
+
         if(target.getDirection() == Direction.WEST){
             for (JsonElement i:ObstaclesWest){
                 JsonObject obs = i.getAsJsonObject();
                 if (obs.get("type").getAsString().equals("Robot")) {
                     name = obs.get("name").getAsString();
-                    Robot rob = getRobotObject(name);
+                    Robot rob = getRobotObject(name,target);
 
                     if (target.minusShot()) {
-
                         response.add("state",target.state());
                         data.addProperty("test","test");
                         response.add("data",data);
@@ -81,15 +79,15 @@ public class FireCommand extends Command {
                 target.minusShot();
             }
         }
+
         if(target.getDirection() == Direction.EAST){
             for (JsonElement i:ObstaclesEast){
                 JsonObject obs = i.getAsJsonObject();
                 if (obs.get("type").getAsString().equals("Robot")) {
                     name = obs.get("name").getAsString();
-                    Robot rob = getRobotObject(name);
+                    Robot rob = getRobotObject(name,target);
 
                     if (target.minusShot()) {
-
                         response.add("state",target.state());
                         data.addProperty("test","test");
                         response.add("data",data);
@@ -99,20 +97,16 @@ public class FireCommand extends Command {
                 target.minusShot();
             }
         }
+
         if (name.isEmpty()){
             response.addProperty("state","miss");
             target.minusShot();
         }
-
-//        System.out.println(ObstaclesNorth);
-//        System.out.println(ObstaclesSouth);
-//        System.out.println(ObstaclesWest);
-//        System.out.println(ObstaclesEast);
         return response;
     }
 
-    public Robot getRobotObject(String name){
-        for(Robot i : Server.world.robotList){
+    public Robot getRobotObject(String name,Robot target){
+        for(Robot i : target.getRobotList()){
             if(i.getName().equals(name)){
                 return i;
             }
@@ -132,13 +126,10 @@ public class FireCommand extends Command {
         Position look_west = new Position(tX - visibility,tY);
         Position look_east = new Position(tX + visibility,tY);
 
-        Position curPos = target.getPosition();
-        for (Obstacles i : Server.world.obstacles) {
+        for (Obstacles i : target.getObstacles()) {
             JsonObject obstacleStats = new JsonObject();
-            Position ob = new Position(i.getBottomLeftX(), i.getBottomLeftY());
 
             if (look_north.getY() >= i.getBottomLeftY() && tY <= i.getBottomLeftY() && tX >= i.getBottomLeftX() && tX <= i.getBottomLeftX() + i.getSize()){
-//                System.out.println("not");
                 obstacleStats.addProperty("direction", "NORTH");
                 obstacleStats.addProperty("type", i.getType());
                 int distance = tY - i.getBottomLeftY();
@@ -184,12 +175,11 @@ public class FireCommand extends Command {
         Position robot_west = new Position(robotX - visibility,robotY);
         Position robot_east = new Position(robotX + visibility,robotY);
 
-        List<Robot> rl = Server.world.robotList;
+        List<Robot> rl = target.getRobotList();
         for (Robot robot : rl) {
             if (!target.getName().equals(robot.getName())){
                 JsonObject robotStats = new JsonObject();
                 Position rob = robot.getPosition();
-                SqaureObstacle robObstacle = new SqaureObstacle(rob.getX(), rob.getY());
                 int robotObX = robot.getPosition().getX();
                 int robotObY = robot.getPosition().getY();
                 if (robot_north.getY() > robotObY && robotY < robotObY && robotX >= robotObX && robotX <= robotObX ){
@@ -283,10 +273,11 @@ public class FireCommand extends Command {
         }
         return obFinal;
     }
+
     public JsonArray sortArray(JsonArray objects){
         JsonObject smal;
 
-        JsonArray temp = new JsonArray();
+        JsonArray temp;
         JsonArray res = new JsonArray();
 
         temp = objects;
@@ -304,7 +295,6 @@ public class FireCommand extends Command {
             res.add(smal);
             temp.remove(smal);
         }
-
         return res;
     }
 }

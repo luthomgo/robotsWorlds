@@ -12,11 +12,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Config {
-    private String homeP;
+    private final String homeP;
     private String configP;
     private File worldFile;
-    private int WorldX;
-    private int WorldY;
     private JsonObject configJSON;
     private boolean configCreated = false;
 
@@ -79,41 +77,72 @@ public class Config {
         int worldReloadTime;
         int worldRepairTime;
         int worldShield;
+        int worldPlayers;
+        int worldShots;
+
         while (true){
             System.out.println("Enter world x size");
-            worldX = Integer.parseInt(s.nextLine());
-            if (worldX >= 30 && worldX <= 500)break;
-            else System.out.println("X cant be smaller than 30 or bigger than 500");
+            try {
+                worldX = Integer.parseInt(s.nextLine());
+                if (worldX >= 30 && worldX <= 500) break;
+                else System.out.println("X cant be smaller than 30 or bigger than 500");
+            }catch (NumberFormatException e) {System.out.println("enter a number");}
         }
         while (true) {
             System.out.println("Enter world y size");
-            worldY = Integer.parseInt(s.nextLine());
-            if (worldY >= 30 && worldY <= 500)break;
-            else System.out.println("Y cant be smaller than 30 or bigger than 500");
+            try{
+                worldY = Integer.parseInt(s.nextLine());
+                if (worldY >= 30 && worldY <= 500)break;
+                else System.out.println("Y cant be smaller than 30 or bigger than 500");
+            }catch (NumberFormatException e) {System.out.println("X cant be smaller than 30 or bigger than 500");}
         }
         while (true) {
             System.out.println("Enter Robot visibility range");
-            worldVis = Integer.parseInt(s.nextLine());
-            if (worldVis >= 0 && worldVis <= 20)break;
-            else System.out.println("World visibility cant be smaller than 0 or bigger than 20");
+            try{
+                worldVis = Integer.parseInt(s.nextLine());
+                if (worldVis >= 0 && worldVis <= 20)break;
+                else System.out.println("World visibility cant be smaller than 0 or bigger than 20");
+            }catch (NumberFormatException e) {System.out.println("enter a number");}
         }
         while (true) {
             System.out.println("Enter world repair time");
-            worldRepairTime = Integer.parseInt(s.nextLine());
-            if (worldRepairTime >= 3 && worldRepairTime <= 10)break;
-            else System.out.println("World repair time cant be smaller than 3 or bigger than 10");
+            try{
+                worldRepairTime = Integer.parseInt(s.nextLine());
+                if (worldRepairTime >= 3 && worldRepairTime <= 10)break;
+                else System.out.println("World repair time cant be smaller than 3 or bigger than 10");
+            }catch (NumberFormatException e) {System.out.println("enter a number");}
         }
         while (true) {
             System.out.println("Enter world reload time");
-            worldReloadTime = Integer.parseInt(s.nextLine());
-            if (worldReloadTime >= 3 && worldReloadTime <= 10)break;
-            else System.out.println("World reload time cant be smaller than 3 or bigger than 10");
+            try{
+                worldReloadTime = Integer.parseInt(s.nextLine());
+                if (worldReloadTime >= 3 && worldReloadTime <= 10)break;
+                else System.out.println("World reload time cant be smaller than 3 or bigger than 10");
+            }catch (NumberFormatException e) {System.out.println("enter a number");}
         }
         while (true) {
             System.out.println("Enter world shield strength");
-            worldShield = Integer.parseInt(s.nextLine());
-            if (worldShield >= 0 && worldShield <= 10)break;
-            else System.out.println("World shield strength cant be smaller than 0 or bigger than 10");
+            try{
+                worldShield = Integer.parseInt(s.nextLine());
+                if (worldShield >= 0 && worldShield <= 10)break;
+                else System.out.println("World shield strength cant be smaller than 0 or bigger than 10");
+            }catch (NumberFormatException e) {System.out.println("enter a number");}
+        }
+        while (true) {
+            System.out.println("Enter world amount of shots");
+            try{
+                 worldShots = Integer.parseInt(s.nextLine());
+                if (worldShots >= 1 && worldShots <= 5)break;
+                else System.out.println("World shots cant be smaller than 1 or bigger than 5");
+            }catch (NumberFormatException e) {System.out.println("enter a number");}
+        }
+        while (true) {
+            System.out.println("Enter amount of players");
+            try{
+                worldPlayers = Integer.parseInt(s.nextLine());
+                if (worldPlayers >= 0 && worldPlayers <= 6)break;
+                else System.out.println("amount of players must be more that 0 and less than 6");
+            }catch (NumberFormatException e) {System.out.println("enter a number");}
         }
         config.addProperty("World x",worldX);
         config.addProperty("World y",worldY);
@@ -121,7 +150,8 @@ public class Config {
         config.addProperty("WorldReload",worldReloadTime);
         config.addProperty("WorldRepair",worldRepairTime);
         config.addProperty("WorldShield",worldShield);
-
+        config.addProperty("WorldShots",worldShots);
+        config.addProperty("WorldPlayers",worldPlayers);
         return config;
     }
 
@@ -158,6 +188,38 @@ public class Config {
             e.printStackTrace();
         }
         return shield;
+    }
+    public int readWorldShots(JsonObject configJSON){
+        int shots = 0;
+        try {
+            Scanner reader = new Scanner(worldFile);
+            while (reader.hasNextLine()){
+                String data = reader.nextLine();
+                JsonObject configData = JsonParser.parseString(data).getAsJsonObject();
+                shots= configData.get("WorldShots").getAsInt();
+            }
+            reader.close();
+        }catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return shots;
+    }
+    public int readWorldPlayers(JsonObject configJSON){
+        int players = 0;
+        try {
+            Scanner reader = new Scanner(worldFile);
+            while (reader.hasNextLine()){
+                String data = reader.nextLine();
+                JsonObject configData = JsonParser.parseString(data).getAsJsonObject();
+                players = configData.get("WorldPlayers").getAsInt();
+            }
+            reader.close();
+        }catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return players;
     }
     public int readWorldRepairTime(JsonObject configJSON){
         int repairTime = 0;

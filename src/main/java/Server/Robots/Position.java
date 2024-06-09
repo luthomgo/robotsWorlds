@@ -1,7 +1,6 @@
 package Server.Robots;
 
 import Server.Server;
-import Server.World.Config;
 
 public class Position {
     private final int x;

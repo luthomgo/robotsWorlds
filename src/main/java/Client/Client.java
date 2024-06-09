@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.*;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Client {
@@ -86,6 +85,7 @@ public class Client {
             dis.close();
         }catch (IOException ignored){}
     }
+
     private static boolean isValidIpAddress(String ipAddress){
         String[] ipNum = ipAddress.split("\\.");
         if (ipNum.length != 4){
@@ -103,7 +103,4 @@ public class Client {
             return false;
         }
     }
-
-
-
 }

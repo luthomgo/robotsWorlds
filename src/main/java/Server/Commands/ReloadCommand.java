@@ -1,7 +1,6 @@
 package Server.Commands;
 
 import Server.Robots.*;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class ReloadCommand extends Command {
@@ -33,10 +32,9 @@ public class ReloadCommand extends Command {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            target.setiShot(target.iShot);
+            target.setShots(target.iShot);
             target.setStatus("NORMAL");
             target.setReload(false);
-
         }
         return response;
     }

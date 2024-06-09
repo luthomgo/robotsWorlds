@@ -1,47 +1,170 @@
 package Server.Robots;
 
-import Client.Client;
 import Server.Commands.Command;
 import Server.Server;
 import Server.World.Obstacles;
 import Server.World.RobotObstacle;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
 import static Server.ServerCommands.ServerCommand.ANSI_RED;
 import static Server.ServerCommands.ServerCommand.ANSI_RESET;
+import java.util.Random;
 
 public class Robot {
-    private DataInputStream dis;
-    private DataOutputStream dos;
-    private Position centre = new Position(0,0);
-    private String name;
-    private String kind;
+    private final DataInputStream dis;
+    private final DataOutputStream dos;
+    private final String name;
+    private final String kind;
     public int shield;
     private int shots;
     private Position position;
-    private int fireDistance = 20;
-    private int visibility ;
+    private final int visibility ;
     private int reload ;
     private int repair ;
     private Direction direction = Direction.NORTH;
     private String status = "NORMAL";
     private int iShield;
     public int iShot;
-    private int maxShots;
-    private Socket client;
+    private final Socket client;
     private boolean isReloading = false;
     private boolean isRepairing = false;
+    private Position TOP_LEFT ;
+    private Position BOTTOM_RIGHT ;
+    private  int MaxShield;
+    private  int MaxShots;
+    private  int WorldVisibily;
+    private final List<Obstacles> obstacles;
+    private final List<Robot> robotList;
 
+    public Robot(String name, String kind, int shield, int shots, int vis, Socket s,DataOutputStream dos, DataInputStream dis) {
+        this.kind = kind;
+        this.name = name;
+
+        this.MaxShield = Server.world.getMaxShield();
+        this.MaxShots = Server.world.getMaxShots();
+        this.WorldVisibily = Server.world.getWorldVisibily();
+
+        if (shots > MaxShots){this.shots = MaxShots;this.iShot = MaxShots;}
+        else {this.shots = shots;this.iShot = shots;}
+
+        if (shield > MaxShield) {this.shield = MaxShield;this.iShield = MaxShield;}
+        else {this.shield = shield;this.iShield = shield;}
+
+        if (vis > WorldVisibily){this.visibility = WorldVisibily;}
+        else this.visibility = vis;
+
+        this.reload = Server.world.getReloadTime();
+        this.repair = Server.world.getRepairTime();
+
+        this.obstacles = Server.world.getObstacles();
+        this.robotList = Server.world.getRobotList();
+
+        this.TOP_LEFT = Server.world.getTOP_LEFT();
+        this.BOTTOM_RIGHT = Server.world.getBOTTOM_RIGHT();
+
+        this.position = genPos();
+
+        this.client = s;
+        this.dis = dis;
+        this.dos = dos;
+    }
+
+    public Robot(String name, String kind, int visibility, List<Obstacles> obstacles, List<Robot> robotList, int shield, int shots, Position position, int reload, int repair, Direction direction, int iShield, int iShot, Position TOP_LEFT, Position BOTTOM_RIGHT, int maxShield, int maxShots, int worldVisibility) {
+        this.name = name;
+        this.kind = kind;
+        this.visibility = visibility;
+        this.obstacles = obstacles;
+        this.robotList = robotList;
+        this.shield = shield;
+        this.shots = shots;
+        this.position = position;
+        this.reload = reload;
+        this.repair = repair;
+        this.direction = direction;
+        this.iShield = iShield;
+        this.iShot = iShot;
+        this.TOP_LEFT = TOP_LEFT;
+        this.BOTTOM_RIGHT = BOTTOM_RIGHT;
+        MaxShield = maxShield;
+        MaxShots = maxShots;
+        WorldVisibily = worldVisibility;
+        this.client = null;
+        this.dos = null;
+        this.dis = null;
+    }
+
+    public JsonObject handleCommand(Command command) {
+        return command.execute(this);
+    }
+
+    public String getName(){
+        return this.name;
+    }
+    public Position getPosition(){
+        return this.position;
+    }
+    public int getVisibility(){
+        return this.visibility;
+    }
+    public Direction getDirection(){
+        return this.direction;
+    }
+    public int getShots() {
+        return shots;
+    }
     public int getReload() {
         return reload;
+    }
+    public int getIShield(){return this.iShield;}
+
+    public Position getTOP_LEFT() {
+        return TOP_LEFT;
+    }
+
+    public Position getBOTTOM_RIGHT() {
+        return BOTTOM_RIGHT;
+    }
+
+    public List<Obstacles> getObstacles() {
+        return obstacles;
+    }
+
+    public List<Robot> getRobotList() {
+        return robotList;
+    }
+
+    public int getShield(){
+        return this.shield;
+    }
+
+    public Position genPos(){
+        while (true){
+            Random random1 = new Random();
+            int randomY = random1.nextInt(this.BOTTOM_RIGHT.getY(),this.TOP_LEFT.getY());
+            Random random2 = new Random();
+            int randomX = random2.nextInt(this.TOP_LEFT.getX(),this.BOTTOM_RIGHT.getX());
+            Position robotPos = new Position(randomX,randomY);
+            int blockCount = 0;
+            for (Obstacles ob:this.obstacles){
+                if (ob.blocksPosition(robotPos)){
+                    blockCount += 1;
+                }
+            }
+            for (Robot rob:this.robotList){
+                if (rob.getName().equals(this.name)) continue;;
+                Obstacles robOb = new RobotObstacle(rob.getPosition().getX(),rob.getPosition().getY());
+                if (robOb.blocksPosition(robotPos)){
+                    blockCount += 1;
+                }
+            }
+            if (blockCount == 0) {return robotPos;}
+        }
     }
 
     public void minusShield(){
@@ -60,51 +183,6 @@ public class Robot {
         }
         return false;
     }
-
-
-    public Robot(String name, String kind, int shield, int shots, int vis, Socket s,DataOutputStream dos, DataInputStream dis) {
-        this.kind = kind;
-        this.name = name;
-        this.shots = shots;this.iShot = shots;
-        if (shield > Server.world.getMaxShield()) {this.shield = Server.world.getMaxShield();this.iShield = Server.world.getMaxShield();}
-        else this.shield = shield;this.iShield = shield;
-        this.reload = Server.world.getReloadTime();
-        this.repair = Server.world.getRepairTime();
-        if (vis > Server.world.getWorldVisibily()) this.visibility = Server.world.getWorldVisibily();
-        else this.visibility = vis;
-        this.position = centre;
-        this.client = s;
-        this.dis = dis;
-        this.dos = dos;
-    }
-
-    public JsonObject handleCommand(Command command) {
-        return command.execute(this);
-    }
-    public String getName(){
-        return this.name;
-    }
-    public Position getPosition(){
-        return this.position;
-    }
-    public int getVisibility(){
-        return this.visibility;
-    }
-    public Direction getDirection(){
-        return this.direction;
-    }
-
-
-
-    public int getShots() {
-        return shots;
-    }
-
-    public int getMaxShots() {
-        return maxShots;
-    }
-
-
     public void updateDirection(boolean turnRight) {
         if (turnRight) {
             switch (this.direction) {
@@ -146,7 +224,6 @@ public class Robot {
 
     public JsonObject state(){
         JsonObject state = new JsonObject();
-
         JsonArray positionL = new JsonArray();
         positionL.add(this.position.getX());
         positionL.add(this.position.getY());
@@ -157,6 +234,7 @@ public class Robot {
         state.addProperty("status",this.status);
         return state;
     }
+
     public JsonObject toJSON(){
         JsonObject data = data();
         JsonObject state = state();
@@ -176,9 +254,10 @@ public class Robot {
                 ", shots=" + shots +
                 '}';
     }
+
     public boolean updatePosition(int nrSteps) {
         List<Obstacles> temp = new ArrayList<>();
-        temp = Server.world.getObstacles();
+        temp = this.obstacles;
 
         int newX = this.position.getX();
         int newY = this.position.getY();
@@ -197,12 +276,13 @@ public class Robot {
                 newX = newX - nrSteps;
                 break;
         }
+
         Position newPosition = new Position(newX, newY);
         checkIfDead();
-        for (Robot i: Server.world.robotList){
+        for (Robot i: this.robotList){
             if (i.getName().equals(this.name))continue;
-            Position ipos = i.getPosition();
-            Obstacles ob = new RobotObstacle(ipos.getX(), ipos.getY());
+            Position iPos = i.getPosition();
+            Obstacles ob = new RobotObstacle(iPos.getX(), iPos.getY());
             temp.add(ob);
         }
 
@@ -215,16 +295,14 @@ public class Robot {
         }
 
         if (Position.Isin(newPosition.getX(), newPosition.getY())) {
-            for (Obstacles obstacle : Server.world.obstacles) {
+            for (Obstacles obstacle : this.obstacles) {
                 if (obstacle.blocksPath(this.position,newPosition)) {
                     String type = obstacle.getType();
                     if (type.equals("pit")) {
                         pitDeath();}
                     else return false;
                 }
-
             }
-
 
             this.position = newPosition;
             return true;
@@ -232,9 +310,7 @@ public class Robot {
             return false;
         }
     }
-    public int getIshield(){
-        return this.iShield;
-    }
+
     public void pitDeath(){
         Server.world.removeRobot(this);
         System.out.println(ANSI_RED+"Robot "+this.name+" has died");
@@ -267,9 +343,8 @@ public class Robot {
             }
         }
 
-
     public void repairShields(){
-        this.shield = Server.world.getMaxShield();
+        this.shield = this.iShield;
     }
 
     public int getRepair() {
@@ -288,8 +363,8 @@ public class Robot {
         return this.status;
     }
 
-    public void setiShot(int iShot) {
-        this.iShot = iShot;
+    public void setShots(int iShot) {
+        this.shots = this.iShot;
     }
 
     public boolean isRepairing(){
