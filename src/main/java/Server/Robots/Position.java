@@ -26,9 +26,7 @@ public class Position {
                 ", y=" + getY() +
                 " }";
     }
-    public static boolean Isin(int newX, int newY){
-        Position top = Server.world.getTOP_LEFT();
-        Position bot = Server.world.getBOTTOM_RIGHT();
+    public static boolean Isin(int newX, int newY,Position top, Position bot){
 
         if (newX >= top.getX() && newX <= bot.getX() && newY <= top.getY() && newY >= bot.getY()){
             return true;

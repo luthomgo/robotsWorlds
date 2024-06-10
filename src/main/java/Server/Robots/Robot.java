@@ -171,9 +171,7 @@ public class Robot {
         if(this.shield > 0){
             this.shield -= 1;
         }else {
-            System.out.println("dies");
-            //abdul dies
-        }
+            checkIfDead();        }
     }
 
     public boolean minusShot(){
@@ -278,7 +276,6 @@ public class Robot {
         }
 
         Position newPosition = new Position(newX, newY);
-        checkIfDead();
         for (Robot i: this.robotList){
             if (i.getName().equals(this.name))continue;
             Position iPos = i.getPosition();
@@ -294,7 +291,7 @@ public class Robot {
             }
         }
 
-        if (Position.Isin(newPosition.getX(), newPosition.getY())) {
+        if (Position.Isin(newPosition.getX(), newPosition.getY(),getTOP_LEFT(),getBOTTOM_RIGHT())) {
             for (Obstacles obstacle : this.obstacles) {
                 if (obstacle.blocksPath(this.position,newPosition)) {
                     String type = obstacle.getType();
@@ -327,7 +324,7 @@ public class Robot {
         }
 
     public void checkIfDead() {
-        if (this.shield == 0 ) {
+        if (this.shield <= 0 ) {
             Server.world.removeRobot(this);
             System.out.println(ANSI_RED+"Robot "+this.name+" has died" + ANSI_RESET);
                 try {

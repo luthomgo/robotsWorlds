@@ -97,7 +97,6 @@ class ClientHandler extends Thread
                     Server.names.add(received);
                     break;
                 }
-
             }
             while (true) {
                 dos.writeUTF("Enter launch to start (please specify the type):\n-Sniper shield 2 shots 3\n-Tank shield 10 shots 5\n-Brad1 shield 5 shots 10\n-Default shields 6 shots 6");
