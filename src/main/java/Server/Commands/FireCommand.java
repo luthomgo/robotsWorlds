@@ -196,8 +196,9 @@ public class FireCommand extends Command {
                     robotStats.addProperty("direction","SOUTH");
                     robotStats.addProperty("type","Robot");
                     int distance = robotY - robot.getPosition().getY();
-                    if (distance < 0) distance *= -1; //remove negative to positive
+                    if (distance < 0) distance *= -1;
                     robotStats.addProperty("distance",distance);
+                    robotStats.addProperty("name",robot.getName());
                     objects.add(robotStats);
 
                 }
@@ -205,8 +206,9 @@ public class FireCommand extends Command {
                     robotStats.addProperty("direction","EAST");
                     robotStats.addProperty("type","Robot");
                     int distance = robotX - robot.getPosition().getX();
-                    if (distance < 0) distance *= -1; //remove negative to positive
+                    if (distance < 0) distance *= -1;
                     robotStats.addProperty("distance",distance);
+                    robotStats.addProperty("name",robot.getName());
                     objects.add(robotStats);
 
                 }
@@ -214,8 +216,9 @@ public class FireCommand extends Command {
                     robotStats.addProperty("direction","WEST");
                     robotStats.addProperty("type","Robot");
                     int distance = robotX - robot.getPosition().getX();
-                    if (distance < 0) distance *= -1; //remove negative to positive
+                    if (distance < 0) distance *= -1;
                     robotStats.addProperty("distance",distance);
+                    robotStats.addProperty("name",robot.getName());
                     objects.add(robotStats);
                 }
             }
