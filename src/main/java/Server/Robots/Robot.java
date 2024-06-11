@@ -255,7 +255,6 @@ public class Robot {
 
     public boolean updatePosition(int nrSteps) {
         List<Obstacles> temp = new ArrayList<>();
-        temp = this.obstacles;
 
         int newX = this.position.getX();
         int newY = this.position.getY();
@@ -273,6 +272,10 @@ public class Robot {
             case WEST:
                 newX = newX - nrSteps;
                 break;
+        }
+
+        for (Obstacles i:this.obstacles){
+            temp.add(i);
         }
 
         Position newPosition = new Position(newX, newY);
