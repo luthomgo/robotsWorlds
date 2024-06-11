@@ -32,15 +32,19 @@ public class FireCommand extends Command {
                 if (obs.get("type").getAsString().equals("Robot")) {
                     name = obs.get("name").getAsString();
                     Robot rob = getRobotObject(name,target);
-
                     if (target.minusShot()) {
-                        response.add("state",target.state());
-                        data.addProperty("test","test");
+                        JsonObject shots = new JsonObject();
+                        shots.addProperty("shots",target.getShots());
+                        data.addProperty("message","Hit");
+                        data.addProperty("distance",obs.get("distance").getAsInt());
+                        data.addProperty("robot",name);
                         response.add("data",data);
+                        response.add("state",rob.state());
+                        response.add("state",shots);
                         rob.minusShield();
+                        return response;
                     }
                 }
-                target.minusShot();
             }
         }
 
@@ -50,15 +54,19 @@ public class FireCommand extends Command {
                 if (obs.get("type").getAsString().equals("Robot")) {
                     name = obs.get("name").getAsString();
                     Robot rob = getRobotObject(name,target);
-
                     if (target.minusShot()) {
-                        response.add("state",target.state());
-                        data.addProperty("test","test");
+                        JsonObject shots = new JsonObject();
+                        shots.addProperty("shots",target.getShots());
+                        data.addProperty("message","Hit");
+                        data.addProperty("distance",obs.get("distance").getAsInt());
+                        data.addProperty("robot",name);
                         response.add("data",data);
+                        response.add("state",rob.state());
+                        response.add("state",shots);
                         rob.minusShield();
+                        return response;
                     }
                 }
-                target.minusShot();
             }
         }
 
@@ -68,15 +76,19 @@ public class FireCommand extends Command {
                 if (obs.get("type").getAsString().equals("Robot")) {
                     name = obs.get("name").getAsString();
                     Robot rob = getRobotObject(name,target);
-
                     if (target.minusShot()) {
-                        response.add("state",target.state());
-                        data.addProperty("test","test");
+                        JsonObject shots = new JsonObject();
+                        shots.addProperty("shots",target.getShots());
+                        data.addProperty("message","Hit");
+                        data.addProperty("distance",obs.get("distance").getAsInt());
+                        data.addProperty("robot",name);
                         response.add("data",data);
+                        response.add("state",rob.state());
+                        response.add("state",shots);
                         rob.minusShield();
+                        return response;
                     }
                 }
-                target.minusShot();
             }
         }
 
@@ -86,22 +98,39 @@ public class FireCommand extends Command {
                 if (obs.get("type").getAsString().equals("Robot")) {
                     name = obs.get("name").getAsString();
                     Robot rob = getRobotObject(name,target);
-
                     if (target.minusShot()) {
-                        response.add("state",target.state());
-                        data.addProperty("test","test");
+                        JsonObject shots = new JsonObject();
+                        shots.addProperty("shots",target.getShots());
+                        data.addProperty("message","Hit");
+                        data.addProperty("distance",obs.get("distance").getAsInt());
+                        data.addProperty("robot",name);
                         response.add("data",data);
+                        response.add("state",rob.state());
+                        response.add("state",shots);
                         rob.minusShield();
+                        return response;
                     }
                 }
-                target.minusShot();
+
             }
         }
 
         if (name.isEmpty()){
-            response.addProperty("state","miss");
             target.minusShot();
+            data.addProperty("message","Miss");
+            response.add("data",data);
+            JsonObject shots = new JsonObject();
+            shots.addProperty("shots",target.getShots());
+            response.add("state",shots);
+            return response;
         }
+
+
+        data.addProperty("message","Gun empty; Reload!");
+        response.add("data",data);
+        JsonObject shots = new JsonObject();
+        shots.addProperty("shots",target.getShots());
+        response.add("state",shots);
         return response;
     }
 

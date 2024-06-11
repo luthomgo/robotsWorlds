@@ -51,7 +51,7 @@ public class LakesObstacles implements Obstacles{
 
     @Override
     public String getType() {
-        return "";
+        return this.type;
     }
 
 
