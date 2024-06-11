@@ -1,6 +1,7 @@
 import static  org.junit.Assert.*;
 
 import Server.Commands.BackwardCommand;
+import Server.Commands.FireCommand;
 import Server.Commands.ForwardCommand;
 import Server.Robots.Direction;
 import Server.Robots.Position;
@@ -34,6 +35,7 @@ public class CommandsTest {
 
         RepairCommand command = new RepairCommand();
         robot.setRepair(5);
+
         JsonObject response = command.execute(robot);
         boolean ok = (response.get("result").toString().contains("OK"));
         assertTrue(ok);

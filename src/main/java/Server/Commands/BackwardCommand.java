@@ -12,6 +12,8 @@ public class BackwardCommand extends Command{
 
         if (target.isRepairing()){
             return generateErrorResponse("Robot is currently repairing and can't move");
+        }else if (target.isReloading()) {
+            return generateErrorResponse("Robot is currently reloading and can't move");
         }
 
         int nrSteps = Integer.parseInt(getArgument().getAsString());
