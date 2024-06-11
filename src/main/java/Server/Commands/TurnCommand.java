@@ -19,6 +19,9 @@ public class TurnCommand extends Command {
         if (target.isRepairing()){
             return generateErrorResponse("Robot is currently repairing and can't move");
         }
+        else if (target.isReloading()) {
+            return generateErrorResponse("Robot is currently repairing and can't move");
+        }
 
         if (turnDirection.equalsIgnoreCase("right")) {
             target.updateDirection(true);
