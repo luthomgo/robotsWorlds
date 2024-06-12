@@ -143,6 +143,9 @@ public class Robot {
         return this.shield;
     }
 
+    public void removeRobot(Robot robot) {
+        this.robotList.remove(robot);
+    }
     public Position genPos(){
         while (true){
             Random random1 = new Random();
@@ -312,7 +315,7 @@ public class Robot {
     }
 
     public void pitDeath(){
-        Server.world.removeRobot(this);
+        removeRobot(this);
         System.out.println(ANSI_RED+"Robot "+this.name+" has died");
             try {
                 DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
@@ -328,7 +331,7 @@ public class Robot {
 
     public void checkIfDead() {
         if (this.shield <= 0 ) {
-            Server.world.removeRobot(this);
+            removeRobot(this);
             System.out.println(ANSI_RED+"Robot "+this.name+" has died" + ANSI_RESET);
                 try {
                     DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
@@ -342,7 +345,6 @@ public class Robot {
                 }
             }
         }
-
     public void repairShields(){
         this.shield = this.iShield;
     }

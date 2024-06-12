@@ -37,6 +37,7 @@ public abstract class Command {
             case"turn" -> new TurnCommand(args);
             case "fire" -> new FireCommand();
             case "help" -> new HelpCommand(args);
+            case "exit" -> new ExitCommand();
             default -> new ErrorResponse(generateErrorResponse("Unsupported command"));
         };
     }

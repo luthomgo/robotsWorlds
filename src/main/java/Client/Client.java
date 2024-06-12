@@ -1,8 +1,11 @@
 package Client;
 
+
+import Server.Server;
+import Server.Robots.Robot;
+import Server.World.World;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
@@ -58,34 +61,36 @@ public class Client {
             while (true) {
                 System.out.println(dis.readUTF());
                 String command = scn.nextLine();
-                if(command.equalsIgnoreCase("exit")) {
-                    System.out.println("Closing this connection: " + s);
-                    s.close();
-                    System.out.println("Connection closed");
-                    break;
-                }
-
                 Request request = new Request(name, command);
                 JsonObject toSend = request.createRequest();
                 dos.writeUTF(toSend.toString());
                 String response = dis.readUTF();
                 System.out.println(formatResponse(response));
+
+                if(command.equalsIgnoreCase("exit")) {
+                    System.out.println("Closing this connection: " + s);
+                    s.close();
+                    System.out.println("Connection closed");
+                    break;
+
+                }
                 if (response.contains("ok")) break;
             }
 
             while (true) {
                 System.out.println(dis.readUTF());
                 String newCommand = scn.nextLine();
+
+                Request newRequest = new Request(name, newCommand);
+                JsonObject newToSend = newRequest.createRequest();
+                dos.writeUTF(newToSend.toString());
+
                 if(newCommand.equalsIgnoreCase("exit")) {
                     System.out.println("Closing this connection: " + s);
                     s.close();
                     System.out.println("Connection closed");
                     break;
                 }
-
-                Request newRequest = new Request(name, newCommand);
-                JsonObject newToSend = newRequest.createRequest();
-                dos.writeUTF(newToSend.toString());
                 System.out.println(formatResponse(dis.readUTF()));
             }
 
