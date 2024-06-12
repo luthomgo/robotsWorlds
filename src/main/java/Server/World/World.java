@@ -153,8 +153,5 @@ public class World {
     public Position getBOTTOM_RIGHT() {
         return BOTTOM_RIGHT;
     }
-    public void removeRobot(Robot robot) {
-        robotList.remove(robot);
-    }
 }
 
