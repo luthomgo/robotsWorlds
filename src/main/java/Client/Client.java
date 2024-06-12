@@ -21,83 +21,93 @@ public class Client {
     public static final String ANSI_CYAN = "\u001B[36m";
 
     public static void main(String[] args) throws IOException {
-        try {
-            System.out.println("Please enter your IP Address:");
-            Scanner scanner = new Scanner(System.in);
-            String ipAddress = scanner.nextLine();
-            if (!isValidIpAddress(ipAddress)){
-                throw new IOException("Invalid IP address format");
-            }
+        boolean portV = false;
+        boolean ipV = false;
+        if (args.length >= 2){
+            String ipAddress = args[0];
+            ipV = isValidIpAddress(ipAddress);
+            int port = 0;
+            try {
+                port = Integer.parseInt(args[1]);
+                portV = true;
+            }catch (NumberFormatException e) {portV =false;}
+            if (ipV & portV){
+                try {
+                    InetAddress ip = InetAddress.getByName(ipAddress);
+                    Socket s = new Socket(ip, port);
 
-            InetAddress ip = InetAddress.getByName(ipAddress);
-            Socket s = new Socket(ip, 5055);
+                    DataInputStream dis = new DataInputStream(s.getInputStream());
+                    DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
-            DataInputStream dis = new DataInputStream(s.getInputStream());
-            DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+                    Scanner scn = new Scanner(System.in);
+                    String name;
+                    while (true) {
+                        System.out.println(dis.readUTF());
 
-            Scanner scn = new Scanner(System.in);
-            String name;
-            while (true) {
-                System.out.println(dis.readUTF());
+                        name = scn.nextLine();
+                        dos.writeUTF(name);
 
-                name = scn.nextLine();
-                dos.writeUTF(name);
+                        if(name.equalsIgnoreCase("exit")) {
+                            System.out.println("Closing this connection: " + s);
+                            s.close();
+                            System.out.println("Connection closed");
+                            break;
+                        }
+                        String response = dis.readUTF();
+                        if (response.contains("Hello")){
+                            System.out.println(response);
+                            break;
+                        } else {
+                            System.out.println(formatResponse(response));
+                        }
+                    }
 
-                if(name.equalsIgnoreCase("exit")) {
-                    System.out.println("Closing this connection: " + s);
-                    s.close();
-                    System.out.println("Connection closed");
-                    break;
+                    while (true) {
+                        System.out.println(dis.readUTF());
+                        String command = scn.nextLine();
+                        Request request = new Request(name, command);
+                        JsonObject toSend = request.createRequest();
+                        dos.writeUTF(toSend.toString());
+                        String response = dis.readUTF();
+                        System.out.println(formatResponse(response));
+
+                        if(command.equalsIgnoreCase("exit")) {
+                            System.out.println("Closing this connection: " + s);
+                            s.close();
+                            System.out.println("Connection closed");
+                            break;
+
+                        }
+                        if (response.contains("ok")) break;
+                    }
+
+                    while (true) {
+                        System.out.println(dis.readUTF());
+                        String newCommand = scn.nextLine();
+
+                        Request newRequest = new Request(name, newCommand);
+                        JsonObject newToSend = newRequest.createRequest();
+                        dos.writeUTF(newToSend.toString());
+
+                        if(newCommand.equalsIgnoreCase("exit")) {
+                            System.out.println("Closing this connection: " + s);
+                            s.close();
+                            System.out.println("Connection closed");
+                            break;
+                        }
+                        System.out.println(formatResponse(dis.readUTF()));
+                    }
+
+                    scn.close();
+                    dos.close();
+                    dis.close();
+                } catch (IOException e) {
+                    System.out.println("Server has not been started");
                 }
-                String response = dis.readUTF();
-                if (response.contains("Hello")){
-                    System.out.println(response);
-                    break;
-                } else {
-                    System.out.println(formatResponse(response));
-                }
             }
-
-            while (true) {
-                System.out.println(dis.readUTF());
-                String command = scn.nextLine();
-                Request request = new Request(name, command);
-                JsonObject toSend = request.createRequest();
-                dos.writeUTF(toSend.toString());
-                String response = dis.readUTF();
-                System.out.println(formatResponse(response));
-
-                if(command.equalsIgnoreCase("exit")) {
-                    System.out.println("Closing this connection: " + s);
-                    s.close();
-                    System.out.println("Connection closed");
-                    break;
-
-                }
-                if (response.contains("ok")) break;
-            }
-
-            while (true) {
-                System.out.println(dis.readUTF());
-                String newCommand = scn.nextLine();
-
-                Request newRequest = new Request(name, newCommand);
-                JsonObject newToSend = newRequest.createRequest();
-                dos.writeUTF(newToSend.toString());
-
-                if(newCommand.equalsIgnoreCase("exit")) {
-                    System.out.println("Closing this connection: " + s);
-                    s.close();
-                    System.out.println("Connection closed");
-                    break;
-                }
-                System.out.println(formatResponse(dis.readUTF()));
-            }
-
-            scn.close();
-            dos.close();
-            dis.close();
-        } catch (IOException ignored) {}
+            else System.out.println("Please enter a valid IP address and port number");
+        }
+        else System.out.println("Please specify the IP address and port you would like to connect to");
     }
 
     private static boolean isValidIpAddress(String ipAddress) {
