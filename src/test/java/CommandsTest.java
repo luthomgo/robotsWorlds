@@ -14,10 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 import Server.Commands.RepairCommand;
 import Server.Robots.Robot;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RunWith(Enclosed.class)
 public class CommandsTest {
 
 
