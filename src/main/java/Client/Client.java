@@ -26,14 +26,15 @@ public class Client {
         if (args.length >= 2){
             String ipAddress = args[0];
             ipV = isValidIpAddress(ipAddress);
+            int port = 0;
             try {
-                int port = Integer.parseInt(args[1]);
+                port = Integer.parseInt(args[1]);
                 portV = true;
             }catch (NumberFormatException e) {portV =false;}
             if (ipV & portV){
                 try {
                     InetAddress ip = InetAddress.getByName(ipAddress);
-                    Socket s = new Socket(ip, 5055);
+                    Socket s = new Socket(ip, port);
 
                     DataInputStream dis = new DataInputStream(s.getInputStream());
                     DataOutputStream dos = new DataOutputStream(s.getOutputStream());
@@ -100,7 +101,9 @@ public class Client {
                     scn.close();
                     dos.close();
                     dis.close();
-                } catch (IOException ignored) {}
+                } catch (IOException e) {
+                    System.out.println("Server has not been started");
+                }
             }
             else System.out.println("Please enter a valid IP address and port number");
         }
