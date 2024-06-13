@@ -316,11 +316,35 @@ public class Robot {
 
     public void pitDeath(){
         removeRobot(this);
-        System.out.println(ANSI_RED+"Robot "+this.name+" has died");
+        System.out.println(ANSI_RED+"Robot "+this.name+" has died" + ANSI_RESET);
+        try {
+            DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
+            JsonObject response = new JsonObject();
+            response.addProperty("result","dead");
+            JsonObject data = new JsonObject();
+            data.addProperty("message","You have fallen into a pit");
+            response.add("data",data);
+            dos.writeUTF(response.toString());
+            this.client.close();
+            this.dos.close();
+            this.dis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void checkIfDead() {
+        if (this.shield <= 0 ) {
+            removeRobot(this);
+            System.out.println(ANSI_RED+"Robot "+this.name+" has died" + ANSI_RESET);
             try {
                 DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
-                dos.writeUTF(ANSI_RED+"You have fallen into a pit" + ANSI_RESET);
-                dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)" + ANSI_RESET);
+                JsonObject response = new JsonObject();
+                response.addProperty("result","dead");
+                JsonObject data = new JsonObject();
+                data.addProperty("message","You have died");
+                response.add("data",data);
+                dos.writeUTF(response.toString());
                 this.client.close();
                 this.dos.close();
                 this.dis.close();
@@ -328,23 +352,7 @@ public class Robot {
                 e.printStackTrace();
             }
         }
-
-    public void checkIfDead() {
-        if (this.shield <= 0 ) {
-            removeRobot(this);
-            System.out.println(ANSI_RED+"Robot "+this.name+" has died" + ANSI_RESET);
-                try {
-                    DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
-                    dos.writeUTF(ANSI_RED+"You're shields have hit 0" + ANSI_RESET);
-                    dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)" + ANSI_RESET);
-                    this.client.close();
-                    this.dos.close();
-                    this.dis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    }
     public void repairShields(){
         this.shield = this.iShield;
     }
