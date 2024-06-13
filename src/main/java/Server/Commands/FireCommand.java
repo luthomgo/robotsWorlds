@@ -11,10 +11,10 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 public class FireCommand extends Command {
-    private JsonArray ObstaclesNorth;
-    private JsonArray ObstaclesSouth;
-    private JsonArray ObstaclesWest;
-    private JsonArray ObstaclesEast;
+    public JsonArray ObstaclesNorth;
+    public JsonArray ObstaclesSouth;
+    public JsonArray ObstaclesWest;
+    public JsonArray ObstaclesEast;
 
     @Override
     public JsonObject execute(Robot target) {
