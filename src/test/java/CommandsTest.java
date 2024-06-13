@@ -8,16 +8,12 @@ import Server.Robots.Direction;
 import Server.Robots.Position;
 import Server.World.MountainObstacle;
 import Server.World.Obstacles;
-import Server.World.World;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -332,7 +328,7 @@ public class CommandsTest {
 
 
 
-    public class CommandTests {
+    public static class mainCommandTests {
 
         @Test
         public void testCommandCreationState() {
@@ -429,8 +425,6 @@ public class CommandsTest {
             JsonArray args = new JsonArray();
             args.add(5);
             ForwardCommand command = new ForwardCommand(args);
-
-            // Create a mock Robot and execute the command
             Robot robot = createTestRobot(Direction.NORTH, new Position(0, 0));
             JsonObject result = command.execute(robot);
 
@@ -443,8 +437,6 @@ public class CommandsTest {
             JsonArray args = new JsonArray();
             args.add(5);
             BackwardCommand command = new BackwardCommand(args);
-
-            // Create a mock Robot and execute the command
             Robot robot = createTestRobot(Direction.NORTH, new Position(0, 5));
             JsonObject result = command.execute(robot);
 
