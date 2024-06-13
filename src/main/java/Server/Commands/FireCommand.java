@@ -115,7 +115,7 @@ public class FireCommand extends Command {
             }
         }
 
-        if (name.isEmpty()){
+        if (name.isEmpty() && target.getShots() > 0) {
             target.minusShot();
             data.addProperty("message","Miss");
             response.add("data",data);
