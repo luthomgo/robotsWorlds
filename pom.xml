@@ -50,7 +50,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>Server.Server</mainClass>
+                            <mainClass>RobotWorlds</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
