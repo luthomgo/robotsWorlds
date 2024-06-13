@@ -1,26 +1,27 @@
-import static  org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 import Server.Commands.BackwardCommand;
 import Server.Commands.FireCommand;
 import Server.Commands.ForwardCommand;
+import Server.Commands.RepairCommand;
 import Server.Robots.Direction;
 import Server.Robots.Position;
 import Server.World.MountainObstacle;
 import Server.World.Obstacles;
-import Server.World.World;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.junit.Before;
 import org.junit.Test;
-import Server.Commands.RepairCommand;
-import Server.Robots.Robot;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import Server.Commands.*;
+import Server.Robots.*;
+
+
+
 
 @RunWith(Enclosed.class)
 public class CommandsTest {
@@ -324,5 +325,130 @@ public class CommandsTest {
             assertEquals(4, targetRobot.getShield());
         }
     }
+
+
+
+    public static class mainCommandTests {
+
+        @Test
+        public void testCommandCreationState() {
+            JsonObject request = new JsonObject();
+            request.addProperty("command", "state");
+            request.add("arguments", new JsonArray());
+
+            Command command = Command.create(request);
+            assertTrue(command instanceof StateCommand);
+        }
+
+        @Test
+        public void testCommandCreationLook() {
+            JsonObject request = new JsonObject();
+            request.addProperty("command", "look");
+            request.add("arguments", new JsonArray());
+
+            Command command = Command.create(request);
+            assertTrue(command instanceof LookCommand);
+        }
+
+        @Test
+        public void testCommandCreationForward() {
+            JsonObject request = new JsonObject();
+            request.addProperty("command", "forward");
+            JsonArray args = new JsonArray();
+            args.add(10);
+            request.add("arguments", args);
+
+            Command command = Command.create(request);
+            assertTrue(command instanceof ForwardCommand);
+            assertEquals(10, command.getArgument().get(0).getAsInt());
+        }
+
+        @Test
+        public void testCommandCreationInvalidCommand() {
+            JsonObject request = new JsonObject();
+            request.addProperty("command", "invalid");
+            request.add("arguments", new JsonArray());
+
+            Command command = Command.create(request);
+            assertTrue(command instanceof Command.ErrorResponse);
+            JsonObject response = command.execute(null);
+
+            assertEquals("ERROR", response.get("result").getAsString());
+            assertEquals("Unsupported command", response.getAsJsonObject("data").get("message").getAsString());
+        }
+
+        @Test
+        public void testCommandCreationInvalidArgs() {
+            JsonObject request = new JsonObject();
+            request.addProperty("command", "forward");
+            JsonArray args = new JsonArray();
+            args.add("invalid");
+            request.add("arguments", args);
+
+            Command command = Command.create(request);
+            assertTrue(command instanceof Command.ErrorResponse);
+            JsonObject response = command.execute(null);
+            assertEquals("ERROR", response.get("result").getAsString());
+            assertEquals("Could not parse arguments", response.getAsJsonObject("data").get("message").getAsString());
+        }
+
+        @Test
+        public void testIsValidArg() {
+            JsonArray validArgs = new JsonArray();
+            validArgs.add("sniper");
+            validArgs.add("tank");
+            validArgs.add("brad1");
+            validArgs.add("left");
+            validArgs.add("right");
+            validArgs.add(10);
+
+            assertTrue(Command.isValidArg(validArgs));
+        }
+
+        @Test
+        public void testIsValidArgInvalid() {
+            JsonArray invalidArgs = new JsonArray();
+            invalidArgs.add("invalid");
+
+            assertFalse(Command.isValidArg(invalidArgs));
+        }
+
+        @Test
+        public void testGenerateErrorResponse() {
+            JsonObject response = Command.generateErrorResponse("Test error message");
+
+            assertEquals("ERROR", response.get("result").getAsString());
+            assertEquals("Test error message", response.getAsJsonObject("data").get("message").getAsString());
+        }
+
+        @Test
+        public void testForwardCommand() {
+            JsonArray args = new JsonArray();
+            args.add(5);
+            ForwardCommand command = new ForwardCommand(args);
+            Robot robot = createTestRobot(Direction.NORTH, new Position(0, 0));
+            JsonObject result = command.execute(robot);
+
+            assertEquals("OK", result.get("result").getAsString());
+            assertEquals(5, robot.getPosition().getY());
+        }
+
+        @Test
+        public void testBackwardCommand() {
+            JsonArray args = new JsonArray();
+            args.add(5);
+            BackwardCommand command = new BackwardCommand(args);
+            Robot robot = createTestRobot(Direction.NORTH, new Position(0, 5));
+            JsonObject result = command.execute(robot);
+
+            assertEquals("OK", result.get("result").getAsString());
+            assertEquals(0, robot.getPosition().getY());
+        }
+
+        private Robot createTestRobot(Direction direction, Position position) {
+            return new Robot("testRobot", "sniper", 100, new ArrayList<>(), new ArrayList<>(), 1, 10, position, 3, 3, direction, 5, 5, new Position(-50, 50), new Position(50, -50), 5, 5, 10);
+        }
+    }
+
 
 }

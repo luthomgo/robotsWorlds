@@ -44,7 +44,7 @@ public abstract class Command {
             default -> new ErrorResponse(generateErrorResponse("Unsupported command"));
         };
     }
-    private static boolean isValidArg(JsonArray args){
+    public static boolean isValidArg(JsonArray args){
 
 
         if (args.isEmpty()){
