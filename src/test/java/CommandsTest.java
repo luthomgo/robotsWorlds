@@ -372,6 +372,7 @@ public class CommandsTest {
             Command command = Command.create(request);
             assertTrue(command instanceof Command.ErrorResponse);
             JsonObject response = command.execute(null);
+
             assertEquals("ERROR", response.get("result").getAsString());
             assertEquals("Unsupported command", response.getAsJsonObject("data").get("message").getAsString());
         }
