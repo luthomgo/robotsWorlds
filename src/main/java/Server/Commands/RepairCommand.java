@@ -9,10 +9,8 @@ public class RepairCommand extends Command {
         target.setStatus("REPAIR");
         target.setRepairing(true);
 
-        if (target.isRepairing()) {
-            return generateErrorResponse("Robot is already reloading.");
-        }
-        else if (target.getIShield() == target.getShield()) {
+
+        if (target.getIShield() == target.getShield()) {
             return generateErrorResponse("Robot is already repaired");
         } else {
             int repairTime = target.getRepair();

@@ -26,6 +26,9 @@ public abstract class Command {
         if (!isValidArg(args)){
             return new ErrorResponse(generateErrorResponse("Could not parse arguments"));
         }
+        if (args.size() > 2){
+            return new ErrorResponse(generateErrorResponse("Could not parse arguments"));
+        }
 
         return switch (command) {
             case "state" -> new StateCommand();
@@ -42,6 +45,8 @@ public abstract class Command {
         };
     }
     private static boolean isValidArg(JsonArray args){
+
+
         if (args.isEmpty()){
             return true;
         }
