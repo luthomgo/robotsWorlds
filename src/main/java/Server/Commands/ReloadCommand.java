@@ -10,9 +10,8 @@ public class ReloadCommand extends Command {
     public JsonObject execute(Robot target) {
         JsonObject response = new JsonObject();
 
-        if (target.isReloading()) {
-            return generateErrorResponse("Robot is already reloading.");
-        } else if (target.getShots() == target.iShot) {
+
+       if (target.getShots() == target.iShot) {
             return generateErrorResponse("Robot is already fully loaded.");
         } else {
             target.setReload(true);
