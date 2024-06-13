@@ -17,6 +17,8 @@ import Server.Robots.Robot;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -186,7 +188,7 @@ public class CommandsTest {
             Position testPos = new Position(5, 5);
             Position topL = new Position(-50, 50);
             Position botR = new Position(50, -50);
-            return new Robot("robot", "sniper", 10, testObs, testRobs, 1, 5, testPos, shots, shield, direction, 5, 5, topL, botR, 5, 5, 10);
+            return new Robot("robot", "sniper", 10, testObs, testRobs, 1, shots, testPos, 3, 3, direction, 5, 5, topL, botR, 5, 5, shield);
         }
 
         private Robot createTargetRobot(Position position, String name) {
@@ -194,7 +196,7 @@ public class CommandsTest {
             List<Robot> testRobs = new ArrayList<>();
             Position topL = new Position(-50, 50);
             Position botR = new Position(50, -50);
-            return new Robot(name, "sniper", 10, testObs, testRobs, 1, 5, position, 3, 3, Direction.NORTH, 5, 5, topL, botR, 5, 5, 10);
+            return new Robot(name, "sniper", 10, testObs, testRobs, 5, 5, position, 3, 3, Direction.NORTH, 5, 5, topL, botR, 5, 5, 10);
         }
 
         private void addObstacle(JsonArray obstacles, String type, String direction, int distance, String name) {
@@ -210,7 +212,7 @@ public class CommandsTest {
 
         @Test
         public void testFireCommandHitsRobotNorth() {
-            Robot robot = createTestRobot(Direction.NORTH, 3, 3);
+            Robot robot = createTestRobot(Direction.NORTH, 5, 5);
             Robot targetRobot = createTargetRobot(new Position(5, 10), "targetRobot");
             robot.getRobotList().add(targetRobot);
 
@@ -225,13 +227,13 @@ public class CommandsTest {
             assertEquals("Hit", response.getAsJsonObject("data").get("message").getAsString());
             assertEquals(5, response.getAsJsonObject("data").get("distance").getAsInt());
             assertEquals("targetRobot", response.getAsJsonObject("data").get("robot").getAsString());
-            assertEquals(2, robot.getShots());
-            assertEquals(2, targetRobot.getShield());
+            assertEquals(4, robot.getShots());
+            assertEquals(4, targetRobot.getShield());
         }
 
         @Test
         public void testFireCommandMisses() {
-            Robot robot = createTestRobot(Direction.NORTH, 3, 3);
+            Robot robot = createTestRobot(Direction.NORTH, 5, 5);
 
             FireCommand fireCommand = new FireCommand();
             JsonArray obstacles = new JsonArray();
@@ -241,7 +243,7 @@ public class CommandsTest {
             boolean ok = response.get("result").getAsString().equals("ok");
             assertTrue(ok);
             assertEquals("Miss", response.getAsJsonObject("data").get("message").getAsString());
-            assertEquals(2, robot.getShots());
+            assertEquals(4, robot.getShots());
         }
 
         @Test
@@ -261,7 +263,7 @@ public class CommandsTest {
 
         @Test
         public void testFireCommandHitsRobotSouth() {
-            Robot robot = createTestRobot(Direction.SOUTH, 3, 3);
+            Robot robot = createTestRobot(Direction.SOUTH, 5, 5);
             Robot targetRobot = createTargetRobot(new Position(5, 0), "targetRobot");
             robot.getRobotList().add(targetRobot);
 
@@ -276,13 +278,13 @@ public class CommandsTest {
             assertEquals("Hit", response.getAsJsonObject("data").get("message").getAsString());
             assertEquals(5, response.getAsJsonObject("data").get("distance").getAsInt());
             assertEquals("targetRobot", response.getAsJsonObject("data").get("robot").getAsString());
-            assertEquals(2, robot.getShots());
-            assertEquals(2, targetRobot.getShield());
+            assertEquals(4, robot.getShots());
+            assertEquals(4, targetRobot.getShield());
         }
 
         @Test
         public void testFireCommandHitsRobotEast() {
-            Robot robot = createTestRobot(Direction.EAST, 3, 3);
+            Robot robot = createTestRobot(Direction.EAST, 5, 5);
             Robot targetRobot = createTargetRobot(new Position(10, 5), "targetRobot");
             robot.getRobotList().add(targetRobot);
 
@@ -297,13 +299,13 @@ public class CommandsTest {
             assertEquals("Hit", response.getAsJsonObject("data").get("message").getAsString());
             assertEquals(5, response.getAsJsonObject("data").get("distance").getAsInt());
             assertEquals("targetRobot", response.getAsJsonObject("data").get("robot").getAsString());
-            assertEquals(2, robot.getShots());
-            assertEquals(2, targetRobot.getShield());
+            assertEquals(4, robot.getShots());
+            assertEquals(4, targetRobot.getShield());
         }
 
         @Test
         public void testFireCommandHitsRobotWest() {
-            Robot robot = createTestRobot(Direction.WEST, 3, 3);
+            Robot robot = createTestRobot(Direction.WEST, 5, 5);
             Robot targetRobot = createTargetRobot(new Position(0, 5), "targetRobot");
             robot.getRobotList().add(targetRobot);
 
@@ -318,8 +320,8 @@ public class CommandsTest {
             assertEquals("Hit", response.getAsJsonObject("data").get("message").getAsString());
             assertEquals(5, response.getAsJsonObject("data").get("distance").getAsInt());
             assertEquals("targetRobot", response.getAsJsonObject("data").get("robot").getAsString());
-            assertEquals(2, robot.getShots());
-            assertEquals(2, targetRobot.getShield());
+            assertEquals(4, robot.getShots());
+            assertEquals(4, targetRobot.getShield());
         }
     }
 
