@@ -474,10 +474,10 @@ public class CommandsTest {
             String name = testRobot.getName();
             assertEquals(name,"robot");
         }
-//        public void testGetRobotPosition() {
-//            Position position = new Position(5, 10);
-//            assertEquals(position, testRobot.getPosition());
-//        }
+        public void testGetRobotPosition() {
+            Position position = new Position(5, 10);
+            assertEquals(position, testRobot.getPosition());
+        }
 //        private Socket mockSocket;
 //        private DataInputStream mockDis;
 //        private DataOutputStream mockDos;
