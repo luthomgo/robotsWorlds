@@ -102,7 +102,7 @@ public class Client {
                     dos.close();
                     dis.close();
                 } catch (IOException e) {
-                    System.out.println("Server has not been started");
+                    System.out.println("Server connection off");
                 }
             }
             else System.out.println("Please enter a valid IP address and port number");

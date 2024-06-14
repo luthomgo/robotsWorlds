@@ -157,125 +157,40 @@ public class Config {
 
     public Position readWorldTop(JsonObject configJSON){
         Position top = null;
-        try {
-            Scanner myReader = new Scanner(worldFile);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                JsonObject configData = JsonParser.parseString(data).getAsJsonObject();
-                int x = configData.get("World x").getAsInt();
-                int y = configData.get("World y").getAsInt();
-                top = new Position(x * -1,y);
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        int x = configJSON.get("World x").getAsInt();
+        int y = configJSON.get("World y").getAsInt();
+        top = new Position(x * -1,y);
         return top;
     }
     public int readWorldShield(JsonObject configJSON){
         int shield = 0;
-        try {
-            Scanner reader = new Scanner(worldFile);
-            while (reader.hasNextLine()){
-                String data = reader.nextLine();
-                JsonObject configData = JsonParser.parseString(data).getAsJsonObject();
-                shield = configData.get("WorldShield").getAsInt();
-            }
-            reader.close();
-        }catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        shield = configJSON.get("WorldShield").getAsInt();
         return shield;
     }
     public int readWorldShots(JsonObject configJSON){
         int shots = 0;
-        try {
-            Scanner reader = new Scanner(worldFile);
-            while (reader.hasNextLine()){
-                String data = reader.nextLine();
-                JsonObject configData = JsonParser.parseString(data).getAsJsonObject();
-                shots= configData.get("WorldShots").getAsInt();
-            }
-            reader.close();
-        }catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        shots= configJSON.get("WorldShots").getAsInt();
         return shots;
     }
     public int readWorldPlayers(JsonObject configJSON){
         int players = 0;
-        try {
-            Scanner reader = new Scanner(worldFile);
-            while (reader.hasNextLine()){
-                String data = reader.nextLine();
-                JsonObject configData = JsonParser.parseString(data).getAsJsonObject();
-                players = configData.get("WorldPlayers").getAsInt();
-            }
-            reader.close();
-        }catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        players = configJSON.get("WorldPlayers").getAsInt();
         return players;
     }
     public int readWorldRepairTime(JsonObject configJSON){
         int repairTime = 0;
-        try {
-            Scanner reader = new Scanner(worldFile);
-            while (reader.hasNextLine()){
-                String data = reader.nextLine();
-                JsonObject configData = JsonParser.parseString(data).getAsJsonObject();
-                repairTime = configData.get("WorldRepair").getAsInt();
-            }
-            reader.close();
-        }catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        repairTime = configJSON.get("WorldRepair").getAsInt();
         return repairTime;
     }
 
     public int readWorldReloadTime(JsonObject configJSON){
         int reload = 0;
-        try {
-            Scanner reader = new Scanner(worldFile);
-            while (reader.hasNextLine()){
-                String data = reader.nextLine();
-                JsonObject configData = JsonParser.parseString(data).getAsJsonObject();
-                reload = configData.get("WorldReload").getAsInt();
-            }
-            reader.close();
-        }catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        reload = configJSON.get("WorldReload").getAsInt();
         return reload;
     }
     public int readWorldVise(JsonObject configJSON){
         int vis = 0;
-        try {
-            Scanner reader = new Scanner(worldFile);
-            while (reader.hasNextLine()){
-                String data = reader.nextLine();
-                JsonObject configData = JsonParser.parseString(data).getAsJsonObject();
-                vis = configData.get("WorldVis").getAsInt();
-            }
-            reader.close();
-        }catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        vis = configJSON.get("WorldVis").getAsInt();
         return vis;
-    }
-
-    public JsonObject getConfigJSON() {
-        return configJSON;
-    }
-
-    public boolean isConfigCreated() {
-        return configCreated;
     }
 }
