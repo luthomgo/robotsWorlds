@@ -571,5 +571,4 @@ public class CommandsTest {
             assertEquals(initialBottomRight, botR);
         }
     }
-
 }
