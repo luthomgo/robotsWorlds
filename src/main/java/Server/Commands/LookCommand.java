@@ -10,6 +10,11 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 public class LookCommand extends Command {
+    /**
+     * LookCommand is a type of command that scans the surroundings of robots and provides details
+     * about the obstacles and other robots within its visibility range
+     */
+
     private JsonArray ObstaclesNorth;
     private JsonArray ObstaclesSouth;
     private JsonArray ObstaclesWest;
@@ -17,6 +22,13 @@ public class LookCommand extends Command {
 
     @Override
     public JsonObject execute(Robot target) {
+        /**
+         * Executes the LookCommand for the specified robot. This method scans the surrounding and returns
+         * a Json object containing the details of obstacles and other robots within its visibility range.
+         *
+         * @param target The robot for which the command is executed.
+         * @return A Json containing the result of the look command, including detected obstacles and other robots.
+         */
         JsonObject response = new JsonObject();
         JsonArray obFinal = generateObFinal(target);
         response.addProperty("result","ok");
@@ -28,6 +40,12 @@ public class LookCommand extends Command {
     }
 
     public JsonArray sortArray(JsonArray objects){
+        /**
+         * Sorts the given JsonArray of objects based on their distance property in ascending order
+         *
+         * @param objects a jsonArray of objects to be sorted
+         * @return A sorted JsonArray of objects based on the distance.
+         */
         JsonObject small;
 
         JsonArray temp;
@@ -52,6 +70,13 @@ public class LookCommand extends Command {
     }
 
     public JsonArray generateObFinal(Robot target){
+        /**
+         * Generates a JsonArray containing details of obstacles and other robots within the visibility range
+         * of the target robot. It categorises these object based on their direction (NORTH, SOUTH,EAST,WEST).
+         *
+         * @param target The robot for which the surrounding are being scanned.
+         * @return A JsonArray containing the detected objects within the robot's visibility.
+         */
         JsonArray objects = new JsonArray();
 
         int tX = target.getPosition().getX();
@@ -64,7 +89,7 @@ public class LookCommand extends Command {
         Position look_west = new Position(tX - visibility,tY);
         Position look_east = new Position(tX + visibility,tY);
 
-
+        // check edges and add them to the objects if within the visibility
         if (look_north.getY() >= target.getTOP_LEFT().getY()){
             JsonObject edgeStats = new JsonObject();
             edgeStats.addProperty("direction", "NORTH");
@@ -105,6 +130,7 @@ public class LookCommand extends Command {
             objects.add(edgeStats);
         }
 
+        // check obstacles and add the to objects if within visibility
         for (Obstacles i : target.getObstacles()) {
             JsonObject obstacleStats = new JsonObject();
 
@@ -154,6 +180,7 @@ public class LookCommand extends Command {
         Position robot_west = new Position(robotX - visibility,robotY);
         Position robot_east = new Position(robotX + visibility,robotY);
 
+        // check for other robots within the visibility
         List<Robot> rl = target.getRobotList();
         for (Robot robot : rl) {
             if (!target.getName().equals(robot.getName())){
@@ -199,6 +226,7 @@ public class LookCommand extends Command {
             }
         }
 
+        // sort object and categorise them by direction
         JsonArray ob = sortArray(objects);
         JsonArray obFinal = new JsonArray();
         JsonArray obNorth = new JsonArray();
@@ -255,18 +283,38 @@ public class LookCommand extends Command {
     }
 
     public JsonArray getObstaclesNorth() {
+        /**
+         * Gets obstacles detected to the north of the robot
+         *
+         * @return A JsonArray of obstacles to the north
+         */
         return ObstaclesNorth;
     }
 
     public JsonArray getObstaclesSouth() {
+        /**
+         * Gets obstacles detected to the south of the robot
+         *
+         * @return A JsonArray of obstacles to the south
+         */
         return ObstaclesSouth;
     }
 
     public JsonArray getObstaclesWest() {
+        /**
+         * Gets obstacles detected to the west of the robot
+         *
+         * @return A JsonArray of obstacles to the west
+         */
         return ObstaclesWest;
     }
 
     public JsonArray getObstaclesEast() {
+        /**
+         * Gets obstacles detected to the east of the robot
+         *
+         * @return A JsonArray of obstacles to the east
+         */
         return ObstaclesEast;
     }
 }
