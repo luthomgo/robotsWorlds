@@ -21,10 +21,10 @@ public class Position {
 
     @Override
     public String toString() {
-        return "Position{ " +
-                " x=" + getX()+
+        return "Position{" +
+                "x=" + getX()+
                 ", y=" + getY() +
-                " }";
+                "}";
     }
     public static boolean Isin(int newX, int newY,Position top, Position bot){
 

@@ -57,9 +57,9 @@ public class MountainObstacle implements Obstacles{
 
     @Override
     public String toString() {
-        return "Mountain Obstacle{ " +
-                " x=" + getBottomLeftX()+
+        return "Mountain Obstacle{" +
+                "x=" + getBottomLeftX()+
                 ", y=" + getBottomLeftY() +
-                " }";
+                "}";
     }
 }

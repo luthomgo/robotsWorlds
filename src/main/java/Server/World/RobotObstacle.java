@@ -58,9 +58,9 @@ public class RobotObstacle implements Obstacles{
 
     @Override
     public String toString() {
-        return "Robot Obstacle{ " +
-                " x=" + getBottomLeftX()+
+        return "Robot Obstacle{" +
+                "x=" + getBottomLeftX()+
                 ", y=" + getBottomLeftY() +
-                " }";
+                "}";
     }
 }

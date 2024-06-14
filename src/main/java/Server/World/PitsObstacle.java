@@ -57,9 +57,9 @@ public class PitsObstacle implements Obstacles{
 
     @Override
     public String toString() {
-        return "Pit Obstacle{ " +
-                " x=" + getBottomLeftX()+
+        return "Pit Obstacle{" +
+                "x=" + getBottomLeftX()+
                 ", y=" + getBottomLeftY() +
-                " }";
+                "}";
     }
 }
