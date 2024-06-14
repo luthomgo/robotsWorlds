@@ -44,8 +44,6 @@ else
         exit 1
     fi
 fi
-
-cd target || { echo "Target directory not found"; exit 1; }
-
 clear
 echo "Welcome to Robot Worlds"
+cd target || { echo "Target directory not found"; exit 1; }
