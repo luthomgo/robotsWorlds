@@ -35,6 +35,7 @@ public class LakesObstacles implements Obstacles{
 
     @Override
     public boolean blocksPath(Position a, Position b) {
+
         int aX = a.getX();
         int aY = a.getY();
         int bX = b.getX();
