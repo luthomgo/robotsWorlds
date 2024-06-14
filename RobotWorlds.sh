@@ -24,7 +24,7 @@ else
     sudo apt install -y maven
 fi
 
-cd /home/wtc/Documents/java/java_work/r/cpt10_robot_worlds || { echo "Directory not found"; exit 1; }
+cd cpt10_robot_worlds-main/ || { echo "Directory not found"; exit 1; }
 
 mvn clean
 

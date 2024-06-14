@@ -1,11 +1,9 @@
 import static  org.junit.Assert.*;
-
 import Server.Robots.Direction;
 import Server.Robots.Position;
 import Server.Robots.Robot;
 import Server.World.Obstacles;
 import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 
