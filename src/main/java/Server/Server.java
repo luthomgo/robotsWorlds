@@ -18,14 +18,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static Server.Commands.Command.*;
-
+/**
+ * The main server class responsible for managing client connections and handling commands.
+ */
 public class Server {
+
     public static final List<Socket> clientSockets = new ArrayList<>();
     public final static List<String> names = new ArrayList<String>();
     public static World world = new World();
-
+    /**
+     * Main method that starts the server and listens for client connections.
+     *
+     * @param args Command-line arguments (not used).
+     * @throws IOException If an I/O error occurs while setting up the server socket.
+     */
     public static void main(String[] args) throws IOException {
-        ServerSocket ss = new ServerSocket(5055);
+        ServerSocket ss = new ServerSocket(5058);
         ServerCommand sc = new ServerCommand();
         sc.ServerCommand(ss);
 
@@ -58,7 +66,9 @@ public class Server {
         }
     }
 }
-
+/**
+ * Handles communication with a single client connected to the server.
+ */
 class ClientHandler extends Thread
 {
     final DataInputStream dis;
@@ -66,7 +76,13 @@ class ClientHandler extends Thread
     final Socket s;
 
     private Robot robot;
-
+    /**
+     * Constructs a ClientHandler object for the given client socket.
+     *
+     * @param s   The client socket.
+     * @param dis DataInputStream to receive data from the client.
+     * @param dos DataOutputStream to send data to the client.
+     */
     public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos)
     {
         this.s = s;

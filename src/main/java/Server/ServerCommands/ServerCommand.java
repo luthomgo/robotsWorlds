@@ -12,11 +12,27 @@ import java.net.Socket;
 import static Server.Server.clientSockets;
 
 public class ServerCommand {
+
+    /**
+     * This class represents the server command interface for handling various commands
+     * such as quitting the server, dumping world information, and displaying robots in the game.
+     */
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
 
+    /**
+     * Creates a server command interface that listens for commands from the server admin.
+     * Supported commands include:
+     * <ul>
+     * <li>quit - Disconnects the server and all connected clients.</li>
+     * <li>dump - Dumps the current world information, including positions, visibility, repair times, and more.</li>
+     * <li>robots - Lists all robots currently in the game along with their state.</li>
+     * </ul>
+     *
+     * @param socket the server socket through which clients are connected
+     */
     public void ServerCommand(ServerSocket socket){
         BufferedReader com = new BufferedReader(new InputStreamReader(System.in));
         PrintStream out = new PrintStream(System.out);
