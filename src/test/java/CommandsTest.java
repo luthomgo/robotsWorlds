@@ -19,6 +19,15 @@ import java.util.List;
 
 import Server.Commands.*;
 import Server.Robots.*;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import java.net.Socket;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import com.google.gson.JsonObject;
 
 
 
@@ -449,6 +458,156 @@ public class CommandsTest {
             return new Robot("testRobot", "sniper", 100, new ArrayList<>(), new ArrayList<>(), 1, 10, position, 3, 3, direction, 5, 5, new Position(-50, 50), new Position(50, -50), 5, 5, 10);
         }
     }
+
+    public static class RobotTest {
+        List<Obstacles> testObs = new ArrayList<>();
+        List<Robot> testRobs = new ArrayList<>();
+
+        Position initialPosition = new Position(5, 10);
+        Position topL = new Position(-50, 50);
+        Position botR = new Position(50, -50);
+        Robot testRobot = new Robot("robot", "sniper", 10, testObs, testRobs, 1, 5, initialPosition, 3, 3, Direction.NORTH, 5, 5, topL, botR, 5, 5, 10);
+
+        @Test
+        public void testName(){
+
+            String name = testRobot.getName();
+            assertEquals(name,"robot");
+        }
+//        public void testGetRobotPosition() {
+//            Position position = new Position(5, 10);
+//            assertEquals(position, testRobot.getPosition());
+//        }
+//        private Socket mockSocket;
+//        private DataInputStream mockDis;
+//        private DataOutputStream mockDos;
+//        private List<Obstacles> obstacles;
+//        private List<Robot> robotList;
+//
+//        @Before
+//        public void setup() {
+//            mockSocket = new Socket();
+//            mockDis = new DataInputStream(System.in);
+//            mockDos = new DataOutputStream(System.out);
+//            obstacles = new ArrayList<>();
+//            robotList = new ArrayList<>();
+//
+//            // Initializing Server.world with dummy data for testing
+//            Server.world = new Server.world() {
+//                @Override
+//                public int getMaxShield() {
+//                    return 5;
+//                }
+//
+//                @Override
+//                public int getMaxShots() {
+//                    return 5;
+//                }
+//
+//                @Override
+//                public int getWorldVisibily() {
+//                    return 10;
+//                }
+//
+//                @Override
+//                public int getReloadTime() {
+//                    return 2;
+//                }
+//
+//                @Override
+//                public int getRepairTime() {
+//                    return 3;
+//                }
+//
+//                @Override
+//                public List<Obstacles> getObstacles() {
+//                    return obstacles;
+//                }
+//
+//                @Override
+//                public List<Robot> getRobotList() {
+//                    return robotList;
+//                }
+//
+//                @Override
+//                public Position getTOP_LEFT() {
+//                    return new Position(0, 10);
+//                }
+//
+//                @Override
+//                public Position getBOTTOM_RIGHT() {
+//                    return new Position(10, 0);
+//                }
+//            };
+        }
+
+//        @Test
+//        public void testRobotInitialization() {
+//            Robot robot = new Robot("TestRobot", "TypeA", 6, 6, 12, mockSocket, mockDos, mockDis);
+//
+//            assertEquals("TestRobot", robot.getName());
+//            assertEquals(5, robot.getShield());
+//            assertEquals(5, robot.getShots());
+//            assertEquals(10, robot.getVisibility());
+//        }
+//
+//        @Test
+//        public void testHandleCommand() {
+//            Robot robot = new Robot("TestRobot", "TypeA", 5, 5, 10, mockSocket, mockDos, mockDis);
+//            Command mockCommand = new Command() {
+//                @Override
+//                public JsonObject execute(Robot robot) {
+//                    JsonObject json = new JsonObject();
+//                    json.addProperty("result", "success");
+//                    return json;
+//                }
+//            };
+//
+//            JsonObject result = robot.handleCommand(mockCommand);
+//            assertEquals("success", result.get("result").getAsString());
+//        }
+//
+//        @Test
+//        public void testUpdatePosition() {
+//            Robot robot = new Robot("TestRobot", "TypeA", 5, 5, 10, mockSocket, mockDos, mockDis);
+//
+//            Position initialPosition = robot.getPosition();
+//            robot.updatePosition(1);
+//
+//            Position newPosition = robot.getPosition();
+//            assertNotEquals(initialPosition, newPosition);
+//        }
+//
+//        @Test
+//        public void testMinusShield() {
+//            Robot robot = new Robot("TestRobot", "TypeA", 5, 5, 10, mockSocket, mockDos, mockDis);
+//            int initialShield = robot.getShield();
+//
+//            robot.minusShield();
+//
+//            assertEquals(initialShield - 1, robot.getShield());
+//        }
+//
+//        @Test
+//        public void testMinusShot() {
+//            Robot robot = new Robot("TestRobot", "TypeA", 5, 5, 10, mockSocket, mockDos, mockDis);
+//            int initialShots = robot.getShots();
+//
+//            boolean result = robot.minusShot();
+//
+//            assertTrue(result);
+//            assertEquals(initialShots - 1, robot.getShots());
+//        }
+//
+//        @Test
+//        public void testData() {
+//            Robot robot = new Robot("TestRobot", "TypeA", 5, 5, 10, mockSocket, mockDos, mockDis);
+//            JsonObject data = robot.data();
+//
+//            assertEquals(5, data.get("shields").getAsInt());
+//            assertEquals(10, data.get("visibility").getAsInt());
+//        }
+//    }
 
 
 }
