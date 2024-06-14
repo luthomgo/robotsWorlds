@@ -32,6 +32,10 @@ public class World {
     private JsonObject con;
 
     public World(){
+        /**
+         * Constructs a World instance. If a configuration file exists, it loads the configuration;
+         * otherwise, it creates a new configuration file.
+         */
         String filePath = "/home/wtc/.RobotWorldsConfig/WorldConfig.txt";
         Path path = Paths.get(filePath);
         Config c = new Config();
@@ -101,6 +105,10 @@ public class World {
     }
 
     public void genObs(){
+        /**
+         * Generates obstacles in the world based on the world size.
+         * It creates lakes, mountains, and pits at random positions within the world bounds.
+         */
         int xSize = this.getBOTTOM_RIGHT().getX() * 2;
         int ySize = this.getTOP_LEFT().getY() * 2;
         int totalSize = xSize + ySize;
