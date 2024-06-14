@@ -118,6 +118,9 @@ public class Robot {
     public int getShots() {
         return shots;
     }
+    public int getIShot() {
+        return this.iShot;
+    }
     public int getReload() {
         return reload;
     }
