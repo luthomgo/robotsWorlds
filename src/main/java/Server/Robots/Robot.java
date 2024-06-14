@@ -392,4 +392,8 @@ public class Robot {
     public void setReload(boolean reloading){
         this.isReloading = reloading;
     }
+
+    public String getkind() {
+        return this.kind;
+    }
 }
