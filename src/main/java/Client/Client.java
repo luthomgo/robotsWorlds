@@ -147,6 +147,7 @@ public class Client {
         }
     }
 
+
     /**
      * Formats the server response into a human-readable format.
      * Parses the JSON response and formats accordingly.
@@ -182,6 +183,8 @@ public class Client {
 
         return formattedResponse.toString();
     }
+
+
 
     /**
      * Formats the fire command response into a human-readable format.

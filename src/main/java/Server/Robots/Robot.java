@@ -317,6 +317,8 @@ public class Robot {
         return state;
     }
 
+
+
     public JsonObject toJSON(){
     /**
      * Creates a JSON object representing the robot's overall information, including

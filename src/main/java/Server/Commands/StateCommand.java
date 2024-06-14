@@ -18,7 +18,8 @@ public class StateCommand extends Command {
      * @return a JsonObject containing the state of the robot.
      */
 
-        JsonObject response = target.state();
-        return response;
+    JsonObject response = new JsonObject();
+    response.add("state",target.state());
+    return response;
     }
 }
