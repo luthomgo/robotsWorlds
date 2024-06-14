@@ -1,110 +1,89 @@
+import Server.Commands.*;
+import Server.Robots.Direction;
+import Server.Robots.Position;
+import Server.Robots.Robot;
 import Server.World.*;
-
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.junit.jupiter.api.*;
+import org.junit.Test;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ReloadTest {
+    @Test
+    public void testRobotReload() {
+        List<Obstacles> testObs = new ArrayList<>();
+        List<Robot> testRobs = new ArrayList<>();
+        testObs.add(new MountainObstacle(5, -10));
 
-    private Config config;
-    private static final String CONFIG_DIRECTORY = System.getProperty("user.home") + "/.RobotWorldsConfig";
-    private static final String CONFIG_FILE_PATH = CONFIG_DIRECTORY + "/WorldConfig.txt";
+        Position initialPosition = new Position(5, 10);
+        Position topL = new Position(-50, 50);
+        Position botR = new Position(50, -50);
 
-    @BeforeEach
-    public void setUp() {
-        config = new Config();
-        deleteConfigDirectory();
-    }
+        Robot robot = new Robot("robot", "sniper", 10, testObs, testRobs, 1, 5, initialPosition, 3, 3, Direction.NORTH, 5, 5, topL, botR, 5, 5, 10);
 
-    @AfterEach
-    public void tearDown() {
-        deleteConfigDirectory();
+        JsonArray args = new JsonArray();
+        args.add(40);
+
+
+        FireCommand fireCommand = new FireCommand();
+        JsonObject fireResponse = fireCommand.execute(robot);
+        boolean fireOk = fireResponse.get("result").getAsString().equals("ok");
+        assertTrue(fireOk);
+        int iShot = robot.getIShield();
+
+        ReloadCommand reloadCommand = new ReloadCommand();
+        JsonObject reloadResponse = reloadCommand.execute(robot);
+        boolean reloadOK = reloadResponse.get("result").getAsString().equals("OK");
+        assertTrue(reloadOK);
+        assertEquals(iShot, robot.getIShot());
     }
 
     @Test
-    @Order(1)
-    public void testCreateConfigF() {
-        config.createConfigF();
-        File dir = new File(CONFIG_DIRECTORY);
-        assertTrue(dir.exists() && dir.isDirectory(), "Config directory should be created");
+    public void testRobotErrorResponse(){
+        List<Obstacles> testObs = new ArrayList<>();
+        List<Robot> testRobs = new ArrayList<>();
+        testObs.add(new MountainObstacle(5, -10));
+
+        Position initialPosition = new Position(5, 10);
+        Position topL = new Position(-50, 50);
+        Position botR = new Position(50, -50);
+        Robot robot = new Robot("robot", "sniper", 10, testObs, testRobs, 10, 5, initialPosition, 3, 3, Direction.NORTH, 10, 5, topL, botR, 10, 5, 10);
+
+
+        ReloadCommand reloadCommand = new ReloadCommand();
+        JsonObject reloadResponse = reloadCommand.execute(robot);
+        JsonObject data = reloadResponse.getAsJsonObject("data");
+        String errorMessage = data.get("message").getAsString();
+        assertEquals("Robot is already fully loaded.", errorMessage);
+        assertEquals(5, robot.getIShot());
+
     }
 
     @Test
-    @Order(2)
-    public void testCreateFile() {
-        config.createConfigF();
-        config.createFile();
-        File file = new File(CONFIG_FILE_PATH);
-        assertTrue(file.exists() && file.isFile(), "Config file should be created");
-    }
+    public void testRobotMovementErrorResponse(){
+        List<Obstacles> testObs = new ArrayList<>();
+        List<Robot> testRobs = new ArrayList<>();
+        testObs.add(new MountainObstacle(5, -10));
 
-    @Test
-    @Order(3)
-    public void testWriteToFile() {
-        config.createConfigF();
-        config.createFile();
+        Position initialPosition = new Position(5, 10);
+        Position topL = new Position(-50, 50);
+        Position botR = new Position(50, -50);
+        Robot robot = new Robot("robot", "sniper", 10, testObs, testRobs, 10, 5, initialPosition, 3, 3, Direction.NORTH, 10, 5, topL, botR, 10, 5, 10);
 
-        JsonObject testConfig = new JsonObject();
-        testConfig.addProperty("World x", 100);
-        testConfig.addProperty("World y", 100);
-        testConfig.addProperty("WorldVis", 10);
-        testConfig.addProperty("WorldReload", 5);
-        testConfig.addProperty("WorldRepair", 5);
-        testConfig.addProperty("WorldShield", 5);
-        testConfig.addProperty("WorldShots", 3);
-        testConfig.addProperty("WorldPlayers", 2);
+        robot.setReload(true);
 
-        config.writeToFile(testConfig);
+        JsonArray args = new JsonArray();
+        args.add(15);
+        BackwardCommand backwardCommand = new BackwardCommand(args);
+        JsonObject response = backwardCommand.execute(robot);
+        JsonObject data = response.getAsJsonObject("data");
+        String errorMessage = data.get("message").getAsString();
+        assertEquals("Robot is currently reloading and can't move", errorMessage);
+        assertTrue(robot.isReloading());
 
-        try {
-            Scanner reader = new Scanner(new File(CONFIG_FILE_PATH));
-            StringBuilder content = new StringBuilder();
-            while (reader.hasNextLine()) {
-                content.append(reader.nextLine());
-            }
-            reader.close();
-
-            JsonObject readConfig;
-            readConfig = JsonParser.parseString(content.toString()).getAsJsonObject();
-            assertEquals(testConfig, readConfig, "Written config should match the test config");
-        } catch (IOException e) {
-            fail("Failed to read the config file");
-        }
-    }
-
-
-
-    private void createTestConfigFile() {
-        try {
-            Files.createDirectories(Paths.get(CONFIG_DIRECTORY));
-            try (FileWriter writer = new FileWriter(CONFIG_FILE_PATH)) {
-                writer.write("{\"World x\":100,\"World y\":100,\"WorldVis\":10,\"WorldReload\":5,\"WorldRepair\":5,\"WorldShield\":5,\"WorldShots\":3,\"WorldPlayers\":2}");
-            }
-        } catch (IOException e) {
-            fail("Failed to create test config file");
-        }
-    }
-
-    private void deleteConfigDirectory() {
-        File dir = new File(CONFIG_DIRECTORY);
-        if (dir.exists() && dir.isDirectory()) {
-            File[] files = dir.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    file.delete();
-                }
-            }
-            dir.delete();
-        }
     }
 }

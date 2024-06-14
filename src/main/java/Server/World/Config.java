@@ -12,6 +12,11 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Config {
+    /**
+     * Retrieves the world configuration file.
+     *
+     * @return The world configuration file as a {@code File} object.
+     */
     private final String homeP;
     private String configP;
     private File worldFile;
@@ -19,6 +24,7 @@ public class Config {
     private boolean configCreated = false;
 
     public Config(){
+
         this.homeP = System.getProperty("user.home");
         this.configP = setConfigP();
     }
