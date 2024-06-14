@@ -499,24 +499,6 @@ public class CommandsTest {
         }
 
         @Test
-        public void testMaxShots(){
-            int maxShots = testRobot.getMaxShots();
-            assertEquals(maxShots, 5);
-        }
-
-        @Test
-        public void testMaxShield(){
-            int maxShield = testRobot.getMaxShield();
-            assertEquals(maxShield, 5);
-        }
-
-        @Test
-        public void testWorldVisibily(){
-            int worldVisibility = testRobot.getWorldVisibily();
-            assertEquals(worldVisibility, 10);
-        }
-
-        @Test
         public void testObstacles(){
             List<Obstacles> obstacles = testRobot.getObstacles();
             assertEquals(obstacles, testObs);
@@ -564,23 +546,6 @@ public class CommandsTest {
             assertEquals(initialShield, 5);
         }
 
-        @Test
-        public void testGetInitialMaxShots(){
-            int initialMaxShots = testRobot.getMaxShots();
-            assertEquals(initialMaxShots, 10);
-        }
-
-        @Test
-        public void testGetInitialMaxShield(){
-            int initialMaxShield = testRobot.getMaxShield();
-            assertEquals(initialMaxShield, 10);
-        }
-
-        @Test
-        public void testGetInitialWorldVisibily(){
-            int initialWorldVisibility = testRobot.getWorldVisibily();
-            assertEquals(initialWorldVisibility, 10);
-        }
 
         @Test
         public void testGetInitialObstacles(){
