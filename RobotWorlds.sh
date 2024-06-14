@@ -26,7 +26,7 @@ fi
 
 cd /home/wtc/Downloads || { echo "Downloads directory not found"; exit 1; }
 
-unzip cpt10_robot_worlds-main.zip || { echo "Unzipping failed"; exit 1; }
+#unzip cpt10_robot_worlds-main.zip || { echo "Unzipping failed"; exit 1; }
 
 cd cpt10_robot_worlds-main || { echo "Project directory not found"; exit 1; }
 
