@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Config {
+    /**
+     * The Config
+     */
     private final String homeP;
     private String configP;
     private File worldFile;
