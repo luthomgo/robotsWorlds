@@ -47,3 +47,4 @@ fi
 clear
 echo "Welcome to Robot Worlds"
 cd target || { echo "Target directory not found"; exit 1; }
+java -jar CPT_10_Robot_Worlds-1.0-SNAPSHOT-jar-with-dependencies.jar "$@"
