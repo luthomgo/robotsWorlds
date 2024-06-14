@@ -3,6 +3,13 @@ package Server.World;
 import Server.Robots.Position;
 
 public class LakesObstacles implements Obstacles{
+    /**
+     * Constructor for the LakesObstacles class.
+     *
+     * @param x The x-coordinate of the bottom-left corner of the obstacle.
+     * @param y The y-coordinate of the bottom-left corner of the obstacle.
+     *
+     */
     private final int x;
     private final int y;
     private final int size = 10;
@@ -35,6 +42,9 @@ public class LakesObstacles implements Obstacles{
 
     @Override
     public boolean blocksPath(Position a, Position b) {
+        /**
+         *
+         */
 
         int aX = a.getX();
         int aY = a.getY();
