@@ -91,6 +91,6 @@ public class PitsObstacle implements Obstacles{
         return "Pit Obstacle{ " +
                 " x=" + getBottomLeftX()+
                 ", y=" + getBottomLeftY() +
-                " }";
+                "}";
     }
 }

@@ -68,9 +68,9 @@ public class LakesObstacles implements Obstacles{
 
     @Override
     public String toString() {
-        return "Lake Obstacle{ " +
-                " x=" + getBottomLeftX()+
+        return "Lake Obstacle{" +
+                "x=" + getBottomLeftX()+
                 ", y=" + getBottomLeftY() +
-                " }";
+                "}";
     }
 }

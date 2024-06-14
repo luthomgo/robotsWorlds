@@ -92,6 +92,6 @@ public class RobotObstacle implements Obstacles{
         return "Robot Obstacle{ " +
                 " x=" + getBottomLeftX()+
                 ", y=" + getBottomLeftY() +
-                " }";
+                "}";
     }
 }

@@ -38,7 +38,7 @@ public class Position {
         return "Position{ " +
                 " x=" + getX()+
                 ", y=" + getY() +
-                " }";
+                "}";
     }
     public static boolean Isin(int newX, int newY,Position top, Position bot){
     /**
