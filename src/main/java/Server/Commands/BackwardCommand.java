@@ -5,9 +5,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class BackwardCommand extends Command{
-
+    /**
+     * The BackwardCommand class represents a command to move a robot backward by a specified number of steps.
+     * It extends the Command class and overrides the execute method to perform the backward movement.
+     */
     @Override
     public JsonObject execute(Robot target) {
+        /**
+         * Executes the backward command on the specified robot.
+         *
+         * @param target the robot on which the command is executed.
+         * @return a JsonObject containing the result of the command execution, including the robot's state.
+         */
+
         JsonObject response = new JsonObject();
 
         if (target.isRepairing()){
@@ -37,4 +47,8 @@ public class BackwardCommand extends Command{
     public BackwardCommand(JsonArray args) {
         super(args);
     }
+    /**
+     * Constructs a BackwardCommand with the specified arguments.
+     * @param args the arguments for the command, expected to contain the number of steps to move backward.
+     */
 }
