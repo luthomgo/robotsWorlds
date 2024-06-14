@@ -39,23 +39,13 @@ public class Config {
     public void createConfigF(){
         File dir = new File(this.configP);
         boolean worldConfig = dir.mkdir();
-        if (worldConfig) {System.out.println("created config file at " + configP);configCreated =true;}
-        else {System.out.println("Failed to create config it already exists");configCreated=true;}
+        if (worldConfig) {configCreated =true;}
+        else {configCreated=true;}
     }
 
     public void createFile(){
-        try {
-            File myObj = new File(configP + "/" + "WorldConfig.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-            this.worldFile = myObj;
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        File myObj = new File(configP + "/" + "WorldConfig.txt");
+        this.worldFile = myObj;
     }
 
     public void writeToFile(JsonObject config){

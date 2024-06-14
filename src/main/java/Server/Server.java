@@ -37,12 +37,10 @@ public class Server {
                 } catch (SocketException ignored) {
                 }
                 if (s != null) {
-                    System.out.println("A new client is connected : " + s);
+                    System.out.println("A new client is connected");
 
                     DataInputStream dis = new DataInputStream(s.getInputStream());
                     DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-
-                    System.out.println("Assigning new thread");
 
                     Thread t = new ClientHandler(s, dis, dos);
                     t.start();
