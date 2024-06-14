@@ -466,148 +466,145 @@ public class CommandsTest {
         Position initialPosition = new Position(5, 10);
         Position topL = new Position(-50, 50);
         Position botR = new Position(50, -50);
-        Robot testRobot = new Robot("robot", "sniper", 10, testObs, testRobs, 1, 5, initialPosition, 3, 3, Direction.NORTH, 5, 5, topL, botR, 5, 5, 10);
+        Robot testRobot = new Robot("robot", "sniper", 10, testObs, testRobs, 5, 5, initialPosition, 3, 3, Direction.NORTH, 5, 5, topL, botR, 5, 5, 10);
 
         @Test
         public void testName(){
-
             String name = testRobot.getName();
-            assertEquals(name,"robot");
-        }
-        public void testGetRobotPosition() {
-            Position position = new Position(5, 10);
-            assertEquals(position, testRobot.getPosition());
-        }
-//        private Socket mockSocket;
-//        private DataInputStream mockDis;
-//        private DataOutputStream mockDos;
-//        private List<Obstacles> obstacles;
-//        private List<Robot> robotList;
-//
-//        @Before
-//        public void setup() {
-//            mockSocket = new Socket();
-//            mockDis = new DataInputStream(System.in);
-//            mockDos = new DataOutputStream(System.out);
-//            obstacles = new ArrayList<>();
-//            robotList = new ArrayList<>();
-//
-//            // Initializing Server.world with dummy data for testing
-//            Server.world = new Server.world() {
-//                @Override
-//                public int getMaxShield() {
-//                    return 5;
-//                }
-//
-//                @Override
-//                public int getMaxShots() {
-//                    return 5;
-//                }
-//
-//                @Override
-//                public int getWorldVisibily() {
-//                    return 10;
-//                }
-//
-//                @Override
-//                public int getReloadTime() {
-//                    return 2;
-//                }
-//
-//                @Override
-//                public int getRepairTime() {
-//                    return 3;
-//                }
-//
-//                @Override
-//                public List<Obstacles> getObstacles() {
-//                    return obstacles;
-//                }
-//
-//                @Override
-//                public List<Robot> getRobotList() {
-//                    return robotList;
-//                }
-//
-//                @Override
-//                public Position getTOP_LEFT() {
-//                    return new Position(0, 10);
-//                }
-//
-//                @Override
-//                public Position getBOTTOM_RIGHT() {
-//                    return new Position(10, 0);
-//                }
-//            };
+            assertEquals(name, "robot");
         }
 
-//        @Test
-//        public void testRobotInitialization() {
-//            Robot robot = new Robot("TestRobot", "TypeA", 6, 6, 12, mockSocket, mockDos, mockDis);
-//
-//            assertEquals("TestRobot", robot.getName());
-//            assertEquals(5, robot.getShield());
-//            assertEquals(5, robot.getShots());
-//            assertEquals(10, robot.getVisibility());
-//        }
-//
-//        @Test
-//        public void testHandleCommand() {
-//            Robot robot = new Robot("TestRobot", "TypeA", 5, 5, 10, mockSocket, mockDos, mockDis);
-//            Command mockCommand = new Command() {
-//                @Override
-//                public JsonObject execute(Robot robot) {
-//                    JsonObject json = new JsonObject();
-//                    json.addProperty("result", "success");
-//                    return json;
-//                }
-//            };
-//
-//            JsonObject result = robot.handleCommand(mockCommand);
-//            assertEquals("success", result.get("result").getAsString());
-//        }
-//
-//        @Test
-//        public void testUpdatePosition() {
-//            Robot robot = new Robot("TestRobot", "TypeA", 5, 5, 10, mockSocket, mockDos, mockDis);
-//
-//            Position initialPosition = robot.getPosition();
-//            robot.updatePosition(1);
-//
-//            Position newPosition = robot.getPosition();
-//            assertNotEquals(initialPosition, newPosition);
-//        }
-//
-//        @Test
-//        public void testMinusShield() {
-//            Robot robot = new Robot("TestRobot", "TypeA", 5, 5, 10, mockSocket, mockDos, mockDis);
-//            int initialShield = robot.getShield();
-//
-//            robot.minusShield();
-//
-//            assertEquals(initialShield - 1, robot.getShield());
-//        }
-//
-//        @Test
-//        public void testMinusShot() {
-//            Robot robot = new Robot("TestRobot", "TypeA", 5, 5, 10, mockSocket, mockDos, mockDis);
-//            int initialShots = robot.getShots();
-//
-//            boolean result = robot.minusShot();
-//
-//            assertTrue(result);
-//            assertEquals(initialShots - 1, robot.getShots());
-//        }
-//
-//        @Test
-//        public void testData() {
-//            Robot robot = new Robot("TestRobot", "TypeA", 5, 5, 10, mockSocket, mockDos, mockDis);
-//            JsonObject data = robot.data();
-//
-//            assertEquals(5, data.get("shields").getAsInt());
-//            assertEquals(10, data.get("visibility").getAsInt());
-//        }
-//    }
+        @Test
+        public void testDirection(){
+            Direction direction = testRobot.getDirection();
+            assertEquals(direction, Direction.NORTH);
+        }
 
+        @Test
+        public void testPosition(){
+            Position position = testRobot.getPosition();
+            assertEquals(position, initialPosition);
+        }
+
+        @Test
+        public void testShots(){
+            int shots = testRobot.getShots();
+            assertEquals(shots, 5);
+        }
+
+        @Test
+        public void testShield(){
+            int shield = testRobot.getShield();
+            assertEquals(shield, 5);
+        }
+
+        @Test
+        public void testMaxShots(){
+            int maxShots = testRobot.getMaxShots();
+            assertEquals(maxShots, 5);
+        }
+
+        @Test
+        public void testMaxShield(){
+            int maxShield = testRobot.getMaxShield();
+            assertEquals(maxShield, 5);
+        }
+
+        @Test
+        public void testWorldVisibily(){
+            int worldVisibility = testRobot.getWorldVisibily();
+            assertEquals(worldVisibility, 10);
+        }
+
+        @Test
+        public void testObstacles(){
+            List<Obstacles> obstacles = testRobot.getObstacles();
+            assertEquals(obstacles, testObs);
+        }
+
+        @Test
+        public void testRobotList(){
+            List<Robot> robotList = testRobot.getRobotList();
+            assertEquals(robotList, testRobs);
+        }
+
+        @Test
+        public void testGetTopLeft(){
+            Position topLeft = testRobot.getTOP_LEFT();
+            assertEquals(topLeft, topL);
+        }
+
+        @Test
+        public void testGetBottomRight(){
+            Position bottomRight = testRobot.getBOTTOM_RIGHT();
+            assertEquals(bottomRight, botR);
+        }
+
+        @Test
+        public void testGetInitialPosition(){
+            Position initialPosition = testRobot.getPosition();
+            assertEquals(initialPosition, this.initialPosition);
+        }
+
+        @Test
+        public void testGetInitialDirection(){
+            Direction initialDirection = testRobot.getDirection();
+            assertEquals(initialDirection, Direction.NORTH);
+        }
+
+        @Test
+        public void testGetInitialShots(){
+            int initialShots = testRobot.getShots();
+            assertEquals(initialShots, 5);
+        }
+
+        @Test
+        public void testGetInitialShield(){
+            int initialShield = testRobot.getShield();
+            assertEquals(initialShield, 5);
+        }
+
+        @Test
+        public void testGetInitialMaxShots(){
+            int initialMaxShots = testRobot.getMaxShots();
+            assertEquals(initialMaxShots, 10);
+        }
+
+        @Test
+        public void testGetInitialMaxShield(){
+            int initialMaxShield = testRobot.getMaxShield();
+            assertEquals(initialMaxShield, 10);
+        }
+
+        @Test
+        public void testGetInitialWorldVisibily(){
+            int initialWorldVisibility = testRobot.getWorldVisibily();
+            assertEquals(initialWorldVisibility, 10);
+        }
+
+        @Test
+        public void testGetInitialObstacles(){
+            List<Obstacles> initialObstacles = testRobot.getObstacles();
+            assertEquals(initialObstacles, testObs);
+        }
+
+        @Test
+        public void testGetInitialRobotList(){
+            List<Robot> initialRobotList = testRobot.getRobotList();
+            assertEquals(initialRobotList, testRobs);
+        }
+
+        @Test
+        public void testGetInitialTopLeft(){
+            Position initialTopLeft = testRobot.getTOP_LEFT();
+            assertEquals(initialTopLeft, topL);
+        }
+
+        @Test
+        public void testGetInitialBottomRight(){
+            Position initialBottomRight = testRobot.getBOTTOM_RIGHT();
+            assertEquals(initialBottomRight, botR);
+        }
+    }
 
 }
