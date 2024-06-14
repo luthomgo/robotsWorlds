@@ -9,6 +9,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class Request {
+    /**
+     * the Request class represents a request sent from the client to the server.
+     * It contains the name of the robot, the command, and the arguments for the command.
+     * The arguments are stored as a list of strings.
+     * request is a JsonObject that contains the name of the robot, the command, and the arguments for the command.
+     * Returns a JsonObject that contains the name of the robot, the command, and the arguments for the command.
+     *
+     */
     private String name;
     private String command;
 
