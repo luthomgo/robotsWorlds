@@ -9,6 +9,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class Request {
+    /**
+     * the Request class represents a request sent from the client to the server.
+     * It contains the name of the robot, the command, and the arguments for the command.
+     * The arguments are stored as a list of strings.
+     * request is a JsonObject that contains the name of the robot, the command, and the arguments for the command.
+     * Returns a JsonObject that contains the name of the robot, the command, and the arguments for the command.
+     *
+     */
     private String name;
     private String command;
 
@@ -16,6 +24,12 @@ public class Request {
 
 
     public Request(String name,String instruction) {
+        /**
+         * The constructor for the Request class.
+         * @param name the name of the robot.
+         * @param instruction the instruction for the robot to execute.
+         * the constructor for the Request class.
+         */
         this.name = name;
         String[] args = instruction.toLowerCase().trim().split(" ",2);
         this.command = args[0];
@@ -30,6 +44,10 @@ public class Request {
     }
 
     public JsonObject createRequest(){
+        /**
+         * the createRequest method creates a JsonObject that contains the name of the robot, the command, and the arguments for the command.
+         * @return a JsonObject that contains the name of the robot, the command, and the arguments for the command.
+         */
         JsonObject request = new JsonObject();
         request.addProperty("robot",this.name);
         request.addProperty("command",this.command);

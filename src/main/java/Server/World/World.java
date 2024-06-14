@@ -2,10 +2,21 @@ package Server.World;
 import Server.Robots.Position;
 import Server.Robots.Robot;
 import com.google.gson.JsonObject;
-
+import com.google.gson.JsonParser;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.IOException;
+import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class World {
     private Position TOP_LEFT ;
@@ -18,30 +29,86 @@ public class World {
     private final int Players;
     public List<Obstacles> obstacles = new ArrayList<>();
     public List<Robot> robotList = new ArrayList<>();
+    private JsonObject con;
 
     public World(){
+        /**
+         * Constructs a World instance. If a configuration file exists, it loads the configuration;
+         * otherwise, it creates a new configuration file.
+         */
+        String filePath = "/home/wtc/.RobotWorldsConfig/WorldConfig.txt";
+        Path path = Paths.get(filePath);
         Config c = new Config();
-        c.createConfigF();
-        c.createFile();
-        JsonObject configJSON = c.config();
-        c.writeToFile(configJSON);
 
-        Position top = c.readWorldTop(configJSON);
-        this.TOP_LEFT = top;
-        this.BOTTOM_RIGHT = new Position(top.getX() * -1,top.getY() * -1);
+        if (Files.exists(path)) {
+            Scanner s = new Scanner(System.in);
+            System.out.println("Config file exists would you like to reconfigure? y/n");
+            String a = s.nextLine();
+            if (a.equalsIgnoreCase("y")){
+                c.createConfigF();
+                c.createFile();
+                JsonObject configJSON = c.config();
+                c.writeToFile(configJSON);
 
-        this.WorldVisibily = c.readWorldVise(configJSON);
-        this.RepairTime = c.readWorldRepairTime(configJSON);
-        this.ReloadTime= c.readWorldReloadTime(configJSON);
-        this.MaxShield = c.readWorldShield(configJSON);
-        this.MaxShots = c.readWorldReloadTime(configJSON);
-        this.Players = c.readWorldPlayers(configJSON);
+                Position top = c.readWorldTop(configJSON);
+                this.TOP_LEFT = top;
+                this.BOTTOM_RIGHT = new Position(top.getX() * -1,top.getY() * -1);
+
+                this.WorldVisibily = c.readWorldVise(configJSON);
+                this.RepairTime = c.readWorldRepairTime(configJSON);
+                this.ReloadTime = c.readWorldReloadTime(configJSON);
+                this.MaxShield = c.readWorldShield(configJSON);
+                this.MaxShots = c.readWorldShots(configJSON);
+                this.Players = c.readWorldPlayers(configJSON);
+            }
+            else{
+                try {
+                    String line = Files.readString(path);
+                    this.con = JsonParser.parseString(line).getAsJsonObject();
+
+                } catch (IOException e) {
+                    System.err.println("An error occurred while reading the file: " + e.getMessage());
+                }
+
+                Position top = c.readWorldTop(con);
+                this.TOP_LEFT = top;
+                this.BOTTOM_RIGHT = new Position(top.getX() * -1,top.getY() * -1);
+
+                this.WorldVisibily = c.readWorldVise(con);
+                this.RepairTime = c.readWorldRepairTime(con);
+                this.ReloadTime = c.readWorldReloadTime(con);
+                this.MaxShield = c.readWorldShield(con);
+                this.MaxShots = c.readWorldShots(con);
+                this.Players = c.readWorldPlayers(con);
+            }
+        } else {
+
+            c.createConfigF();
+            c.createFile();
+            JsonObject configJSON = c.config();
+            c.writeToFile(configJSON);
+
+            Position top = c.readWorldTop(configJSON);
+            this.TOP_LEFT = top;
+            this.BOTTOM_RIGHT = new Position(top.getX() * -1,top.getY() * -1);
+
+            this.WorldVisibily = c.readWorldVise(configJSON);
+            this.RepairTime = c.readWorldRepairTime(configJSON);
+            this.ReloadTime = c.readWorldReloadTime(configJSON);
+            this.MaxShield = c.readWorldShield(configJSON);
+            this.MaxShots = c.readWorldShots(configJSON);
+            this.Players = c.readWorldPlayers(configJSON);
+        }
 
         System.out.println("Started world");
         genObs();
     }
 
     public void genObs(){
+        /**
+         * Generates obstacles in the world based on the world size.
+         * It creates lakes, mountains, and pits at random positions within the world bounds.
+         */
         int xSize = this.getBOTTOM_RIGHT().getX() * 2;
         int ySize = this.getTOP_LEFT().getY() * 2;
         int totalSize = xSize + ySize;

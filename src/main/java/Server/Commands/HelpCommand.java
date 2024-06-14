@@ -5,13 +5,28 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class HelpCommand extends Command {
+    /**
+     * A command to display help information about available commands.
+     */
 
     public HelpCommand(JsonArray args) {
         super(args);
     }
+    /**
+     * Constructs a HelpCommand with the specified arguments.
+     *
+     * @param args the arguments for the command (not used in this case)
+     */
 
     @Override
     public JsonObject execute(Robot target) {
+    /**
+     * Executes the help command, providing information about available commands.
+     *
+     * @param target the robot on which the command is executed
+     * @return a JsonObject containing the help information and the current state of the robot
+     */
+
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");
 
@@ -25,6 +40,11 @@ public class HelpCommand extends Command {
     }
 
     private String getHelpText() {
+    /**
+     * Retrieves the formatted help text with descriptions of available commands.
+     *
+     * @return a string containing the help text
+     */
         return """
                 Available Commands:
                 1. state - Returns the current state of the robot.

@@ -43,6 +43,19 @@ public class Robot {
     private final List<Robot> robotList;
 
     public Robot(String name, String kind, int shield, int shots, int vis, Socket s,DataOutputStream dos, DataInputStream dis) {
+        /**
+         * Constructs a Robot object with the given parameters.
+         *
+         * @param name the name of the robot
+         * @param kind the type of robot
+         * @param shield the initial shield value
+         * @param shots the initial number of shots
+         * @param vis the visibility range of the robot
+         * @param s the socket connection to the client
+         * @param dos the DataOutputStream to communicate with the client
+         * @param dis the DataInputStream to communicate with the client
+         */
+
         this.kind = kind;
         this.name = name;
 
@@ -76,6 +89,29 @@ public class Robot {
     }
 
     public Robot(String name, String kind, int visibility, List<Obstacles> obstacles, List<Robot> robotList, int shield, int shots, Position position, int reload, int repair, Direction direction, int iShield, int iShot, Position TOP_LEFT, Position BOTTOM_RIGHT, int maxShield, int maxShots, int worldVisibility) {
+        /**
+         * Constructs a Robot object with the given parameters, used for state restoration.
+         *
+         * @param name the name of the robot
+         * @param kind the type of robot
+         * @param visibility the visibility range of the robot
+         * @param obstacles the list of obstacles in the world
+         * @param robotList the list of robots in the world
+         * @param shield the shield value of the robot
+         * @param shots the number of shots the robot has
+         * @param position the position of the robot
+         * @param reload the reload time for the robot
+         * @param repair the repair time for the robot
+         * @param direction the direction the robot is facing
+         * @param iShield the initial shield value of the robot
+         * @param iShot the initial shot value of the robot
+         * @param TOP_LEFT the top-left position of the world
+         * @param BOTTOM_RIGHT the bottom-right position of the world
+         * @param maxShield the maximum shield value
+         * @param maxShots the maximum shot value
+         * @param worldVisibility the maximum visibility in the world
+         */
+
         this.name = name;
         this.kind = kind;
         this.visibility = visibility;
@@ -118,6 +154,9 @@ public class Robot {
     public int getShots() {
         return shots;
     }
+    public int getIShot() {
+        return this.iShot;
+    }
     public int getReload() {
         return reload;
     }
@@ -147,6 +186,12 @@ public class Robot {
         this.robotList.remove(robot);
     }
     public Position genPos(){
+    /**
+     * Generates a random position within the bounds of the world that is not blocked by any obstacles or other robots.
+     *
+     * @return a Position object representing the new position for the robot.
+     */
+
         while (true){
             Random random1 = new Random();
             int randomY = random1.nextInt(this.BOTTOM_RIGHT.getY(),this.TOP_LEFT.getY());
@@ -171,6 +216,10 @@ public class Robot {
     }
 
     public void minusShield(){
+    /**
+     * Decreases the shield value of the robot by 1. If the shield value reaches 0 or less, checks if the robot is dead.
+     */
+
         if(this.shield > 0){
             this.shield -= 1;
         }else {
@@ -178,6 +227,12 @@ public class Robot {
     }
 
     public boolean minusShot(){
+    /**
+     * Decreases the number of shots the robot has by 1 if the robot has shots remaining.
+     *
+     * @return true if a shot was successfully deducted, false if no shots remain.
+     */
+
         if(this.shots > 0){
             this.shots -= 1;
             return true;
@@ -185,6 +240,12 @@ public class Robot {
         return false;
     }
     public void updateDirection(boolean turnRight) {
+    /**
+     * Updates the direction of the robot. Turns the robot right if turnRight is true, otherwise turns the robot left.
+     *
+     * @param turnRight a boolean indicating the direction to turn the robot. True for right, false for left.
+     */
+
         if (turnRight) {
             switch (this.direction) {
                 case NORTH -> this.direction = Direction.EAST;
@@ -205,6 +266,13 @@ public class Robot {
 
 
     public JsonObject data(){
+    /**
+     * Creates a JSON object containing the data of the robot, including its position,
+     * visibility, reload time, repair time, and shields.
+     *
+     * @return a JsonObject containing the robot's data.
+     */
+
         JsonObject data = new JsonObject();
 
         JsonArray positionL = new JsonArray();
@@ -220,10 +288,23 @@ public class Robot {
     }
 
     public void setPosition(Position centre) {
+        /**
+         * Sets the position of the robot to the specified position.
+         *
+         * @param centre the new position for the robot.
+         */
+
         this.position= centre;
     }
 
     public JsonObject state(){
+    /**
+    * Creates a JSON object containing the state of the robot, including its position,
+    * direction, shields, shots, and status.
+    *
+    * @return a JsonObject containing the robot's state.
+    */
+
         JsonObject state = new JsonObject();
         JsonArray positionL = new JsonArray();
         positionL.add(this.position.getX());
@@ -237,6 +318,13 @@ public class Robot {
     }
 
     public JsonObject toJSON(){
+    /**
+     * Creates a JSON object representing the robot's overall information, including
+     * the result, data, and state of the robot.
+     *
+     * @return a JsonObject containing the robot's overall information.
+     */
+
         JsonObject data = data();
         JsonObject state = state();
         JsonObject response = new JsonObject();
@@ -248,6 +336,13 @@ public class Robot {
 
     @Override
     public String toString() {
+    /**
+     * Returns a string representation of the robot, including its name, kind,
+     * shield, and shots.
+     *
+     * @return a string representation of the robot.
+     */
+
         return "Robot{" +
                 "name='" + name + '\'' +
                 ", kind='" + kind + '\'' +
@@ -257,6 +352,16 @@ public class Robot {
     }
 
     public boolean updatePosition(int nrSteps) {
+        /**
+         * Updates the position of the robot by the specified number of steps.
+         * The direction in which the robot moves depends on its current direction.
+         * Checks for obstacles and other robots in the path, and only updates the position
+         * if the path is clear and within bounds.
+         *
+         * @param nrSteps the number of steps to move.
+         * @return true if the position was successfully updated, false otherwise.
+         */
+
         List<Obstacles> temp = new ArrayList<>();
 
         int newX = this.position.getX();
@@ -315,12 +420,46 @@ public class Robot {
     }
 
     public void pitDeath(){
+        /**
+         * Handles the scenario where the robot falls into a pit and dies.
+         * Removes the robot from the world and notifies the client.
+         */
+
         removeRobot(this);
-        System.out.println(ANSI_RED+"Robot "+this.name+" has died");
+        System.out.println(ANSI_RED+"Robot "+this.name+" has died" + ANSI_RESET);
+        try {
+            DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
+            JsonObject response = new JsonObject();
+            response.addProperty("result","dead");
+            JsonObject data = new JsonObject();
+            data.addProperty("message","You have fallen into a pit");
+            response.add("data",data);
+            dos.writeUTF(response.toString());
+            this.client.close();
+            this.dos.close();
+            this.dis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void checkIfDead() {
+        /**
+         * Checks if the robot's shield is zero or less, indicating it has died.
+         * Removes the robot from the world and notifies the client if the robot is dead.
+         */
+
+        if (this.shield <= 0 ) {
+            removeRobot(this);
+            System.out.println(ANSI_RED+"Robot "+this.name+" has died" + ANSI_RESET);
             try {
                 DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
-                dos.writeUTF(ANSI_RED+"You have fallen into a pit" + ANSI_RESET);
-                dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)" + ANSI_RESET);
+                JsonObject response = new JsonObject();
+                response.addProperty("result","dead");
+                JsonObject data = new JsonObject();
+                data.addProperty("message","You have died");
+                response.add("data",data);
+                dos.writeUTF(response.toString());
                 this.client.close();
                 this.dos.close();
                 this.dis.close();
@@ -328,23 +467,7 @@ public class Robot {
                 e.printStackTrace();
             }
         }
-
-    public void checkIfDead() {
-        if (this.shield <= 0 ) {
-            removeRobot(this);
-            System.out.println(ANSI_RED+"Robot "+this.name+" has died" + ANSI_RESET);
-                try {
-                    DataOutputStream dos = new DataOutputStream(this.client.getOutputStream());
-                    dos.writeUTF(ANSI_RED+"You're shields have hit 0" + ANSI_RESET);
-                    dos.writeUTF(ANSI_RED+"You have died.\nTry again ;)" + ANSI_RESET);
-                    this.client.close();
-                    this.dos.close();
-                    this.dis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    }
     public void repairShields(){
         this.shield = this.iShield;
     }
@@ -377,11 +500,14 @@ public class Robot {
     }
 
     public boolean isReloading() {
-
         return this.isReloading;
     }
 
     public void setReload(boolean reloading){
         this.isReloading = reloading;
+    }
+
+    public String getkind() {
+        return this.kind;
     }
 }

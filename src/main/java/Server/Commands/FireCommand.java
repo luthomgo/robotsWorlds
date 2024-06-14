@@ -11,6 +11,11 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 public class FireCommand extends Command {
+    /**
+     * The FireCommand class handles the firing action of a robot.
+     * It determines if the robots hits an obstacle or another based on its direction and updates the
+     * game states accordingly.
+     */
     public JsonArray ObstaclesNorth;
     public JsonArray ObstaclesSouth;
     public JsonArray ObstaclesWest;
@@ -18,6 +23,15 @@ public class FireCommand extends Command {
 
     @Override
     public JsonObject execute(Robot target) {
+        /**
+         * Executes the fire command for the specified robot.
+         * The robot will attempt to fire in its current direction, checking for hits on obstacles or
+         * other robots.
+         *
+         * @param target The robot that is executing the fire command
+         * @return A JsonObject containing the result of the fire command execution, including whether
+         * it hit another robot, the distance to the target, and the remaining number of shots.
+         */
         JsonArray obFinal = generateObFinal(target);
         JsonObject response = new JsonObject();
         response.addProperty("result","ok");
@@ -135,6 +149,13 @@ public class FireCommand extends Command {
     }
 
     public Robot getRobotObject(String name,Robot target){
+        /**
+         * Retrieves the robot object with the specified name from the list of robots in the game.
+         *
+         * @param name The name of the robot to retrieve.
+         * @param target The robot is executing the fire command.
+         * @return The robot with the specified name, or null if not found.
+         */
         for(Robot i : target.getRobotList()){
             if(i.getName().equals(name)){
                 return i;
@@ -144,6 +165,13 @@ public class FireCommand extends Command {
     }
 
     public JsonArray generateObFinal(Robot target){
+        /**
+         * Generates a JsonArray of obstacles and robots that are within the visibility range of the
+         * specified robot.
+         *
+         * @param target The robot for which to generate the list of the obstacles and robots.
+         * @return A sorted JsonArray of obstacles and robots within the visibility range of the specified robot.
+         */
         JsonArray objects = new JsonArray();
 
         int tX = target.getPosition().getX();
@@ -307,6 +335,12 @@ public class FireCommand extends Command {
     }
 
     public JsonArray sortArray(JsonArray objects){
+        /**
+         * Sorts a JsonArray of objects by their distance property in ascending order.
+         *
+         * @param objects The JsonArray of objects to sort.
+         * @return A sorted JsonArray of objects by their distance property.
+         */
         JsonObject smal;
 
         JsonArray temp;

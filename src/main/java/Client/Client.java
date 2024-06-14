@@ -1,17 +1,18 @@
 package Client;
 
-
-import Server.Server;
-import Server.Robots.Robot;
-import Server.World.World;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
 import static Server.ServerCommands.ServerCommand.ANSI_RED;
 
+/**
+ * Represents a client application that connects to a server using sockets.
+ * Allows interaction with the server through command-line input.
+ */
 public class Client {
     // ANSI color codes
     public static final String ANSI_RESET = "\u001B[0m";
@@ -20,6 +21,14 @@ public class Client {
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_CYAN = "\u001B[36m";
 
+    /**
+     * Main method that starts the client application.
+     * Connects to a server specified by IP address and port number passed as command-line arguments.
+     * Handles input/output streams for communication with the server.
+     *
+     * @param args Command-line arguments: IP address and port number of the server.
+     * @throws IOException If an I/O error occurs during socket communication.
+     */
     public static void main(String[] args) throws IOException {
         boolean portV = false;
         boolean ipV = false;
@@ -30,8 +39,10 @@ public class Client {
             try {
                 port = Integer.parseInt(args[1]);
                 portV = true;
-            }catch (NumberFormatException e) {portV =false;}
-            if (ipV & portV){
+            } catch (NumberFormatException e) {
+                portV = false;
+            }
+            if (ipV && portV) {
                 try {
                     InetAddress ip = InetAddress.getByName(ipAddress);
                     Socket s = new Socket(ip, port);
@@ -102,14 +113,22 @@ public class Client {
                     dos.close();
                     dis.close();
                 } catch (IOException e) {
-                    System.out.println("Server has not been started");
+                    System.out.println("Server connection off");
                 }
+            } else {
+                System.out.println("Please enter a valid IP address and port number");
             }
-            else System.out.println("Please enter a valid IP address and port number");
+        } else {
+            System.out.println("Please specify the IP address and port you would like to connect to");
         }
-        else System.out.println("Please specify the IP address and port you would like to connect to");
     }
 
+    /**
+     * Validates if the given string is a valid IPv4 address.
+     *
+     * @param ipAddress The IP address to validate.
+     * @return true if the IP address is valid, false otherwise.
+     */
     private static boolean isValidIpAddress(String ipAddress) {
         String[] ipNum = ipAddress.split("\\.");
         if (ipNum.length != 4) {
@@ -128,6 +147,13 @@ public class Client {
         }
     }
 
+    /**
+     * Formats the server response into a human-readable format.
+     * Parses the JSON response and formats accordingly.
+     *
+     * @param response The JSON response string from the server.
+     * @return Formatted response with ANSI color codes for styling.
+     */
     private static String formatResponse(String response) {
         JsonObject jsonResponse = JsonParser.parseString(response).getAsJsonObject();
         StringBuilder formattedResponse = new StringBuilder();
@@ -156,6 +182,14 @@ public class Client {
 
         return formattedResponse.toString();
     }
+
+    /**
+     * Formats the fire command response into a human-readable format.
+     * Adds specific formatting for fire command responses.
+     *
+     * @param jsonResponse The JSON response object from the fire command.
+     * @return Formatted response with ANSI color codes for styling.
+     */
     private static String formatFireResponse(JsonObject jsonResponse) {
         StringBuilder formattedFireResponse = new StringBuilder();
 
@@ -176,6 +210,13 @@ public class Client {
         return formattedFireResponse.toString();
     }
 
+    /**
+     * Formats help data retrieved from the server into a human-readable format.
+     * Adds specific formatting for help command responses.
+     *
+     * @param helpText The help text string from the server.
+     * @return Formatted help text with ANSI color codes for styling.
+     */
     private static String formatHelpData(String helpText) {
         String[] commands = helpText.split("\n");
         StringBuilder formattedHelp = new StringBuilder();
