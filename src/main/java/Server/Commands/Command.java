@@ -7,6 +7,10 @@ import com.google.gson.JsonObject;
 import java.util.Arrays;
 
 public abstract class Command {
+/**
+ * The Command class represents an abstract base class for all commands that can be executed by a robot.
+ * It provides methods for creating specific command instances, validating arguments, and generating error responses.
+ */
     private JsonArray args;
     public Command(JsonArray args){
         this.args = args;
@@ -20,6 +24,13 @@ public abstract class Command {
     }
 
     public static Command create(JsonObject response) {
+    /**
+     * Creates a specific command instance based on the provided JsonObject.
+     *
+     * @param response the JsonObject containing the command and its arguments.
+     * @return a Command instance representing the specific command.
+     */
+
         String command = response.get("command").getAsString();
         JsonArray args = response.get("arguments").getAsJsonArray();
 
@@ -45,7 +56,12 @@ public abstract class Command {
         };
     }
     public static boolean isValidArg(JsonArray args){
-
+    /**
+     * Validates the arguments for a command.
+     *
+     * @param args the arguments to validate.
+     * @return true if the arguments are valid, false otherwise.
+     */
 
         if (args.isEmpty()){
             return true;
@@ -68,6 +84,13 @@ public abstract class Command {
         return false;
     }
     public static JsonObject generateErrorResponse(String message){
+    /**
+     * Generates an error response with the specified message.
+     *
+     * @param message the error message.
+     * @return a JsonObject containing the error response.
+     */
+
         JsonObject Response = new JsonObject();
         Response.addProperty("result", "ERROR");
         JsonObject data = new JsonObject();
