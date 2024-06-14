@@ -19,21 +19,16 @@ fi
 if command_exists mvn; then
     echo "Maven is already installed"
 else
+
     sudo apt update
     sudo apt install -y maven
 fi
 
-# Determine the user's home directory and construct the path to the target directory
-USER_HOME=$(eval echo "~$USER")
-PROJECT_DIR="$USER_HOME/Documents/java/java_work/r/cpt10_robot_worlds-main"
+cd /home/wtc/Downloads || { echo "Downloads directory not found"; exit 1; }
 
-# Check if the directory exists, if not, create it
-if [[ ! -d "$PROJECT_DIR" ]]; then
-    echo "Project directory not found. Creating directory..."
-    mkdir -p "$PROJECT_DIR"
-fi
+unzip cpt10_robot_worlds-main.zip || { echo "Unzipping failed"; exit 1; }
 
-cd "$PROJECT_DIR" || { echo "Directory not found and creation failed"; exit 1; }
+cd cpt10_robot_worlds-main || { echo "Project directory not found"; exit 1; }
 
 mvn clean
 
@@ -41,6 +36,7 @@ JAR_FILE="target/CPT_10_Robot_Worlds-1.0-SNAPSHOT-jar-with-dependencies.jar"
 if [[ -f "$JAR_FILE" ]]; then
     echo "Jar file already exists. Skipping packaging."
 else
+
     mvn package -DskipTests
 
     if [[ ! -f "$JAR_FILE" ]]; then
@@ -53,4 +49,3 @@ cd target || { echo "Target directory not found"; exit 1; }
 
 clear
 echo "Welcome to Robot Worlds"
-java -jar CPT_10_Robot_Worlds-1.0-SNAPSHOT-jar-with-dependencies.jar "$@"
