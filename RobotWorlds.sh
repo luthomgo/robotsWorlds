@@ -19,14 +19,17 @@ fi
 if command_exists mvn; then
     echo "Maven is already installed"
 else
-
     sudo apt update
     sudo apt install -y maven
 fi
 
-cd /home/wtc/Downloads || { echo "Downloads directory not found"; exit 1; }
+DOWNLOADS_DIR=$(xdg-user-dir DOWNLOAD)
 
-#unzip cpt10_robot_worlds-main.zip || { echo "Unzipping failed"; exit 1; }
+if [[ -d "$DOWNLOADS_DIR" ]]; then
+    cd "$DOWNLOADS_DIR" || { echo "Failed to navigate to Downloads directory"; exit 1; }
+else
+    echo "Downloads directory not found"; exit 1;
+fi
 
 cd cpt10_robot_worlds-main || { echo "Project directory not found"; exit 1; }
 
@@ -36,14 +39,13 @@ JAR_FILE="target/CPT_10_Robot_Worlds-1.0-SNAPSHOT-jar-with-dependencies.jar"
 if [[ -f "$JAR_FILE" ]]; then
     echo "Jar file already exists. Skipping packaging."
 else
-
     mvn package -DskipTests
-
     if [[ ! -f "$JAR_FILE" ]]; then
         echo "Packaging failed. Exiting."
         exit 1
     fi
 fi
+
 clear
 echo "Welcome to Robot Worlds"
 cd target || { echo "Target directory not found"; exit 1; }
