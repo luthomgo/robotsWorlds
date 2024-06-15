@@ -4,7 +4,7 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-SCRIPT_NAME=$(basename "$0")
+SCRIPT_NAME="RobotWorlds"
 TARGET_DIR="/usr/local/bin"
 TARGET_PATH="$TARGET_DIR/$SCRIPT_NAME"
 
