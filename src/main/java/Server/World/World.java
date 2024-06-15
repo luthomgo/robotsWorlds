@@ -36,7 +36,7 @@ public class World {
          * Constructs a World instance. If a configuration file exists, it loads the configuration;
          * otherwise, it creates a new configuration file.
          */
-        String filePath = "/home/wtc/.RobotWorldsConfig/WorldConfig.txt";
+        String filePath = System.getProperty("user.home") + "/.RobotWorldsConfig/WorldConfig.txt";
         Path path = Paths.get(filePath);
         Config c = new Config();
 

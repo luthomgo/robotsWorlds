@@ -66,7 +66,9 @@ public abstract class Command {
      * @param args the arguments to validate.
      * @return true if the arguments are valid, false otherwise.
      */
-
+        if (args.size()>= 2){
+            return false;
+        }
         if (args.isEmpty()){
             return true;
         }
