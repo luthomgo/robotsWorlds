@@ -21,6 +21,8 @@ public class ServerCommand {
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     /**
      * Creates a server command interface that listens for commands from the server admin.
@@ -48,7 +50,7 @@ public class ServerCommand {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    if (message.equals("quit")) {
+                    if (message.equalsIgnoreCase("quit")) {
                         System.out.println("Disconnecting Server and clients");
                         synchronized (clientSockets) {
                             for (Socket clientSocket : clientSockets) {
@@ -67,7 +69,7 @@ public class ServerCommand {
                             break;
                         }
                     }
-                    else if (message.equals("dump")){
+                    else if (message.equalsIgnoreCase("dump")){
                         System.out.println(ANSI_BLUE + "========= World Information =========" + ANSI_RESET);
                         System.out.println("Top Left Position: " + ANSI_GREEN +Server.world.getTOP_LEFT() + ANSI_RESET);
                         System.out.println("Bottom Right Position: " + ANSI_GREEN +Server.world.getBOTTOM_RIGHT() + ANSI_RESET);
@@ -91,18 +93,40 @@ public class ServerCommand {
                         }
 
                     }
-                    else if (message.equals("robots")){
+                    else if (message.equalsIgnoreCase("robots")){
                         System.out.println(ANSI_BLUE + "Robots in the game: "+ ANSI_RESET);
                         for (Robot i : Server.world.robotList) {
                             String name = i.getName();
                             JsonObject state = i.state();
+                            StringBuilder formattedResponse = new StringBuilder();
+
                             System.out.print("Robot Name: ");
                             System.out.println(ANSI_GREEN + name + ANSI_RESET);
-                            System.out.println("Robot State: " + state.toString());
+
+                            formattedResponse.append("\nRobot State: ").append(ANSI_RESET).append("\n");
+                            state.entrySet().forEach(entry -> {
+                                formattedResponse.append(ANSI_YELLOW).append("  ").append(entry.getKey()).append(": ").append(ANSI_RESET).append(entry.getValue().toString()).append("\n");
+                            });
+                            System.out.println(formattedResponse);
                             System.out.println();
                         }
-                    }
-                    else{
+                    } else if (message.equalsIgnoreCase("help")) {
+                        String help =ANSI_CYAN + """
+                                        Available Commands:
+                                        1.  state - Returns the current state of the robot.
+                                        2.  look - Returns the current view from the robot's perspective.
+                                        3.  forward <steps> - Moves the robot forward by the specified number of steps.
+                                        4.  back <steps> - Moves the robot backward by the specified number of steps.
+                                        5.  turn <direction> - Turns the robot in the specified direction (left or right).
+                                        6.  help - Displays this help message.
+                                        7.  exit - Exits the program.
+                                        8.  look - Look around in the world
+                                        9.  fire - Instructs the robot to Fires a shot.
+                                        10. reload - Instructs the robot to Reload.
+                                        11. repair - Instructs the robot to Repair.
+                                        """ + ANSI_RESET;
+                        System.out.println(help);
+                    } else{
                         out.println("command not understood");
                     }
                 }

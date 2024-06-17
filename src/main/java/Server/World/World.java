@@ -41,10 +41,18 @@ public class World {
         Config c = new Config();
 
         if (Files.exists(path)) {
-            Scanner s = new Scanner(System.in);
-            System.out.println("Config file exists would you like to reconfigure? y/n");
-            String a = s.nextLine();
-            if (a.equalsIgnoreCase("y")){
+            String a;
+            while (true) {
+                Scanner s = new Scanner(System.in);
+                System.out.println("Config file exists would you like to reconfigure? y/n");
+                a = s.nextLine();
+                if (a.equalsIgnoreCase("yes") || a.equalsIgnoreCase("y") || a.equalsIgnoreCase("no") || a.equalsIgnoreCase("n")) {
+                    break;
+                } else {
+                    System.out.println("Respond with yes/y/no/n");
+                }
+            }
+            if (a.equalsIgnoreCase("y")) {
                 c.createConfigF();
                 c.createFile();
                 JsonObject configJSON = c.config();
@@ -52,7 +60,7 @@ public class World {
 
                 Position top = c.readWorldTop(configJSON);
                 this.TOP_LEFT = top;
-                this.BOTTOM_RIGHT = new Position(top.getX() * -1,top.getY() * -1);
+                this.BOTTOM_RIGHT = new Position(top.getX() * -1, top.getY() * -1);
 
                 this.WorldVisibily = c.readWorldVise(configJSON);
                 this.RepairTime = c.readWorldRepairTime(configJSON);
@@ -60,8 +68,7 @@ public class World {
                 this.MaxShield = c.readWorldShield(configJSON);
                 this.MaxShots = c.readWorldShots(configJSON);
                 this.Players = c.readWorldPlayers(configJSON);
-            }
-            else{
+            } else {
                 try {
                     String line = Files.readString(path);
                     this.con = JsonParser.parseString(line).getAsJsonObject();
@@ -72,7 +79,7 @@ public class World {
 
                 Position top = c.readWorldTop(con);
                 this.TOP_LEFT = top;
-                this.BOTTOM_RIGHT = new Position(top.getX() * -1,top.getY() * -1);
+                this.BOTTOM_RIGHT = new Position(top.getX() * -1, top.getY() * -1);
 
                 this.WorldVisibily = c.readWorldVise(con);
                 this.RepairTime = c.readWorldRepairTime(con);
