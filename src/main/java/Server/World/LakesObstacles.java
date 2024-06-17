@@ -13,7 +13,7 @@ public class LakesObstacles implements Obstacles{
     private final int x;
     private final int y;
     private final int size = 10;
-    private final String type = "lakes";
+    private final String type = "lake";
 
     public LakesObstacles(int x, int y){
         this.x = x;
@@ -42,15 +42,13 @@ public class LakesObstacles implements Obstacles{
 
     @Override
     public boolean blocksPath(Position a, Position b) {
-        /**
-         *
-         */
 
         int aX = a.getX();
         int aY = a.getY();
         int bX = b.getX();
         int bY = b.getY();
 
+        if (blocksPosition(b)) return true;
         if (aX >= this.x && aX <= this.x + this.size && bX >= this.x && bX <= this.x + this.size){
             if (this.y >= aY && this.y <= bY || this.y <= aY && this.y >= bY) return true;
         }
@@ -68,9 +66,12 @@ public class LakesObstacles implements Obstacles{
 
     @Override
     public String toString() {
-        return "Lake Obstacle{" +
-                "x=" + getBottomLeftX()+
-                ", y=" + getBottomLeftY() +
-                "}";
+        return "Lake Obstacle" + "\n{" +
+                "x = " + getBottomLeftX()+
+                ", y = " + getBottomLeftY() +
+                "}" +
+                " to " +
+                "{x = " + (getBottomLeftX() + size) +
+                ", y = " + (getBottomLeftY() + size) + "}";
     }
 }

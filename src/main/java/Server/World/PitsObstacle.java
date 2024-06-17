@@ -72,6 +72,8 @@ public class PitsObstacle implements Obstacles{
         int bX = b.getX();
         int bY = b.getY();
 
+        if (blocksPosition(b)) return true;
+
         if (aX >= this.x && aX <= this.x + this.size && bX >= this.x && bX <= this.x + this.size){
             if (this.y >= aY && this.y <= bY || this.y <= aY && this.y >= bY) return true;
         }
@@ -88,9 +90,12 @@ public class PitsObstacle implements Obstacles{
          *
          * @return A string describing the pit's coordinates.
          */
-        return "Pit Obstacle{ " +
-                " x=" + getBottomLeftX()+
-                ", y=" + getBottomLeftY() +
-                "}";
+        return "Pit Obstacle" + "\n{" +
+                "x = " + getBottomLeftX()+
+                ", y = " + getBottomLeftY() +
+                "}" +
+                " to " +
+                "{x = " + (getBottomLeftX() + size) +
+                ", y = " + (getBottomLeftY() + size) + "}";
     }
 }

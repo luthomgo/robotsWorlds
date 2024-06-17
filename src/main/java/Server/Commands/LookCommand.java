@@ -114,7 +114,7 @@ public class LookCommand extends Command {
             JsonObject edgeStats = new JsonObject();
             edgeStats.addProperty("direction", "EAST");
             edgeStats.addProperty("type", "Edge");
-            int distance = tX - target.getTOP_LEFT().getX();
+            int distance = tX - target.getBOTTOM_RIGHT().getX();
             if (distance < 0) distance *= -1; //remove negative to positive
             edgeStats.addProperty("distance",distance);
             objects.add(edgeStats);
@@ -124,7 +124,7 @@ public class LookCommand extends Command {
             JsonObject edgeStats = new JsonObject();
             edgeStats.addProperty("direction", "WEST");
             edgeStats.addProperty("type", "Edge");
-            int distance =   target.getBOTTOM_RIGHT().getX() - tX;
+            int distance =   target.getTOP_LEFT().getX() - tX;
             if (distance < 0) distance *= -1; //remove negative to positive
             edgeStats.addProperty("distance",distance);
             objects.add(edgeStats);
@@ -134,38 +134,54 @@ public class LookCommand extends Command {
         for (Obstacles i : target.getObstacles()) {
             JsonObject obstacleStats = new JsonObject();
 
-            if (look_north.getY() >= i.getBottomLeftY() && tY <= i.getBottomLeftY() && tX >= i.getBottomLeftX() && tX <= i.getBottomLeftX() + i.getSize()){
+            if ((look_north.getY() >= i.getBottomLeftY() || look_north.getY() >= i.getBottomLeftY() + i.getSize()) && tY <= i.getBottomLeftY() && tX >= i.getBottomLeftX() && tX <= i.getBottomLeftX() + i.getSize()){
                 obstacleStats.addProperty("direction", "NORTH");
                 obstacleStats.addProperty("type", i.getType());
-                int distance = tY - i.getBottomLeftY();
-                if (distance < 0) distance *= -1;
+
+                int distance = 0;
+                int distance1 = Math.abs(tY - i.getBottomLeftY());
+                int distance2 = Math.abs(tY - (i.getBottomLeftY() + i.getSize()));
+                distance = Math.min(distance1,distance2);
+
                 obstacleStats.addProperty("distance", distance);
                 objects.add(obstacleStats);
             }
 
-            if (look_south.getY() <= i.getBottomLeftY() && tY >= i.getBottomLeftY() && tX >= i.getBottomLeftX() && tX<= i.getBottomLeftX() + i.getSize()){
+            if ((look_south.getY() <= i.getBottomLeftY() || look_south.getY() <= i.getBottomLeftY() + i.getSize()) && tY >= i.getBottomLeftY() && tX >= i.getBottomLeftX() && tX<= i.getBottomLeftX() + i.getSize()){
                 obstacleStats.addProperty("direction", "SOUTH");
                 obstacleStats.addProperty("type", i.getType());
-                int distance = tY - i.getBottomLeftY();
-                if (distance < 0) distance *= -1;
+
+                int distance = 0;
+                int distance1 = Math.abs(tY - i.getBottomLeftY());
+                int distance2 = Math.abs(tY - (i.getBottomLeftY() + i.getSize()));
+                distance = Math.min(distance1,distance2);
+
                 obstacleStats.addProperty("distance", distance);
                 objects.add(obstacleStats);
             }
 
-            if (look_west.getX() <= i.getBottomLeftX() &&  tX >= i.getBottomLeftX() && tY >= i.getBottomLeftY() && tY <= i.getBottomLeftY() + i.getSize()){
+            if ((look_west.getX() <= i.getBottomLeftX() || look_west.getX() <= i.getBottomLeftX() + i.getSize()) &&  tX >= i.getBottomLeftX() && tY >= i.getBottomLeftY() && tY <= i.getBottomLeftY() + i.getSize()){
                 obstacleStats.addProperty("direction", "WEST");
                 obstacleStats.addProperty("type", i.getType());
-                int distance = tX - i.getBottomLeftX();
-                if (distance < 0) distance *= -1;
+
+                int distance = 0;
+                int distance1 = Math.abs(tX - i.getBottomLeftX());
+                int distance2 = Math.abs(tX - (i.getBottomLeftX() + i.getSize()));
+                distance = Math.min(distance1,distance2);
+
                 obstacleStats.addProperty("distance", distance);
                 objects.add(obstacleStats);
             }
 
-            if (look_east.getX() >= i.getBottomLeftX() && tX <= i.getBottomLeftX() && tY >= i.getBottomLeftY() && tY <= i.getBottomLeftY() + i.getSize()){
+            if ((look_east.getX() >= i.getBottomLeftX() || look_east.getX() >= i.getBottomLeftX() + i.getSize()) && tX <= i.getBottomLeftX() && tY >= i.getBottomLeftY() && tY <= i.getBottomLeftY() + i.getSize()){
                 obstacleStats.addProperty("direction", "EAST");
                 obstacleStats.addProperty("type", i.getType());
-                int distance = tX - i.getBottomLeftX();
-                if (distance < 0) distance *= -1;
+
+                int distance = 0;
+                int distance1 = Math.abs(tX - i.getBottomLeftX());
+                int distance2 = Math.abs(tX - (i.getBottomLeftX() + i.getSize()));
+                distance = Math.min(distance1,distance2);
+
                 obstacleStats.addProperty("distance", distance);
                 objects.add(obstacleStats);
             }
@@ -190,8 +206,12 @@ public class LookCommand extends Command {
                 if (robot_north.getY() > robotObY && robotY < robotObY && robotX >= robotObX && robotX <= robotObX ){
                     robotStats.addProperty("direction","NORTH");
                     robotStats.addProperty("type","Robot");
-                    int distance = robotY - robot.getPosition().getY();
-                    if (distance < 0) distance *= -1; //remove negative to positive
+
+                    int distance = 0;
+                    int distance1 = Math.abs(robotY - robot.getPosition().getY());
+                    int distance2 = Math.abs(robotY - (robot.getPosition().getY() + 1));
+                    distance = Math.min(distance1,distance2);
+
                     robotStats.addProperty("distance",distance);
                     objects.add(robotStats);
                 }
@@ -199,8 +219,12 @@ public class LookCommand extends Command {
                 if (robot_south.getY() < robotObY && robotY > robotObY && robotX >= robotObX && robotX <= robotObX ){
                     robotStats.addProperty("direction","SOUTH");
                     robotStats.addProperty("type","Robot");
-                    int distance = robotY - robot.getPosition().getY();
-                    if (distance < 0) distance *= -1; //remove negative to positive
+
+                    int distance = 0;
+                    int distance1 = Math.abs(robotY - robot.getPosition().getY());
+                    int distance2 = Math.abs(robotY - (robot.getPosition().getY() + 1));
+                    distance = Math.min(distance1,distance2);
+
                     robotStats.addProperty("distance",distance);
                     objects.add(robotStats);
 
@@ -209,8 +233,12 @@ public class LookCommand extends Command {
                 if (robot_east.getX() > robotObX && robotX < robotObX && robotY >= robotObY && robotY <= robotObY){
                     robotStats.addProperty("direction","EAST");
                     robotStats.addProperty("type","Robot");
-                    int distance = robotX - robot.getPosition().getX();
-                    if (distance < 0) distance *= -1; //remove negative to positive
+
+                    int distance = 0;
+                    int distance1 = Math.abs(robotX - robot.getPosition().getX());
+                    int distance2 = Math.abs(robotX - (robot.getPosition().getX() + 1));
+                    distance = Math.min(distance1,distance2);
+
                     robotStats.addProperty("distance",distance);
                     objects.add(robotStats);
                 }
@@ -218,8 +246,12 @@ public class LookCommand extends Command {
                 if (robot_west.getX() < robotObX && robotX > robotObX && robotY >= robotObY && robotY <= robotObY){
                     robotStats.addProperty("direction","WEST");
                     robotStats.addProperty("type","Robot");
-                    int distance = robotX - robot.getPosition().getX();
-                    if (distance < 0) distance *= -1; //remove negative to positive
+
+                    int distance = 0;
+                    int distance1 = Math.abs(robotX - robot.getPosition().getX());
+                    int distance2 = Math.abs(robotX - (robot.getPosition().getX() + 1));
+                    distance = Math.min(distance1,distance2);
+
                     robotStats.addProperty("distance",distance);
                     objects.add(robotStats);
                 }

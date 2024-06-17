@@ -72,6 +72,8 @@ public class RobotObstacle implements Obstacles{
         int bX = b.getX();
         int bY = b.getY();
 
+        if (blocksPosition(b)) return true;
+
         if (aX >= this.x && aX <= this.x + this.size && bX >= this.x && bX <= this.x + this.size){
             if (this.y >= aY && this.y <= bY || this.y <= aY && this.y >= bY) return true;
         }
@@ -84,14 +86,12 @@ public class RobotObstacle implements Obstacles{
 
     @Override
     public String toString() {
-        /**
-         * Returns a string representation of the RobotObstacle.
-         *
-         * @return A string describing the robot's coordinates.
-         */
-        return "Robot Obstacle{ " +
-                " x=" + getBottomLeftX()+
-                ", y=" + getBottomLeftY() +
-                "}";
+        return "Robot Obstacle" + "\n{" +
+                "x = " + getBottomLeftX()+
+                ", y = " + getBottomLeftY() +
+                "}" +
+                " to " +
+                "{x = " + (getBottomLeftX() + size) +
+                ", y = " + (getBottomLeftY() + size) + "}";
     }
 }
