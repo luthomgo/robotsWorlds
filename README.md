@@ -47,8 +47,10 @@
 ## Client Usage
 To run the client, use the following command with the IP address and port number of the specific server you want to connect to as arguments:
 
-`RobotWorlds 10.200.109.255 5055
+`RobotWorlds 10.200.109.255 5058
 `
+Note that to connect to our Robot Worlds you have to use the 5058 port. The IP adress depends on who in your party wants to run the server.
+
 
 Once the command is executed, you will be connected to the RobotWorlds server. If the server has not been started, you will receive a message saying the server is not connected.
 
