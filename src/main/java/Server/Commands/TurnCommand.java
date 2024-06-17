@@ -49,7 +49,7 @@ public class TurnCommand extends Command {
             response.add("state", target.state());
 
         } else if (turnDirection.equalsIgnoreCase("left")) {
-            target.updateDirection(true);
+            target.updateDirection(false);
             JsonObject data = new JsonObject();
             response.addProperty("result", "ok");
             JsonObject jsonData = new JsonObject();

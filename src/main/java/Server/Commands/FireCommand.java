@@ -47,15 +47,15 @@ public class FireCommand extends Command {
                     name = obs.get("name").getAsString();
                     Robot rob = getRobotObject(name,target);
                     if (target.minusShot()) {
+                        rob.minusShield();
                         JsonObject shots = new JsonObject();
                         shots.addProperty("shots",target.getShots());
                         data.addProperty("message","Hit");
                         data.addProperty("distance",obs.get("distance").getAsInt());
                         data.addProperty("robot",name);
+                        data.add("state",rob.state());
                         response.add("data",data);
-                        response.add("state",rob.state());
                         response.add("state",shots);
-                        rob.minusShield();
                         return response;
                     }
                 }
@@ -69,15 +69,15 @@ public class FireCommand extends Command {
                     name = obs.get("name").getAsString();
                     Robot rob = getRobotObject(name,target);
                     if (target.minusShot()) {
+                        rob.minusShield();
                         JsonObject shots = new JsonObject();
                         shots.addProperty("shots",target.getShots());
                         data.addProperty("message","Hit");
                         data.addProperty("distance",obs.get("distance").getAsInt());
                         data.addProperty("robot",name);
+                        data.add("state",rob.state());
                         response.add("data",data);
-                        response.add("state",rob.state());
                         response.add("state",shots);
-                        rob.minusShield();
                         return response;
                     }
                 }
@@ -91,15 +91,15 @@ public class FireCommand extends Command {
                     name = obs.get("name").getAsString();
                     Robot rob = getRobotObject(name,target);
                     if (target.minusShot()) {
+                        rob.minusShield();
                         JsonObject shots = new JsonObject();
                         shots.addProperty("shots",target.getShots());
                         data.addProperty("message","Hit");
                         data.addProperty("distance",obs.get("distance").getAsInt());
                         data.addProperty("robot",name);
+                        data.add("state",rob.state());
                         response.add("data",data);
-                        response.add("state",rob.state());
                         response.add("state",shots);
-                        rob.minusShield();
                         return response;
                     }
                 }
@@ -113,15 +113,16 @@ public class FireCommand extends Command {
                     name = obs.get("name").getAsString();
                     Robot rob = getRobotObject(name,target);
                     if (target.minusShot()) {
+                        rob.minusShield();
                         JsonObject shots = new JsonObject();
                         shots.addProperty("shots",target.getShots());
                         data.addProperty("message","Hit");
                         data.addProperty("distance",obs.get("distance").getAsInt());
                         data.addProperty("robot",name);
+                        data.add("state",rob.state());
                         response.add("data",data);
-                        response.add("state",rob.state());
+//                        response.add("state",rob.state());
                         response.add("state",shots);
-                        rob.minusShield();
                         return response;
                     }
                 }
@@ -140,7 +141,7 @@ public class FireCommand extends Command {
         }
 
 
-        data.addProperty("message","Gun empty; Reload!");
+        data.addProperty("message","No more shots left Reload!");
         response.add("data",data);
         JsonObject shots = new JsonObject();
         shots.addProperty("shots",target.getShots());

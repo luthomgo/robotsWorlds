@@ -31,10 +31,10 @@ public class Launch {
                 this.robot = new Robot(name,"tank",5,1,5,s,dos,dis);
             }
             else if (args.get(0).toString().contains("sniper")){
-                this.robot = new Robot(name,"sniper",1,5,10,s,dos,dis);
+                this.robot = new Robot(name,"sniper",1,1,15,s,dos,dis);
             }
             else if (args.get(0).toString().contains("brad1")){
-                this.robot = new Robot(name,"brad1",4,2,5,s,dos,dis);
+                this.robot = new Robot(name,"brad1",1,5,5,s,dos,dis);
             }
             else {
                 this.robot = new Robot(name,"Normy",3,3,5,s,dos,dis);
@@ -42,7 +42,7 @@ public class Launch {
         }
         else
         {
-            this.robot = new Robot(name,"Normy",6,6,6,s,dos,dis);
+            this.robot = new Robot(name,"Normy",3,3,5,s,dos,dis);
         }
     }
 

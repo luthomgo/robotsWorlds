@@ -184,6 +184,7 @@ public class Robot {
 
     public void removeRobot(Robot robot) {
         this.robotList.remove(robot);
+        Server.names.remove(name);
     }
     public Position genPos(){
     /**
@@ -219,11 +220,8 @@ public class Robot {
     /**
      * Decreases the shield value of the robot by 1. If the shield value reaches 0 or less, checks if the robot is dead.
      */
-
-        if(this.shield > 0){
-            this.shield -= 1;
-        }else {
-            checkIfDead();        }
+        this.shield -= 1;
+        checkIfDead();
     }
 
     public boolean minusShot(){
@@ -451,7 +449,7 @@ public class Robot {
          * Removes the robot from the world and notifies the client if the robot is dead.
          */
 
-        if (this.shield <= 0 ) {
+        if (this.shield == 0 ) {
             removeRobot(this);
             System.out.println(ANSI_RED+"Robot "+this.name+" has died" + ANSI_RESET);
             try {
