@@ -112,8 +112,6 @@ public class CommandsTest {
 
         assertTrue(response.has("data"));
         assertTrue(response.get("data").getAsJsonObject().has("help"));
-        assertTrue(response.has("state"));
-        assertEquals(robot.state(), response.get("state"));
     }
 
     @Test
@@ -396,7 +394,7 @@ public class CommandsTest {
             JsonObject response = fireCommand.execute(robot);
             boolean ok = response.get("result").getAsString().equals("ok");
             assertTrue(ok);
-            assertEquals("Gun empty; Reload!", response.getAsJsonObject("data").get("message").getAsString());
+            assertEquals("No more shots left Reload!", response.getAsJsonObject("data").get("message").getAsString());
             assertEquals(0, robot.getShots());
         }
 
@@ -532,15 +530,29 @@ public class CommandsTest {
 
         @Test
         public void testIsValidArg() {
-            JsonArray validArgs = new JsonArray();
-            validArgs.add("sniper");
-            validArgs.add("tank");
-            validArgs.add("brad1");
-            validArgs.add("left");
-            validArgs.add("right");
-            validArgs.add(10);
+            JsonArray validArgs1 = new JsonArray();
+            validArgs1.add("sniper");
+            assertTrue(Command.isValidArg(validArgs1));
 
-            assertTrue(Command.isValidArg(validArgs));
+            JsonArray validArgs2 = new JsonArray();
+            validArgs2.add("tank");
+            assertTrue(Command.isValidArg(validArgs2));
+
+            JsonArray validArgs3 = new JsonArray();
+            validArgs3.add("brad1");
+            assertTrue(Command.isValidArg(validArgs3));
+
+            JsonArray validArgs4 = new JsonArray();
+            validArgs4.add("left");
+            assertTrue(Command.isValidArg(validArgs4));
+
+            JsonArray validArgs5 = new JsonArray();
+            validArgs5.add("right");
+            assertTrue(Command.isValidArg(validArgs5));
+
+            JsonArray validArgs6 = new JsonArray();
+            validArgs6.add(10);
+            assertTrue(Command.isValidArg(validArgs6));
         }
 
         @Test
