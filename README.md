@@ -133,3 +133,4 @@ You can then enter commands that will display properties of the world. The comma
 * **dump:** Displays the world attributes, obstacles, and robots.
 * **robots:** Displays the robots currently connected to the world.
 * **quit:** Closes the server and disconnects all players connected to it.
+* **Help:** Displays how to run commands and what they each do.
